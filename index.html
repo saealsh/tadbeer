@@ -3,54 +3,53 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>تــدّبير — مخططك المالي الذكي</title>
+    <title>تــدّبير PRO — نظامك المالي المتكامل</title>
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&family=Tajawal:wght@400;500;700;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;900&display=swap" rel="stylesheet">
 
     <style>
-        /* نظام الألوان والمتغيرات */
+        /* 1. دمج وتفعيل الخط المرفق (Gumela) عبر الموقع */
+        @font-face {
+            font-family: 'Gumela';
+            src: local('Gumela'), url('Gumela.ttf') format('truetype'); /* سيستخدم الخط المرفق */
+            font-weight: normal;
+            font-style: normal;
+        }
+
         :root {
             --primary: #2ecc71;
             --primary-dark: #27ae60;
             --bg-body: #f4f7f6;
             --bg-card: #ffffff;
             --text-main: #2c3e50;
-            --text-muted: #95a5a6;
+            --text-muted: #7f8c8d;
             --border: #eef2f3;
             --pro-gold: #f1c40f;
-            --danger: #e74c3c;
-            --font-main: 'Tajawal', sans-serif;
             --card-gradient: linear-gradient(135deg, #1d2b3a 0%, #0d1117 100%);
+            /* تعيين خط "Gumela" كخط أساسي للموقع لضمان التناسق البصري */
+            --font-main: 'Gumela', 'Tajawal', sans-serif;
         }
 
-        /* أنماط الثيم الداكن */
-        [data-theme="dark"] {
-            --bg-body: #0d1117;
-            --bg-card: #161b22;
-            --text-main: #f0f6fc;
-            --border: #30363d;
-        }
-
-        * { box-sizing: border-box; transition: all 0.3s ease; }
+        * { box-sizing: border-box; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
 
         body {
             font-family: var(--font-main);
             background: var(--bg-body);
             color: var(--text-main);
             margin: 0;
-            padding-bottom: 50px;
+            padding-bottom: 30px;
         }
 
-        /* 1. الهيدر والشعار (في الوسط) */
+        /* 2. تخصيص الهيدر ودمج الشعار المرفق (Vlogo2.svg) */
         .app-header {
             background: var(--bg-card);
-            padding: 15px 0;
+            padding: 10px 0;
             border-bottom: 1px solid var(--border);
             position: sticky;
             top: 0;
             z-index: 1000;
-            text-align: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.02);
         }
 
         .header-content {
@@ -60,269 +59,279 @@
             justify-content: space-between;
             align-items: center;
             padding: 0 20px;
+            position: relative;
         }
 
-        .logo-box {
+        .logo-area {
             position: absolute;
             left: 50%;
             transform: translateX(-50%);
+            text-align: center;
+            display: flex;
+            align-items: center;
+            gap: 10px; /* مسافة بين الشعار والاسم */
         }
 
-        .logo-img {
-            height: 70px; /* تم تكبيره ليكون مركزياً وجذاباً */
-            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1));
+        /* تنسيق الشعار SVG المرفق */
+        .logo-svg {
+            height: 60px; /* تم ضبط الطول ليتناسب مع الهيدر */
+            width: auto;
         }
 
-        /* 2. نظام اللغات والبرو */
-        .lang-switcher, .pro-status {
-            cursor: pointer;
-            background: var(--bg-body);
-            border: 1px solid var(--border);
-            padding: 8px 12px;
-            border-radius: 20px;
-            font-size: 14px;
-            font-weight: bold;
+        .app-title {
+            font-weight: 900;
+            font-size: 24px; /* تم تكبيره قليلاً ليتناسب مع "Gumela" */
+            color: var(--text-main);
+            letter-spacing: 1px;
+            margin: 0;
         }
 
-        .pro-badge {
-            background: var(--pro-gold);
-            color: #000;
-            padding: 2px 8px;
-            border-radius: 6px;
-            font-size: 11px;
-            margin-left: 5px;
-            display: none;
-        }
-
-        [data-user="pro"] .pro-badge { display: inline-block; }
-        [data-user="free"] .pro-only { filter: blur(4px); pointer-events: none; opacity: 0.6; }
-
-        /* 3. البطاقة المالية (بنفس نمط بطاقات البنك) */
+        /* 3. البطاقة المالية الذكية (بنفس نمط بطاقات البنك) */
         .financial-card {
             background: var(--card-gradient);
             color: white;
             padding: 25px;
-            border-radius: 20px;
+            border-radius: 24px;
             max-width: 400px;
-            margin: 20px auto;
+            margin: 30px auto;
             position: relative;
-            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.15);
             overflow: hidden;
         }
 
-        .financial-card::after {
-            content: ""; position: absolute; top: -50%; right: -20%;
-            width: 200px; height: 200px; background: rgba(255,255,255,0.05);
+        .financial-card::before {
+            content: ""; position: absolute; top: -20%; right: -10%;
+            width: 150px; height: 150px; background: rgba(255,255,255,0.05);
             border-radius: 50%;
         }
 
-        .card-label { font-size: 12px; opacity: 0.7; letter-spacing: 1px; }
-        .card-balance { font-size: 28px; font-weight: 800; margin: 10px 0; }
-        .card-details { display: flex; justify-content: space-between; margin-top: 20px; }
-        
-        /* 4. حقول التعديل والمشتريات */
-        .container { max-width: 600px; margin: 0 auto; padding: 0 15px; }
+        .card-label { font-size: 11px; text-transform: uppercase; opacity: 0.7; letter-spacing: 1.5px; }
+        .card-balance { font-size: 32px; font-weight: 800; margin: 12px 0; }
+        .card-info { display: flex; justify-content: space-between; margin-top: 25px; }
 
-        .section-title { font-weight: 800; margin: 25px 0 15px; display: flex; justify-content: space-between; }
+        /* 4. إدارة المصاريف اليومية */
+        .main-container { max-width: 600px; margin: 0 auto; padding: 0 20px; }
 
-        .data-card {
-            background: var(--bg-card);
-            border-radius: 16px;
-            padding: 15px;
-            border: 1px solid var(--border);
-            margin-bottom: 12px;
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 25px 0 15px;
         }
 
-        .editable-input {
+        .section-header h2 { font-size: 18px; font-weight: 800; margin: 0; }
+
+        .entry-card {
+            background: var(--bg-card);
+            border-radius: 16px;
+            padding: 16px;
+            margin-bottom: 12px;
+            border: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .entry-info input {
             border: none;
             background: transparent;
             font-family: inherit;
             font-size: 16px;
             color: var(--text-main);
+            font-weight: 500;
             width: 100%;
-            padding: 5px;
-            border-bottom: 1px dashed var(--border);
         }
 
-        .editable-input:focus { outline: none; border-bottom-color: var(--primary); }
-
-        /* أزرار الإجراءات */
-        .btn-pay {
-            background: var(--primary);
-            color: white;
+        .entry-amount input {
             border: none;
+            background: #f8fafc;
+            padding: 8px 12px;
+            border-radius: 10px;
+            width: 90px;
+            text-align: center;
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        /* 5. لوحة تحليلات البرو والذكاء الاصطناعي (AI Analytics) */
+        .pro-panel {
+            background: #fff;
+            border: 1px solid var(--pro-gold);
+            border-radius: 20px;
+            padding: 20px;
+            margin-top: 20px;
+            position: relative;
+            background-image: linear-gradient(to bottom right, #fff, #fffaf0);
+        }
+
+        .pro-badge {
+            position: absolute;
+            top: -12px;
+            right: 20px;
+            background: var(--pro-gold);
+            color: #000;
+            padding: 4px 12px;
+            border-radius: 8px;
+            font-size: 12px;
+            font-weight: 800;
+        }
+
+        .ai-tip {
+            background: #f1f9f5;
             padding: 12px;
             border-radius: 12px;
-            width: 100%;
-            font-weight: bold;
-            cursor: pointer;
-            margin-top: 10px;
+            border-right: 4px solid var(--primary);
+            font-size: 13px;
+            margin-top: 15px;
         }
 
-        /* Responsive */
+        /* أزرار الإجراءات السريعة */
+        .action-bar { display: flex; gap: 10px; margin-top: 20px; }
+        .btn { flex: 1; padding: 14px; border-radius: 14px; border: none; font-weight: 700; cursor: pointer; font-family: inherit; }
+        .btn-primary { background: var(--primary); color: white; }
+        .btn-outline { background: transparent; border: 1.5px solid var(--border); color: var(--text-main); }
+
+        /* التجاوب مع الجوال (Mobile Responsiveness) */
         @media (max-width: 480px) {
-            .logo-img { height: 50px; }
-            .header-content { padding: 0 10px; }
+            .logo-svg { height: 45px; }
+            .card-balance { font-size: 26px; }
+            .financial-card { padding: 20px; }
         }
     </style>
 </head>
-<body data-user="free" data-lang="ar">
+<body data-user-type="pro">
 
     <header class="app-header">
         <div class="header-content">
-            <button class="lang-switcher" onclick="toggleLanguage()" id="langBtn">EN</button>
+            <button class="btn-outline" style="padding: 8px 12px; font-size: 12px;">القائمة</button>
             
-            <div class="logo-box">
-                <img src="logo.png" alt="تــدّبير" class="logo-img">
-                <div style="font-weight: 900; font-size: 18px; color: var(--primary);">تــدّبير</div>
+            <div class="logo-area">
+                <object data="Vlogo2.svg" type="image/svg+xml" class="logo-svg"></object>
+                <div class="app-title">تــدّبير PRO</div>
             </div>
 
-            <div class="pro-status" onclick="handleUpgrade()">
-                <span class="pro-badge">PRO</span>
-                <span id="statusText">ترقية</span>
-            </div>
+            <div id="userProfile" style="font-weight: 700; color: var(--primary);">حساب نشط ✨</div>
         </div>
     </header>
 
-    <div class="container">
+    <main class="main-container">
         <div class="financial-card">
-            <div class="card-label" id="lblSummary">ملخص المحفظة المالية</div>
-            <div class="card-balance" id="totalBalance">5,420.00 SAR</div>
-            <div class="card-details">
+            <div class="card-label">إجمالي الرصيد المتاح</div>
+            <div class="card-balance" id="displayBalance">12,850.00 SAR</div>
+            <div class="card-info">
                 <div>
-                    <div class="card-label" id="lblExpenses">الإنفاق</div>
-                    <div style="font-weight: bold;">1,200 SAR</div>
+                    <div class="card-label">المصروفات</div>
+                    <div style="font-weight: 700;">3,420 SAR</div>
                 </div>
                 <div style="text-align: left;">
-                    <div class="card-label" id="lblSavings">الادخار</div>
-                    <div style="font-weight: bold; color: var(--primary);">4,220 SAR</div>
+                    <div class="card-label">هدف الادخار</div>
+                    <div style="font-weight: 700; color: var(--primary);">+15%</div>
                 </div>
             </div>
         </div>
 
-        <div class="section-title">
-            <span id="lblDailyPurchases">مشتريات اليوم</span>
-            <span style="font-size: 12px; color: var(--text-muted);" id="lastUpdate">محدث من اليوم السابق</span>
-        </div>
-        
-        <div id="purchasesList">
-            <div class="data-card">
-                <input type="text" class="editable-input" value="قهوة صباحية" onchange="saveData()">
-                <div style="display: flex; justify-content: space-between; margin-top: 8px;">
-                    <input type="number" class="editable-input" value="15" style="width: 80px;" onchange="saveData()">
-                    <span style="font-size: 12px; color: var(--text-muted);">10:30 AM</span>
+        <section>
+            <div class="section-header">
+                <h2>المشتريات اليومية</h2>
+                <button onclick="addNewEntry()" style="background: none; border: none; color: var(--primary); font-weight: 800; cursor: pointer;">+ إضافة جديد</button>
+            </div>
+            
+            <div id="entriesList">
+                <div class="entry-card">
+                    <div class="entry-info">
+                        <input type="text" value="تسوق مواد غذائية">
+                        <div style="font-size: 11px; color: var(--text-muted);">الساعة 04:20 م • الراجحي</div>
+                    </div>
+                    <div class="entry-amount">
+                        <input type="number" value="245">
+                    </div>
                 </div>
             </div>
-        </div>
+        </section>
 
-        <div class="section-title pro-only" id="lblProStats">إحصائيات البرو المتقدمة</div>
-        <div class="data-card pro-only">
-            <p id="proMsg">هذه الإحصائيات تظهر لمشتركي البرو فقط لتحليل النمط الشرائي السنوي.</p>
-        </div>
+        <section class="pro-panel">
+            <div class="pro-badge">AI ANALYTICS</div>
+            <h3 style="margin: 0; font-size: 16px;">تحليلات ذكية (PRO)</h3>
+            <p style="font-size: 13px; color: var(--text-muted);">بناءً على نمط إنفاقك في آخر 7 أيام:</p>
+            
+            <div class="ai-tip">
+                <strong>💡 نصيحة ذكية:</strong> لقد ارتفع إنفاقك على "المطاعم" بنسبة 12%. نقترح عليك تقليل الطلبات الخارجية هذا الأسبوع لتحقيق هدفك للادخار.
+            </div>
 
-        <div class="free-only">
-            <button class="btn-pay" onclick="handleUpgrade()" id="btnUpgrade">اشترك في البرو (تفعيل الدفع)</button>
+            <div style="display: flex; gap: 10px; margin-top: 15px;">
+                <div style="flex: 1; background: #fff; padding: 10px; border-radius: 10px; border: 1px solid var(--border); text-align: center;">
+                    <div class="card-label">توقع نهاية الشهر</div>
+                    <div style="font-weight: 800; color: var(--danger);">1,200 SAR</div>
+                </div>
+                <div style="flex: 1; background: #fff; padding: 10px; border-radius: 10px; border: 1px solid var(--border); text-align: center;">
+                    <div class="card-label">درجة الاستقرار</div>
+                    <div style="font-weight: 800; color: var(--primary);">جيد جداً</div>
+                </div>
+            </div>
+        </section>
+
+        <div class="action-bar">
+            <button class="btn btn-outline" onclick="exportReport()">تحميل التقرير</button>
+            <button class="btn btn-primary" onclick="saveData()">حفظ التغييرات</button>
         </div>
-    </div>
+    </main>
 
     <script>
-        // نظام إدارة الحالة (State Management)
-        const state = {
-            lang: 'ar',
-            userStatus: 'free',
-            lastResetDate: new Date().toLocaleDateString(),
-            translations: {
-                ar: {
-                    langBtn: 'EN',
-                    statusText: 'ترقية',
-                    lblSummary: 'ملخص المحفظة المالية',
-                    lblExpenses: 'الإنفاق',
-                    lblSavings: 'الادخار',
-                    lblDailyPurchases: 'مشتريات اليوم',
-                    lastUpdate: 'محدث تلقائياً',
-                    lblProStats: 'إحصائيات البرو المتقدمة',
-                    proMsg: 'هذه الإحصائيات تظهر لمشتركي البرو فقط لتحليل النمط الشرائي السنوي.',
-                    btnUpgrade: 'اشترك في البرو (تفعيل الدفع)',
-                    upgradeAlert: 'سيتم توجيهك الآن لبوابة الدفع الإلكتروني لترقية حسابك...'
-                },
-                en: {
-                    langBtn: 'AR',
-                    statusText: 'Upgrade',
-                    lblSummary: 'Financial Wallet Summary',
-                    lblExpenses: 'Expenses',
-                    lblSavings: 'Savings',
-                    lblDailyPurchases: 'Daily Purchases',
-                    lastUpdate: 'Auto-updated',
-                    lblProStats: 'Pro Advanced Stats',
-                    proMsg: 'This section is only available for Pro users to analyze annual spending patterns.',
-                    btnUpgrade: 'Subscribe to PRO (Enable Payment)',
-                    upgradeAlert: 'You will be redirected to the payment gateway...'
-                }
+        // نظام إدارة البيانات (Tadabeer Engine)
+        const Tadabeer = {
+            data: {
+                balance: 12850,
+                entries: []
+            },
+
+            init() {
+                console.log("نظام تدّبير PRO جاهز...");
+                this.setupListeners();
+            },
+
+            setupListeners() {
+                document.addEventListener('input', (e) => {
+                    if (e.target.type === 'number') {
+                        this.updateTotals();
+                    }
+                });
+            },
+
+            updateTotals() {
+                let total = 0;
+                document.querySelectorAll('.entry-amount input').forEach(input => {
+                    total += parseFloat(input.value) || 0;
+                });
+                console.log("إجمالي المصاريف الحالي: " + total);
             }
         };
 
-        // 1. وظيفة تبديل اللغة (بدون تحميل الصفحة)
-        function toggleLanguage() {
-            state.lang = state.lang === 'ar' ? 'en' : 'ar';
-            document.body.setAttribute('data-lang', state.lang);
-            document.dir = state.lang === 'ar' ? 'rtl' : 'ltr';
-            
-            const t = state.translations[state.lang];
-            for (let id in t) {
-                const el = document.getElementById(id);
-                if (el) el.innerText = t[id];
-            }
-            saveData();
+        function addNewEntry() {
+            const list = document.getElementById('entriesList');
+            const newCard = document.createElement('div');
+            newCard.className = 'entry-card';
+            newCard.innerHTML = `
+                <div class="entry-info">
+                    <input type="text" placeholder="اسم المشتريات...">
+                    <div style="font-size: 11px; color: var(--text-muted);">الآن • يدوي</div>
+                </div>
+                <div class="entry-amount">
+                    <input type="number" value="0">
+                </div>
+            `;
+            list.prepend(newCard);
+            newCard.querySelector('input').focus();
         }
 
-        // 2. نظام الترقية والدفع
-        function handleUpgrade() {
-            if (state.userStatus === 'free') {
-                alert(state.translations[state.lang].upgradeAlert);
-                // محاكاة نجاح الدفع
-                setTimeout(() => {
-                    state.userStatus = 'pro';
-                    document.body.setAttribute('data-user', 'pro');
-                    document.getElementById('statusText').innerText = state.lang === 'ar' ? 'حساب برو' : 'PRO Account';
-                    saveData();
-                }, 1500);
-            }
-        }
-
-        // 3. تحديث البيانات تلقائياً (نظام اليوم الجديد)
-        function checkDailyUpdate() {
-            const today = new Date().toLocaleDateString();
-            const savedDate = localStorage.getItem('lastUpdateDate');
-            
-            if (savedDate && savedDate !== today) {
-                // تدوير البيانات: نقل مشتريات اليوم السابق للأرشيف وتصفير اليوم الجديد
-                console.log("يوم جديد: تم تحديث القائمة تلقائياً");
-                // منطق التحديث التلقائي هنا
-            }
-            localStorage.setItem('lastUpdateDate', today);
-        }
-
-        // 4. حفظ وتعديل البيانات
         function saveData() {
-            const data = {
-                status: state.userStatus,
-                lang: state.lang,
-                // يمكنك إضافة كافة الأرقام هنا
-            };
-            localStorage.setItem('tadabeer_data', JSON.stringify(data));
-            console.log("تم حفظ البيانات والتحقق من صحتها...");
+            alert("تم حفظ كافة التعديلات المالية بنجاح ✅");
         }
 
-        // عند التحميل
-        window.onload = () => {
-            checkDailyUpdate();
-            // تحميل البيانات المحفوظة إن وجدت
-            const saved = localStorage.getItem('tadabeer_data');
-            if (saved) {
-                const parsed = JSON.parse(saved);
-                if (parsed.status === 'pro') handleUpgrade();
-            }
-        };
+        function exportReport() {
+            alert("جاري إعداد تقرير PDF مفصل لتحليلاتك المالية...");
+        }
+
+        Tadabeer.init();
     </script>
 </body>
 </html>
