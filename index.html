@@ -3340,7 +3340,7 @@ body::before {
       <input type="text" class="auth-input" id="authUsername" placeholder="اسم المستخدم (بالإنجليزية)" maxlength="20" style="display:none" autocomplete="username">
       <input type="email" class="auth-input" id="authEmail" placeholder="البريد الإلكتروني" autocomplete="email" required>
       <input type="password" class="auth-input" id="authPass" placeholder="كلمة السر (٦ أحرف+)" autocomplete="current-password" minlength="6" required>
-      <button type="submit" class="auth-btn-primary" id="authSubmitBtn">🔐 تسجيل الدخول</button>
+      <button type="submit" class="auth-btn-primary" id="authSubmitBtn" onclick="setTimeout(function(){if(window.__authSubmit)window.__authSubmit({preventDefault:function(){}});else alert('الكود لم يُحمّل بعد — انتظر ثانية وحاول');},50);">🔐 تسجيل الدخول</button>
     </form>
     
     <div class="auth-divider">أو</div>
@@ -3358,49 +3358,74 @@ body::before {
 
 <div class="toast-wrap" id="toastWrap" aria-live="polite"></div>
 
-<!-- Firebase SDK (loaded as module, exposes to global) -->
-<script type="module">
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-app.js";
-  import {
-    getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword,
-    signOut, onAuthStateChanged, GoogleAuthProvider, signInWithPopup,
-    sendPasswordResetEmail, updateProfile
-  } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-auth.js";
-  import {
-    getFirestore, doc, setDoc, getDoc, updateDoc, deleteDoc,
-    collection, query, where, getDocs, onSnapshot, serverTimestamp,
-    addDoc, writeBatch, orderBy, limit
-  } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-firestore.js";
-
-  const firebaseConfig = {
-    apiKey: "AIzaSyB2GzbIFGbvb6keWuBu5XsYVXy-qfeE6Og",
-    authDomain: "tadbeer-f76e4.firebaseapp.com",
-    projectId: "tadbeer-f76e4",
-    storageBucket: "tadbeer-f76e4.firebasestorage.app",
-    messagingSenderId: "721485864761",
-    appId: "1:721485864761:web:b45d21ec24b6fc090652e8"
-  };
-
-  const fbApp = initializeApp(firebaseConfig);
-  const auth = getAuth(fbApp);
-  const db = getFirestore(fbApp);
-
-  // Expose to global window for non-module scripts
-  window.FB = {
-    auth, db,
-    signIn: signInWithEmailAndPassword,
-    signUp: createUserWithEmailAndPassword,
-    signOut, onAuthStateChanged,
-    googleProvider: new GoogleAuthProvider(),
-    signInWithPopup,
-    sendPasswordResetEmail,
-    updateProfile,
-    doc, setDoc, getDoc, updateDoc, deleteDoc,
-    collection, query, where, getDocs, onSnapshot, serverTimestamp,
-    addDoc, writeBatch, orderBy, limit,
-    ready: true
-  };
-  window.dispatchEvent(new CustomEvent('fb-ready'));
+<!-- Firebase SDK v8 (maximum compatibility, loads synchronously) -->
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+<script>
+  (function() {
+    try {
+      const firebaseConfig = {
+        apiKey: "AIzaSyB2GzbIFGbvb6keWuBu5XsYVXy-qfeE6Og",
+        authDomain: "tadbeer-f76e4.firebaseapp.com",
+        projectId: "tadbeer-f76e4",
+        storageBucket: "tadbeer-f76e4.firebasestorage.app",
+        messagingSenderId: "721485864761",
+        appId: "1:721485864761:web:b45d21ec24b6fc090652e8"
+      };
+      
+      if (typeof firebase === 'undefined') {
+        console.error('Firebase SDK failed to load');
+        return;
+      }
+      
+      firebase.initializeApp(firebaseConfig);
+      const auth = firebase.auth();
+      const db = firebase.firestore();
+      
+      // Expose to global window with API matching modular version
+      window.FB = {
+        auth, db,
+        signIn: (a, email, pass) => auth.signInWithEmailAndPassword(email, pass),
+        signUp: (a, email, pass) => auth.createUserWithEmailAndPassword(email, pass),
+        signOut: (a) => auth.signOut(),
+        onAuthStateChanged: (a, cb) => auth.onAuthStateChanged(cb),
+        googleProvider: new firebase.auth.GoogleAuthProvider(),
+        signInWithPopup: (a, provider) => auth.signInWithPopup(provider),
+        sendPasswordResetEmail: (a, email) => auth.sendPasswordResetEmail(email),
+        updateProfile: (user, data) => user.updateProfile(data),
+        doc: function(dbOrColl, collName, docId) {
+          if (arguments.length === 3) return dbOrColl.collection(collName).doc(docId);
+          if (arguments.length === 2) return dbOrColl.doc(collName);
+          return dbOrColl;
+        },
+        setDoc: (docRef, data) => docRef.set(data),
+        getDoc: (docRef) => docRef.get(),
+        updateDoc: (docRef, data) => docRef.update(data),
+        deleteDoc: (docRef) => docRef.delete(),
+        collection: (db, name) => db.collection(name),
+        query: (collRef, ...filters) => {
+          let q = collRef;
+          filters.forEach(f => { if (f && f._apply) q = f._apply(q); });
+          return q;
+        },
+        where: (field, op, val) => ({ _apply: (q) => q.where(field, op, val) }),
+        orderBy: (field, dir) => ({ _apply: (q) => q.orderBy(field, dir) }),
+        limit: (n) => ({ _apply: (q) => q.limit(n) }),
+        getDocs: (q) => q.get(),
+        onSnapshot: (q, cb, errCb) => q.onSnapshot(cb, errCb),
+        addDoc: (collRef, data) => collRef.add(data),
+        writeBatch: () => db.batch(),
+        serverTimestamp: () => firebase.firestore.FieldValue.serverTimestamp(),
+        ready: true
+      };
+      
+      window.dispatchEvent(new CustomEvent('fb-ready'));
+      console.log('Firebase loaded successfully');
+    } catch (err) {
+      console.error('Firebase init error:', err.message || err);
+    }
+  })();
 </script>
 
 <script>
@@ -6600,12 +6625,30 @@ const Social = (() => {
   }
   
   async function handleAuthSubmit(e) {
-    e.preventDefault();
+    if (e && e.preventDefault) e.preventDefault();
     const FB = window.FB;
-    const email = $('#authEmail').value.trim();
-    const pass = $('#authPass').value;
+    
+    // Check if Firebase is ready
+    if (!FB || !FB.ready) {
+      showAuthError('⏳ انتظر قليلاً... جاري تحميل Firebase');
+      // Retry after 2 seconds
+      setTimeout(() => {
+        if (window.FB && window.FB.ready) {
+          $('#authError').classList.remove('show');
+        }
+      }, 2000);
+      return;
+    }
+    
+    const email = ($('#authEmail').value || '').trim();
+    const pass = $('#authPass').value || '';
     const btn = $('#authSubmitBtn');
+    
+    if (!email) { showAuthError('أدخل البريد الإلكتروني'); return; }
+    if (!pass || pass.length < 6) { showAuthError('كلمة السر يجب أن تكون ٦ أحرف على الأقل'); return; }
+    
     btn.disabled = true;
+    btn.textContent = '⏳ جاري المعالجة...';
     $('#authError').classList.remove('show');
     
     try {
@@ -6620,9 +6663,7 @@ const Social = (() => {
         if (usernameDoc.exists()) throw { code: 'username-taken' };
         
         const cred = await FB.signUp(FB.auth, email, pass);
-        await FB.updateProfile(cred.user, { displayName: name });
-        // loadProfile() will be called by onAuthStateChanged, but we need to
-        // pre-create with custom username
+        try { await FB.updateProfile(cred.user, { displayName: name }); } catch {}
         const profile = {
           id: cred.user.uid,
           name, username,
@@ -6647,9 +6688,10 @@ const Social = (() => {
     } catch (err) {
       Logger.error('Social.auth', err);
       const msg = friendlyAuthError(err);
-      showAuthError(msg);
+      showAuthError(msg + (err.message ? ' (' + err.message + ')' : ''));
     } finally {
       btn.disabled = false;
+      btn.textContent = authMode === 'signup' ? '✨ إنشاء حساب' : '🔐 تسجيل الدخول';
     }
   }
   
