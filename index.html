@@ -5,7 +5,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
 <meta name="theme-color" content="#0a0a0a">
 <meta name="description" content="تـدّبير — مخططك المالي الذكي: تتبّع الدخل والمصاريف، حاسبة الزكاة، أهداف مالية">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -116,6 +116,28 @@
   --text:  #e8e8f0;
   --text2: #8888a0;
   --text3: #383850;
+}
+
+/* Rose theme (للبنات) */
+[data-theme="rose"] {
+  --bg:     #1a0d14;
+  --bg2:    #261520;
+  --bg3:    #321a2a;
+  --bg4:    #3f2034;
+  --bg5:    #4a273f;
+  --accent: #ff6fa5;
+  --accent-2: #ffa8c5;
+  --accent-dim:  rgba(255,111,165,.14);
+  --accent-glow: rgba(255,111,165,.35);
+  --accent-bd:   rgba(255,111,165,.38);
+  --text:  #fce8f2;
+  --text2: #c09cb0;
+  --text3: #846b7b;
+  --green-2: #ffb3c7;
+  --green-dim: rgba(255,168,197,.15);
+  --border: rgba(255,111,165,.15);
+  --border2: rgba(255,111,165,.28);
+  --shadow-2: 0 4px 20px rgba(255,111,165,.2);
 }
 
 /* Reduced motion */
@@ -346,12 +368,13 @@ body::before {
 .header-band {
   background: linear-gradient(90deg, var(--accent-dim), transparent, var(--accent-dim));
   border-bottom: 1px solid var(--accent-bd);
-  padding: 4px var(--s-4);
+  padding: 6px var(--s-4);
   display: flex;
   align-items: center;
   justify-content: center;
   gap: var(--s-2);
-  font-size: 10px;
+  font-size: 11px;
+  flex-wrap: wrap;
 }
 .header-band-chip {
   background: var(--accent);
@@ -1677,6 +1700,48 @@ body::before {
 .theme-swatch.light .swatch-name { color: #0f172a; }
 .theme-swatch.midnight { background: linear-gradient(160deg, #060810, #161b27); }
 .theme-swatch.midnight .swatch-name { color: #e2e8f0; }
+.theme-swatch.rose { background: linear-gradient(160deg, #1a0d14, #3f2034); border-color: rgba(255,111,165,.3); }
+.theme-swatch.rose .swatch-emoji { color: #ffa8c5; }
+.theme-swatch.rose .swatch-name { color: #fce8f2; }
+.theme-swatch.rose .swatch-desc { color: #c09cb0; }
+
+/* Language buttons */
+.lang-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:10px;
+}
+.lang-btn{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:8px;
+  padding:14px;
+  background:var(--bg3);
+  border:1px solid var(--border2);
+  border-radius:12px;
+  color:var(--text2);
+  font-size:14px;
+  font-weight:700;
+  transition:all var(--t-fast);
+}
+.lang-btn.active{
+  background:var(--accent-dim);
+  border-color:var(--accent);
+  color:var(--accent-2);
+}
+
+/* Header date band */
+.header-band-date{
+  background:var(--accent-dim);
+  border:1px solid var(--accent-bd);
+  color:var(--accent-2);
+  padding:4px 12px;
+  border-radius:12px;
+  font-size:11px;
+  font-weight:700;
+  white-space:nowrap;
+}
 .swatch-emoji { font-size: 24px; }
 .swatch-name { font-size: 11px; font-weight: 700; }
 .swatch-desc { font-size: 9px; text-align: center; color: var(--text3); }
@@ -2918,7 +2983,7 @@ body::before {
 /* ═══ CHAT + PROFILE SYSTEM v2.2 ═══ */
 .chat-overlay{position:fixed;inset:0;z-index:100000;background:rgba(0,0,0,.6);opacity:0;pointer-events:none;transition:opacity var(--t-med)}
 .chat-overlay.open{opacity:1;pointer-events:all}
-.chat-panel{position:fixed;bottom:0;left:50%;transform:translate(-50%,100%);z-index:100001;width:100%;max-width:var(--container);height:90vh;height:90dvh;background:var(--bg);border-radius:24px 24px 0 0;border-top:1px solid var(--accent-bd);display:flex;flex-direction:column;transition:transform var(--t-slow) var(--ease);box-shadow:0 -12px 48px rgba(0,0,0,.7);overflow:hidden;padding-bottom:env(safe-area-inset-bottom)}
+.chat-panel{position:fixed;bottom:0;left:50%;transform:translate(-50%,100%);z-index:100001;width:100%;max-width:var(--container);height:100vh;height:100dvh;background:var(--bg);border-radius:20px 20px 0 0;border-top:1px solid var(--accent-bd);display:flex;flex-direction:column;transition:transform var(--t-slow) var(--ease);box-shadow:0 -12px 48px rgba(0,0,0,.7);overflow:hidden}
 .chat-panel.open{transform:translate(-50%,0)}
 .chat-header{background:var(--bg2);border-bottom:1px solid var(--border);padding:var(--s-3) var(--s-4);padding-top:calc(var(--s-3) + env(safe-area-inset-top,0px));display:flex;align-items:center;gap:var(--s-3);flex-shrink:0}
 .chat-back{width:34px;height:34px;border-radius:50%;background:var(--bg3);border:1px solid var(--border2);color:var(--text2);font-size:20px;display:flex;align-items:center;justify-content:center;transition:all var(--t-fast);flex-shrink:0}
@@ -2945,10 +3010,10 @@ body::before {
 .chat-empty-icon{width:64px;height:64px;border-radius:50%;background:var(--accent-dim);border:1px solid var(--accent-bd);display:flex;align-items:center;justify-content:center;font-size:30px}
 .chat-empty-title{font-size:15px;font-weight:700;color:var(--text2)}
 .chat-empty-desc{font-size:12px;color:var(--text3);line-height:1.6;max-width:260px}
-.chat-input-bar{background:var(--bg2);border-top:1px solid var(--border);padding:var(--s-3);display:flex;gap:var(--s-2);align-items:flex-end;flex-shrink:0}
-.chat-input{flex:1;background:var(--bg3);border:1.5px solid var(--border);border-radius:22px;padding:11px 16px;color:var(--text);font-size:14px;font-family:inherit;resize:none;max-height:100px;min-height:42px;line-height:1.4;transition:border-color var(--t-fast)}
+.chat-input-bar{background:var(--bg2);border-top:1px solid var(--border);padding:10px 12px;display:flex;gap:8px;align-items:flex-end;flex-shrink:0;padding-bottom:calc(10px + env(safe-area-inset-bottom))}
+.chat-input{flex:1;min-width:0;background:var(--bg3);border:1.5px solid var(--border);border-radius:20px;padding:10px 14px;color:var(--text);font-size:15px;font-family:inherit;resize:none;max-height:80px;min-height:40px;line-height:1.4;transition:border-color var(--t-fast);-webkit-appearance:none;overflow-y:auto}
 .chat-input:focus{border-color:var(--accent);outline:none}
-.chat-send{width:42px;height:42px;border-radius:50%;background:linear-gradient(135deg,var(--accent),var(--accent-2));color:#0a0600;font-size:16px;display:flex;align-items:center;justify-content:center;box-shadow:0 3px 12px var(--accent-glow);transition:all var(--t-fast);flex-shrink:0}
+.chat-send{width:44px;height:44px;border-radius:50%;background:linear-gradient(135deg,var(--accent),var(--accent-2));color:#0a0600;font-size:18px;font-weight:800;display:flex;align-items:center;justify-content:center;box-shadow:0 3px 12px var(--accent-glow);transition:all var(--t-fast);flex-shrink:0;border:none;cursor:pointer;padding:0}
 .chat-send:disabled{background:var(--bg4);color:var(--text3);box-shadow:none;opacity:.6}
 .chat-send:not(:disabled):active{transform:scale(.92)}
 .conv-card{display:flex;align-items:center;gap:var(--s-3);padding:var(--s-3);background:var(--bg3);border:1px solid var(--border);border-radius:var(--r-md);margin-bottom:6px;transition:all var(--t-fast);cursor:pointer}
@@ -3046,7 +3111,7 @@ body::before {
 /* ─── CHAT SYSTEM v2.1 ─── */
 .chat-overlay{position:fixed;inset:0;z-index:100000;background:rgba(0,0,0,.6);opacity:0;pointer-events:none;transition:opacity var(--t-med)}
 .chat-overlay.open{opacity:1;pointer-events:all}
-.chat-panel{position:fixed;bottom:0;left:50%;transform:translate(-50%,100%);z-index:100001;width:100%;max-width:var(--container);height:90vh;height:90dvh;background:var(--bg);border-radius:24px 24px 0 0;border-top:1px solid var(--accent-bd);display:flex;flex-direction:column;transition:transform var(--t-slow) var(--ease);box-shadow:0 -12px 48px rgba(0,0,0,.7);overflow:hidden;padding-bottom:env(safe-area-inset-bottom)}
+.chat-panel{position:fixed;bottom:0;left:50%;transform:translate(-50%,100%);z-index:100001;width:100%;max-width:var(--container);height:100vh;height:100dvh;background:var(--bg);border-radius:20px 20px 0 0;border-top:1px solid var(--accent-bd);display:flex;flex-direction:column;transition:transform var(--t-slow) var(--ease);box-shadow:0 -12px 48px rgba(0,0,0,.7);overflow:hidden}
 .chat-panel.open{transform:translate(-50%,0)}
 .chat-header{background:var(--bg2);border-bottom:1px solid var(--border);padding:var(--s-3) var(--s-4);padding-top:calc(var(--s-3) + env(safe-area-inset-top,0px));display:flex;align-items:center;gap:var(--s-3);flex-shrink:0}
 .chat-back{width:34px;height:34px;border-radius:50%;background:var(--bg3);border:1px solid var(--border2);color:var(--text2);font-size:20px;display:flex;align-items:center;justify-content:center;transition:all var(--t-fast);flex-shrink:0}
@@ -3073,10 +3138,10 @@ body::before {
 .chat-empty-icon{width:64px;height:64px;border-radius:50%;background:var(--accent-dim);border:1px solid var(--accent-bd);display:flex;align-items:center;justify-content:center;font-size:30px}
 .chat-empty-title{font-size:15px;font-weight:700;color:var(--text2)}
 .chat-empty-desc{font-size:12px;color:var(--text3);line-height:1.6;max-width:260px}
-.chat-input-bar{background:var(--bg2);border-top:1px solid var(--border);padding:var(--s-3);display:flex;gap:var(--s-2);align-items:flex-end;flex-shrink:0}
-.chat-input{flex:1;background:var(--bg3);border:1.5px solid var(--border);border-radius:22px;padding:11px 16px;color:var(--text);font-size:14px;font-family:inherit;resize:none;max-height:100px;min-height:42px;line-height:1.4;transition:border-color var(--t-fast);-webkit-appearance:none}
+.chat-input-bar{background:var(--bg2);border-top:1px solid var(--border);padding:10px 12px;display:flex;gap:8px;align-items:flex-end;flex-shrink:0;padding-bottom:calc(10px + env(safe-area-inset-bottom))}
+.chat-input{flex:1;min-width:0;background:var(--bg3);border:1.5px solid var(--border);border-radius:20px;padding:10px 14px;color:var(--text);font-size:15px;font-family:inherit;resize:none;max-height:80px;min-height:40px;line-height:1.4;transition:border-color var(--t-fast);-webkit-appearance:none;overflow-y:auto}
 .chat-input:focus{border-color:var(--accent);outline:none}
-.chat-send{width:42px;height:42px;border-radius:50%;background:linear-gradient(135deg,var(--accent),var(--accent-2));color:#0a0600;font-size:16px;display:flex;align-items:center;justify-content:center;box-shadow:0 3px 12px var(--accent-glow);transition:all var(--t-fast);flex-shrink:0}
+.chat-send{width:44px;height:44px;border-radius:50%;background:linear-gradient(135deg,var(--accent),var(--accent-2));color:#0a0600;font-size:18px;font-weight:800;display:flex;align-items:center;justify-content:center;box-shadow:0 3px 12px var(--accent-glow);transition:all var(--t-fast);flex-shrink:0;border:none;cursor:pointer;padding:0}
 .chat-send:disabled{background:var(--bg4);color:var(--text3);box-shadow:none;cursor:not-allowed;opacity:.6}
 .chat-send:not(:disabled):active{transform:scale(.92)}
 
@@ -3379,6 +3444,1260 @@ body::before {
   color:#0a0600;
 }
 
+/* ═══ SMART FEATURES (Simulator, Daily Box, Voice Input) ═══ */
+
+/* Feature grid in friends tab */
+.smart-tools-grid{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:var(--s-2);
+  margin-bottom:var(--s-3);
+}
+.smart-tool-btn{
+  background:var(--bg3);
+  border:1px solid var(--border2);
+  border-radius:var(--r-md);
+  padding:var(--s-3) var(--s-2);
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:6px;
+  transition:all var(--t-fast);
+  cursor:pointer;
+  position:relative;
+  overflow:hidden;
+}
+.smart-tool-btn::before{
+  content:'';
+  position:absolute;
+  top:0;left:0;right:0;
+  height:2px;
+  background:linear-gradient(90deg,transparent,var(--accent),transparent);
+  opacity:0;
+  transition:opacity var(--t-fast);
+}
+.smart-tool-btn:hover{
+  border-color:var(--accent-bd);
+  background:var(--bg4);
+  transform:translateY(-2px);
+}
+.smart-tool-btn:hover::before{opacity:1}
+.smart-tool-btn.has-gift{
+  border-color:var(--accent);
+  background:linear-gradient(135deg,var(--accent-dim),var(--bg3));
+}
+.smart-tool-btn.has-gift::after{
+  content:'';
+  position:absolute;
+  top:5px;right:5px;
+  width:8px;height:8px;
+  background:var(--danger);
+  border-radius:50%;
+  animation:pulse 2s infinite;
+}
+.smart-tool-icon{
+  font-size:22px;
+  line-height:1;
+  margin-bottom:2px;
+}
+.smart-tool-label{
+  font-size:10px;
+  font-weight:700;
+  color:var(--text2);
+  text-align:center;
+  line-height:1.3;
+}
+
+/* ═══ DAILY GIFT BOX ═══ */
+.gift-overlay{
+  position:fixed;
+  inset:0;
+  z-index:100010;
+  background:rgba(0,0,0,.85);
+  display:none;
+  align-items:center;
+  justify-content:center;
+  padding:var(--s-4);
+  backdrop-filter:blur(4px);
+}
+.gift-overlay.open{display:flex;animation:fadeIn var(--t-med)}
+.gift-card{
+  background:linear-gradient(145deg,#1a1400,#0a0600);
+  border:2px solid var(--accent);
+  border-radius:24px;
+  padding:var(--s-6) var(--s-5);
+  max-width:340px;
+  width:100%;
+  text-align:center;
+  position:relative;
+  overflow:hidden;
+  box-shadow:0 0 60px var(--accent-glow);
+}
+.gift-card::before{
+  content:'';
+  position:absolute;
+  inset:0;
+  background:radial-gradient(circle at 50% 0%,var(--accent-dim) 0%,transparent 60%);
+  pointer-events:none;
+}
+.gift-box-visual{
+  width:140px;height:140px;
+  margin:0 auto var(--s-4);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:110px;
+  position:relative;
+  transition:transform var(--t-slow);
+  cursor:pointer;
+}
+.gift-box-visual.shaking{animation:giftShake .4s ease-in-out infinite}
+.gift-box-visual.opening{animation:giftOpen 1s ease-out forwards}
+@keyframes giftShake{
+  0%,100%{transform:rotate(0)}
+  25%{transform:rotate(-10deg)}
+  75%{transform:rotate(10deg)}
+}
+@keyframes giftOpen{
+  0%{transform:scale(1)}
+  50%{transform:scale(1.3) rotate(15deg)}
+  100%{transform:scale(0.8) rotate(-5deg);opacity:0.3}
+}
+.gift-title{
+  font-size:24px;
+  font-weight:800;
+  color:var(--accent-2);
+  margin-bottom:var(--s-2);
+  position:relative;
+}
+.gift-desc{
+  font-size:13px;
+  color:var(--text3);
+  margin-bottom:var(--s-4);
+  line-height:1.6;
+  position:relative;
+}
+.gift-open-btn{
+  width:100%;
+  padding:16px;
+  border-radius:14px;
+  background:linear-gradient(135deg,var(--accent),var(--accent-2));
+  color:#0a0600;
+  font-size:16px;
+  font-weight:800;
+  box-shadow:0 4px 16px var(--accent-glow);
+  position:relative;
+  overflow:hidden;
+}
+.gift-open-btn:active{transform:scale(.97)}
+.gift-close-btn{
+  position:absolute;
+  top:12px;left:12px;
+  width:32px;height:32px;
+  border-radius:50%;
+  background:var(--bg3);
+  border:1px solid var(--border2);
+  color:var(--text2);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  z-index:2;
+}
+.gift-result{
+  display:none;
+  animation:giftReveal .6s ease-out;
+  position:relative;
+}
+.gift-result.show{display:block}
+@keyframes giftReveal{
+  0%{opacity:0;transform:scale(.5) rotate(-180deg)}
+  50%{transform:scale(1.1) rotate(0)}
+  100%{opacity:1;transform:scale(1) rotate(0)}
+}
+.gift-reward-icon{
+  font-size:80px;
+  line-height:1;
+  margin-bottom:var(--s-3);
+  filter:drop-shadow(0 0 20px var(--accent-glow));
+}
+.gift-reward-text{
+  font-size:20px;
+  font-weight:800;
+  color:var(--accent-2);
+  margin-bottom:var(--s-2);
+}
+.gift-reward-detail{
+  font-size:13px;
+  color:var(--text2);
+  margin-bottom:var(--s-4);
+  line-height:1.6;
+}
+.confetti-piece{
+  position:absolute;
+  width:10px;height:10px;
+  top:-20px;
+  pointer-events:none;
+  animation:confettiFall 2.5s linear forwards;
+}
+@keyframes confettiFall{
+  to{
+    transform:translateY(100vh) rotate(720deg);
+    opacity:0;
+  }
+}
+.gift-locked-timer{
+  font-size:24px;
+  font-weight:800;
+  color:var(--accent-2);
+  font-variant-numeric:tabular-nums;
+  margin-bottom:var(--s-2);
+}
+.gift-locked-label{
+  font-size:13px;
+  color:var(--text3);
+  margin-bottom:var(--s-4);
+}
+
+/* ═══ FINANCIAL SIMULATOR ═══ */
+.sim-overlay{
+  position:fixed;
+  inset:0;
+  z-index:100008;
+  background:rgba(0,0,0,.8);
+  display:none;
+  align-items:flex-end;
+  justify-content:center;
+  backdrop-filter:blur(4px);
+}
+.sim-overlay.open{display:flex;animation:fadeIn var(--t-med)}
+.sim-modal{
+  background:var(--bg2);
+  border:1px solid var(--accent-bd);
+  border-radius:24px 24px 0 0;
+  width:100%;
+  max-width:var(--container);
+  max-height:90vh;
+  max-height:90dvh;
+  overflow-y:auto;
+  padding:var(--s-5);
+  padding-bottom:calc(var(--s-5) + env(safe-area-inset-bottom));
+  animation:slideUp var(--t-slow) var(--ease);
+  position:relative;
+}
+@keyframes slideUp{
+  from{transform:translateY(100%)}
+  to{transform:translateY(0)}
+}
+.sim-header{
+  display:flex;
+  align-items:center;
+  gap:var(--s-3);
+  margin-bottom:var(--s-4);
+  padding-bottom:var(--s-3);
+  border-bottom:1px solid var(--border);
+}
+.sim-icon-big{
+  width:52px;height:52px;
+  border-radius:14px;
+  background:linear-gradient(135deg,var(--accent),var(--accent-2));
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:28px;
+  flex-shrink:0;
+  box-shadow:0 4px 16px var(--accent-glow);
+}
+.sim-title{font-size:19px;font-weight:800;color:var(--text)}
+.sim-subtitle{font-size:12px;color:var(--text3);margin-top:2px}
+.sim-close{
+  margin-right:auto;
+  width:36px;height:36px;
+  border-radius:50%;
+  background:var(--bg3);
+  border:1px solid var(--border2);
+  color:var(--text2);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  flex-shrink:0;
+}
+.sim-scenarios{
+  display:flex;
+  flex-direction:column;
+  gap:var(--s-2);
+  margin-bottom:var(--s-4);
+}
+.sim-scenario-btn{
+  background:var(--bg3);
+  border:1px solid var(--border);
+  border-radius:12px;
+  padding:var(--s-3);
+  text-align:right;
+  display:flex;
+  align-items:center;
+  gap:var(--s-3);
+  transition:all var(--t-fast);
+  width:100%;
+  cursor:pointer;
+}
+.sim-scenario-btn:hover,.sim-scenario-btn.active{
+  border-color:var(--accent);
+  background:var(--accent-dim);
+}
+.sim-scenario-emoji{font-size:24px;flex-shrink:0}
+.sim-scenario-text{flex:1;font-size:14px;font-weight:600;color:var(--text)}
+.sim-result{
+  background:linear-gradient(145deg,#0d0d0d,#1a1400);
+  border:1px solid var(--accent-bd);
+  border-radius:var(--r-lg);
+  padding:var(--s-5);
+  display:none;
+  animation:fadeIn var(--t-med);
+  position:relative;
+  overflow:hidden;
+}
+.sim-result.show{display:block}
+.sim-result::before{
+  content:'';
+  position:absolute;
+  top:0;left:0;right:0;
+  height:2px;
+  background:linear-gradient(90deg,transparent,var(--accent),var(--accent-2),var(--accent),transparent);
+}
+.sim-result-headline{
+  font-size:12px;
+  color:var(--text3);
+  margin-bottom:4px;
+  text-transform:uppercase;
+  letter-spacing:1px;
+}
+.sim-result-number{
+  font-size:36px;
+  font-weight:800;
+  color:var(--accent-2);
+  line-height:1.1;
+  margin-bottom:var(--s-2);
+  font-variant-numeric:tabular-nums;
+}
+.sim-result-period{
+  font-size:14px;
+  color:var(--text2);
+  margin-bottom:var(--s-4);
+}
+.sim-equivalents{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:8px;
+  margin-bottom:var(--s-3);
+}
+.sim-equiv{
+  background:var(--bg4);
+  border-radius:10px;
+  padding:10px;
+  text-align:center;
+}
+.sim-equiv-icon{font-size:24px;margin-bottom:4px}
+.sim-equiv-text{font-size:11px;color:var(--text2);font-weight:600}
+.sim-custom-inputs{
+  background:var(--bg3);
+  border:1px solid var(--border);
+  border-radius:12px;
+  padding:var(--s-3);
+  margin-top:var(--s-3);
+}
+.sim-custom-row{
+  display:flex;
+  gap:8px;
+  align-items:center;
+  margin-bottom:8px;
+}
+.sim-custom-row:last-child{margin-bottom:0}
+.sim-custom-label{
+  font-size:12px;
+  color:var(--text3);
+  flex:1;
+}
+.sim-custom-input{
+  background:var(--bg4);
+  border:1px solid var(--border);
+  border-radius:8px;
+  padding:8px 12px;
+  color:var(--text);
+  font-size:14px;
+  width:100px;
+  text-align:center;
+  font-variant-numeric:tabular-nums;
+  direction:ltr;
+}
+.sim-calc-btn{
+  width:100%;
+  padding:12px;
+  border-radius:12px;
+  background:var(--accent);
+  color:#0a0600;
+  font-size:14px;
+  font-weight:700;
+  margin-top:var(--s-2);
+}
+
+/* ═══ VOICE INPUT ═══ */
+.voice-overlay{
+  position:fixed;
+  inset:0;
+  z-index:100009;
+  background:rgba(0,0,0,.85);
+  display:none;
+  align-items:center;
+  justify-content:center;
+  padding:var(--s-4);
+  backdrop-filter:blur(4px);
+}
+.voice-overlay.open{display:flex;animation:fadeIn var(--t-med)}
+.voice-modal{
+  background:var(--bg2);
+  border:1px solid var(--accent-bd);
+  border-radius:24px;
+  max-width:380px;
+  width:100%;
+  padding:var(--s-6);
+  text-align:center;
+  position:relative;
+}
+.voice-close{
+  position:absolute;
+  top:12px;left:12px;
+  width:32px;height:32px;
+  border-radius:50%;
+  background:var(--bg3);
+  border:1px solid var(--border2);
+  color:var(--text2);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+.voice-title{font-size:18px;font-weight:800;color:var(--text);margin-bottom:4px}
+.voice-subtitle{font-size:12px;color:var(--text3);margin-bottom:var(--s-5)}
+.voice-mic-btn{
+  width:120px;height:120px;
+  border-radius:50%;
+  background:linear-gradient(135deg,var(--accent),var(--accent-2));
+  color:#0a0600;
+  font-size:52px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  margin:0 auto var(--s-4);
+  box-shadow:0 8px 32px var(--accent-glow);
+  transition:all var(--t-fast);
+  position:relative;
+  border:none;
+}
+.voice-mic-btn:active{transform:scale(.95)}
+.voice-mic-btn.listening{
+  animation:micPulse 1.2s ease-in-out infinite;
+  background:var(--danger);
+  color:#fff;
+}
+@keyframes micPulse{
+  0%,100%{box-shadow:0 0 0 0 rgba(239,68,68,.5),0 8px 32px var(--accent-glow)}
+  50%{box-shadow:0 0 0 20px rgba(239,68,68,0),0 8px 32px var(--accent-glow)}
+}
+.voice-status{
+  font-size:14px;
+  color:var(--text2);
+  min-height:24px;
+  margin-bottom:var(--s-3);
+  font-weight:600;
+}
+.voice-transcript{
+  background:var(--bg3);
+  border:1px solid var(--border);
+  border-radius:12px;
+  padding:var(--s-3);
+  min-height:60px;
+  font-size:15px;
+  color:var(--text);
+  margin-bottom:var(--s-3);
+  line-height:1.6;
+  display:none;
+  text-align:right;
+}
+.voice-transcript.show{display:block;animation:fadeIn var(--t-fast)}
+.voice-examples{
+  background:var(--bg3);
+  border:1px dashed var(--border2);
+  border-radius:12px;
+  padding:var(--s-3);
+  text-align:right;
+  margin-bottom:var(--s-3);
+}
+.voice-example-title{
+  font-size:11px;
+  color:var(--text3);
+  text-transform:uppercase;
+  letter-spacing:1px;
+  margin-bottom:6px;
+}
+.voice-example-line{
+  font-size:12px;
+  color:var(--text2);
+  padding:3px 0;
+}
+.voice-parsed{
+  background:var(--green-dim);
+  border:1px solid rgba(16,185,129,.4);
+  border-radius:12px;
+  padding:var(--s-3);
+  margin-bottom:var(--s-3);
+  display:none;
+}
+.voice-parsed.show{display:block;animation:fadeIn var(--t-fast)}
+.voice-parsed-title{
+  font-size:12px;
+  color:var(--green-2);
+  font-weight:700;
+  margin-bottom:6px;
+}
+.voice-parsed-detail{
+  font-size:14px;
+  color:var(--text);
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin:4px 0;
+}
+.voice-actions{display:flex;gap:8px}
+.voice-action-btn{
+  flex:1;
+  padding:12px;
+  border-radius:12px;
+  font-size:13px;
+  font-weight:700;
+  border:none;
+}
+.voice-action-btn.confirm{
+  background:linear-gradient(135deg,var(--accent),var(--accent-2));
+  color:#0a0600;
+}
+.voice-action-btn.cancel{
+  background:var(--bg3);
+  border:1px solid var(--border2);
+  color:var(--text2);
+}
+
+/* ═══ COMPANION PICKER ═══ */
+.companion-picker-overlay{
+  position:fixed;inset:0;z-index:100012;
+  background:rgba(0,0,0,.92);
+  display:none;align-items:center;justify-content:center;
+  padding:var(--s-4);
+  backdrop-filter:blur(6px);
+}
+.companion-picker-overlay.open{display:flex;animation:fadeIn var(--t-med)}
+.companion-picker{
+  background:linear-gradient(145deg,#1a1400,#0a0600);
+  border:1px solid var(--accent);
+  border-radius:24px;
+  max-width:420px;width:100%;
+  padding:var(--s-5);
+  box-shadow:0 0 60px var(--accent-glow);
+  max-height:90vh;max-height:90dvh;
+  overflow-y:auto;
+}
+.companion-picker-title{
+  font-size:22px;font-weight:800;color:var(--accent-2);
+  text-align:center;margin-bottom:8px;
+}
+.companion-picker-sub{
+  font-size:13px;color:var(--text3);
+  text-align:center;margin-bottom:var(--s-4);
+}
+.companion-list{display:flex;flex-direction:column;gap:var(--s-2)}
+.companion-option{
+  display:flex;align-items:center;gap:var(--s-3);
+  padding:var(--s-3);
+  background:var(--bg3);
+  border:1px solid var(--border);
+  border-radius:var(--r-md);
+  transition:all var(--t-fast);
+  cursor:pointer;
+  text-align:right;
+  width:100%;
+}
+.companion-option:hover,.companion-option.selected{
+  border-color:var(--accent);
+  background:var(--accent-dim);
+  transform:translateX(-4px);
+}
+.companion-emoji{font-size:42px;line-height:1;flex-shrink:0}
+.companion-info{flex:1}
+.companion-name{font-size:15px;font-weight:800;color:var(--text);margin-bottom:3px}
+.companion-trait{font-size:11px;color:var(--text3);line-height:1.4}
+.companion-confirm{
+  width:100%;margin-top:var(--s-4);
+  padding:14px;border-radius:14px;
+  background:linear-gradient(135deg,var(--accent),var(--accent-2));
+  color:#0a0600;font-size:15px;font-weight:800;
+  border:none;
+  opacity:.5;pointer-events:none;
+  transition:opacity var(--t-fast);
+}
+.companion-confirm.active{opacity:1;pointer-events:auto}
+
+/* ═══ BOT CARD (companion-enhanced) ═══ */
+.companion-mood-badge{
+  font-size:10px;
+  padding:2px 8px;
+  border-radius:10px;
+  background:var(--bg4);
+  color:var(--text2);
+  margin-right:6px;
+  font-weight:600;
+}
+.companion-mood-badge.happy{background:rgba(16,185,129,.2);color:var(--green-2)}
+.companion-mood-badge.sad{background:rgba(59,130,246,.2);color:#60a5fa}
+.companion-mood-badge.missing{background:rgba(239,68,68,.2);color:#f87171}
+.companion-bond{
+  font-size:10px;
+  color:var(--accent-2);
+  margin-top:2px;
+  display:flex;
+  align-items:center;
+  gap:4px;
+}
+
+/* ═══ SMART MOMENTS CARDS ═══ */
+.moments-section{margin-bottom:var(--s-3)}
+.moments-section-title{
+  font-size:12px;
+  font-weight:700;
+  color:var(--text3);
+  text-transform:uppercase;
+  letter-spacing:1px;
+  margin-bottom:var(--s-2);
+  padding-right:var(--s-2);
+  display:flex;
+  align-items:center;
+  gap:6px;
+}
+.moment-card{
+  background:linear-gradient(135deg,var(--bg3),var(--bg2));
+  border:1px solid var(--border);
+  border-radius:var(--r-md);
+  padding:var(--s-3);
+  margin-bottom:var(--s-2);
+  display:flex;
+  align-items:center;
+  gap:var(--s-3);
+  position:relative;
+  overflow:hidden;
+  transition:all var(--t-fast);
+  cursor:pointer;
+}
+.moment-card:hover{
+  border-color:var(--accent-bd);
+  transform:translateY(-1px);
+}
+.moment-card::before{
+  content:'';
+  position:absolute;
+  right:0;top:0;bottom:0;
+  width:3px;
+  background:var(--accent);
+}
+.moment-card.urgent::before{background:var(--danger)}
+.moment-card.success::before{background:var(--green-2)}
+.moment-card.info::before{background:#3b82f6}
+.moment-card.special::before{background:linear-gradient(180deg,var(--accent),#ec4899)}
+.moment-icon{
+  width:44px;height:44px;
+  border-radius:12px;
+  background:var(--bg4);
+  display:flex;align-items:center;justify-content:center;
+  font-size:22px;
+  flex-shrink:0;
+}
+.moment-card.urgent .moment-icon{background:rgba(239,68,68,.15)}
+.moment-card.success .moment-icon{background:rgba(16,185,129,.15)}
+.moment-card.info .moment-icon{background:rgba(59,130,246,.15)}
+.moment-card.special .moment-icon{background:var(--accent-dim)}
+.moment-body{flex:1;min-width:0}
+.moment-title{
+  font-size:14px;
+  font-weight:700;
+  color:var(--text);
+  margin-bottom:2px;
+}
+.moment-desc{
+  font-size:12px;
+  color:var(--text3);
+  line-height:1.5;
+}
+.moment-dismiss{
+  position:absolute;
+  top:4px;left:4px;
+  width:22px;height:22px;
+  border-radius:50%;
+  background:var(--bg4);
+  border:none;
+  color:var(--text3);
+  font-size:11px;
+  opacity:.5;
+  transition:opacity var(--t-fast);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+.moment-dismiss:hover{opacity:1;color:var(--danger)}
+
+/* ═══ FRESH CONTENT CARD ═══ */
+.fresh-content-card{
+  background:linear-gradient(135deg,#1a1400 0%,#0a0600 50%,#1a1400 100%);
+  border:1px solid var(--accent-bd);
+  border-radius:var(--r-lg);
+  padding:var(--s-4);
+  margin-bottom:var(--s-3);
+  position:relative;
+  overflow:hidden;
+}
+.fresh-content-card::before{
+  content:'';
+  position:absolute;
+  top:0;left:0;right:0;
+  height:2px;
+  background:linear-gradient(90deg,transparent,var(--accent),var(--accent-2),var(--accent),transparent);
+  animation:botShimmer 3s ease-in-out infinite;
+}
+.fresh-content-header{
+  display:flex;align-items:center;gap:8px;
+  margin-bottom:var(--s-3);
+}
+.fresh-content-badge{
+  font-size:10px;
+  background:var(--accent);
+  color:#0a0600;
+  padding:3px 9px;
+  border-radius:10px;
+  font-weight:800;
+  letter-spacing:.5px;
+}
+.fresh-content-date{
+  font-size:11px;
+  color:var(--text3);
+  margin-right:auto;
+}
+.fresh-content-type-icon{font-size:24px}
+.fresh-content-title{
+  font-size:16px;
+  font-weight:800;
+  color:var(--text);
+  margin-bottom:8px;
+  line-height:1.4;
+}
+.fresh-content-body{
+  font-size:13px;
+  color:var(--text2);
+  line-height:1.7;
+  margin-bottom:var(--s-3);
+}
+.fresh-content-body b{color:var(--accent-2)}
+.fresh-content-footer{
+  display:flex;
+  gap:8px;
+  padding-top:var(--s-2);
+  border-top:1px solid var(--border);
+}
+.fresh-action-btn{
+  flex:1;
+  padding:8px;
+  border-radius:10px;
+  background:var(--bg3);
+  border:1px solid var(--border2);
+  color:var(--text2);
+  font-size:12px;
+  font-weight:600;
+  transition:all var(--t-fast);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:4px;
+}
+.fresh-action-btn:hover{
+  border-color:var(--accent);
+  color:var(--accent-2);
+}
+.fresh-action-btn.primary{
+  background:var(--accent-dim);
+  border-color:var(--accent-bd);
+  color:var(--accent-2);
+}
+
+/* ═══ NEW 4-TAB STRUCTURE ═══ */
+
+/* Sub-nav */
+.sub-nav{
+  position:sticky;
+  top:calc(64px + env(safe-area-inset-top));
+  z-index:198;
+  background:var(--bg);
+  border-bottom:1px solid var(--border);
+  padding:10px 12px;
+  display:flex;
+  gap:6px;
+  overflow-x:auto;
+  scrollbar-width:none;
+  -webkit-overflow-scrolling:touch;
+}
+.sub-nav::-webkit-scrollbar{display:none}
+.sub-nav-btn{
+  flex-shrink:0;
+  padding:8px 14px;
+  background:var(--bg3);
+  border:1px solid var(--border);
+  border-radius:20px;
+  color:var(--text3);
+  font-size:12px;
+  font-weight:600;
+  transition:all var(--t-fast);
+  white-space:nowrap;
+}
+.sub-nav-btn.active{
+  background:var(--accent);
+  color:#0a0600;
+  border-color:var(--accent);
+}
+.sub-nav-btn:not(.active):hover{
+  border-color:var(--accent-bd);
+  color:var(--text2);
+}
+
+/* Home tab */
+.home-welcome{
+  padding:var(--s-4) var(--s-2) var(--s-3);
+  margin-bottom:var(--s-3);
+  text-align:center;
+}
+.home-welcome-greeting{
+  font-size:22px;
+  font-weight:800;
+  color:var(--accent-2);
+  margin-bottom:4px;
+  line-height:1.3;
+}
+.home-welcome-sub{
+  font-size:13px;
+  color:var(--text3);
+}
+
+.home-stats-row{
+  display:grid;
+  grid-template-columns:repeat(3, 1fr);
+  gap:var(--s-2);
+  margin-bottom:var(--s-3);
+}
+.home-stat-card{
+  background:linear-gradient(145deg, var(--bg3), var(--bg2));
+  border:1px solid var(--border);
+  border-radius:var(--r-md);
+  padding:var(--s-3) var(--s-2);
+  text-align:center;
+  transition:all var(--t-fast);
+}
+.home-stat-card:hover{
+  border-color:var(--accent-bd);
+  transform:translateY(-1px);
+}
+.home-stat-icon{
+  font-size:22px;
+  line-height:1;
+  margin-bottom:4px;
+}
+.home-stat-value{
+  font-size:18px;
+  font-weight:800;
+  color:var(--accent-2);
+  line-height:1.2;
+  font-variant-numeric:tabular-nums;
+  margin-bottom:2px;
+}
+.home-stat-label{
+  font-size:10px;
+  color:var(--text3);
+  font-weight:600;
+}
+
+/* Main nav now uses 4 columns */
+.main-nav-inner{
+  display:grid;
+  grid-template-columns:repeat(4, 1fr);
+}
+
+/* ═══ MOBILE CHAT OPTIMIZATION ═══ */
+@media (max-width: 480px) {
+  .chat-input-bar{
+    padding:8px 10px;
+    gap:6px;
+    padding-bottom:calc(8px + env(safe-area-inset-bottom));
+  }
+  .chat-input{
+    font-size:16px !important;
+    padding:10px 13px;
+    border-radius:18px;
+  }
+  .chat-send{
+    width:42px;
+    height:42px;
+    font-size:17px;
+  }
+  .chat-panel{
+    border-radius:16px 16px 0 0;
+  }
+  .chat-header{
+    padding:10px 12px;
+  }
+  .chat-peer-name{font-size:14px}
+  .chat-peer-status{font-size:11px}
+}
+
+/* Prevent iOS zoom */
+@supports (-webkit-touch-callout: none) {
+  .chat-input{font-size:16px !important}
+}
+
+/* ═══ PROFILE PICTURE ═══ */
+.profile-pic-wrap{
+  position:relative;
+  display:inline-block;
+}
+.profile-pic-img{
+  width:100%;
+  height:100%;
+  border-radius:50%;
+  object-fit:cover;
+  display:block;
+}
+.profile-pic-edit-btn{
+  position:absolute;
+  bottom:0;
+  right:0;
+  width:32px;height:32px;
+  border-radius:50%;
+  background:var(--accent);
+  color:#0a0600;
+  font-size:14px;
+  border:2px solid var(--bg);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  cursor:pointer;
+  transition:all var(--t-fast);
+  z-index:2;
+}
+.profile-pic-edit-btn:hover{
+  transform:scale(1.1);
+}
+
+/* Avatar with image support - overrides text-only avatar */
+.avatar-with-img{
+  overflow:hidden;
+  padding:0 !important;
+}
+.avatar-with-img img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+}
+
+/* Conversation avatar with image */
+.conv-avatar.has-img,
+.friend-avatar.has-img,
+.chat-peer-avatar.has-img{
+  overflow:hidden;
+  padding:0;
+}
+.conv-avatar.has-img img,
+.friend-avatar.has-img img,
+.chat-peer-avatar.has-img img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  border-radius:50%;
+}
+
+/* ═══ CHAT IMAGE MESSAGES ═══ */
+.chat-attach-btn{
+  width:40px;height:40px;
+  border-radius:50%;
+  background:var(--bg3);
+  border:1px solid var(--border2);
+  color:var(--text2);
+  font-size:18px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  flex-shrink:0;
+  transition:all var(--t-fast);
+  cursor:pointer;
+}
+.chat-attach-btn:hover{
+  border-color:var(--accent);
+  color:var(--accent-2);
+}
+.chat-attach-btn.active{
+  background:var(--accent-dim);
+  color:var(--accent-2);
+  border-color:var(--accent);
+}
+
+.attach-menu{
+  position:absolute;
+  bottom:60px;
+  right:12px;
+  background:var(--bg2);
+  border:1px solid var(--accent-bd);
+  border-radius:16px;
+  padding:8px;
+  box-shadow:0 8px 32px rgba(0,0,0,.5);
+  display:none;
+  flex-direction:column;
+  gap:4px;
+  z-index:100005;
+  min-width:180px;
+  animation:fadeIn .15s ease-out;
+}
+.attach-menu.open{display:flex}
+.attach-menu-item{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  padding:10px 12px;
+  border-radius:10px;
+  background:transparent;
+  border:none;
+  color:var(--text);
+  font-size:13px;
+  font-weight:600;
+  text-align:right;
+  transition:all var(--t-fast);
+  cursor:pointer;
+}
+.attach-menu-item:hover{
+  background:var(--bg3);
+}
+.attach-menu-icon{
+  font-size:20px;
+  width:32px;
+  text-align:center;
+}
+.attach-menu-divider{
+  height:1px;
+  background:var(--border);
+  margin:4px 0;
+}
+
+/* Image in message bubble */
+.msg-img-wrap{
+  position:relative;
+  border-radius:14px;
+  overflow:hidden;
+  max-width:240px;
+  cursor:pointer;
+}
+.msg-img-wrap img{
+  width:100%;
+  display:block;
+  border-radius:14px;
+}
+.msg-img-ephemeral{
+  position:relative;
+}
+.msg-img-ephemeral::before{
+  content:'';
+  position:absolute;
+  inset:0;
+  background:linear-gradient(135deg, rgba(255,100,100,.1), rgba(255,200,100,.1));
+  border:2px solid var(--danger);
+  border-radius:14px;
+  pointer-events:none;
+  z-index:1;
+}
+.msg-img-ephemeral-badge{
+  position:absolute;
+  top:8px;
+  right:8px;
+  background:rgba(0,0,0,.7);
+  color:#fff;
+  font-size:10px;
+  padding:3px 8px;
+  border-radius:10px;
+  z-index:2;
+  display:flex;
+  align-items:center;
+  gap:3px;
+  font-weight:700;
+  backdrop-filter:blur(4px);
+}
+.msg-img-locked{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  width:240px;
+  height:180px;
+  background:linear-gradient(135deg, var(--bg3), var(--bg4));
+  border:2px dashed var(--border2);
+  border-radius:14px;
+  color:var(--text3);
+  gap:6px;
+  cursor:pointer;
+}
+.msg-img-locked-icon{font-size:32px}
+.msg-img-locked-text{font-size:12px;font-weight:600}
+.msg-img-locked-hint{font-size:10px;color:var(--text3)}
+
+/* Image viewer overlay */
+.img-viewer-overlay{
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,.95);
+  z-index:100020;
+  display:none;
+  align-items:center;
+  justify-content:center;
+  animation:fadeIn .2s ease-out;
+}
+.img-viewer-overlay.open{display:flex}
+.img-viewer-img{
+  max-width:94vw;
+  max-height:88vh;
+  border-radius:8px;
+}
+.img-viewer-close{
+  position:absolute;
+  top:calc(20px + env(safe-area-inset-top));
+  left:20px;
+  width:42px;height:42px;
+  border-radius:50%;
+  background:rgba(255,255,255,.15);
+  color:#fff;
+  font-size:20px;
+  border:none;
+  backdrop-filter:blur(8px);
+}
+.img-viewer-timer{
+  position:absolute;
+  top:calc(20px + env(safe-area-inset-top));
+  right:20px;
+  padding:8px 16px;
+  background:rgba(239,68,68,.9);
+  color:#fff;
+  border-radius:20px;
+  font-size:14px;
+  font-weight:800;
+  display:flex;
+  align-items:center;
+  gap:6px;
+}
+
+/* Image preview before send */
+.img-preview-overlay{
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,.9);
+  z-index:100018;
+  display:none;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  padding:20px;
+  animation:fadeIn .2s ease-out;
+}
+.img-preview-overlay.open{display:flex}
+.img-preview-img{
+  max-width:90vw;
+  max-height:60vh;
+  border-radius:12px;
+  margin-bottom:20px;
+}
+.img-preview-caption{
+  width:100%;
+  max-width:400px;
+  background:var(--bg3);
+  border:1.5px solid var(--border);
+  border-radius:14px;
+  padding:10px 14px;
+  color:var(--text);
+  font-size:15px;
+  font-family:inherit;
+  margin-bottom:12px;
+}
+.img-preview-actions{
+  display:flex;
+  gap:8px;
+  width:100%;
+  max-width:400px;
+}
+.img-preview-btn{
+  flex:1;
+  padding:12px;
+  border-radius:12px;
+  font-size:14px;
+  font-weight:700;
+  border:none;
+  cursor:pointer;
+  transition:all var(--t-fast);
+}
+.img-preview-btn.cancel{
+  background:var(--bg3);
+  color:var(--text2);
+  border:1px solid var(--border);
+}
+.img-preview-btn.ephemeral{
+  background:linear-gradient(135deg, #ef4444, #f59e0b);
+  color:#fff;
+}
+.img-preview-btn.send{
+  background:linear-gradient(135deg, var(--accent), var(--accent-2));
+  color:#0a0600;
+}
+
+/* Profile pic picker (separate modal) */
+.profile-pic-upload-overlay{
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,.85);
+  z-index:100019;
+  display:none;
+  align-items:center;
+  justify-content:center;
+  padding:20px;
+  animation:fadeIn .2s ease-out;
+}
+.profile-pic-upload-overlay.open{display:flex}
+.profile-pic-upload-card{
+  background:var(--bg2);
+  border:1px solid var(--accent-bd);
+  border-radius:20px;
+  padding:24px;
+  max-width:400px;
+  width:100%;
+  text-align:center;
+}
+.profile-pic-preview{
+  width:160px;
+  height:160px;
+  border-radius:50%;
+  margin:0 auto 20px;
+  background:var(--bg3);
+  border:2px solid var(--accent-bd);
+  overflow:hidden;
+}
+.profile-pic-preview img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+}
+
 </style>
 </head>
 <body>
@@ -3632,46 +4951,55 @@ body::before {
     <!-- Header -->
     <header class="app-header">
       <div class="header-band">
-        <span class="header-band-chip">PRO</span>
-        <span class="header-band-text">مخططك المالي الذكي</span>
+        <span class="header-band-date" id="headerDate">—</span>
+        <span class="header-band-text" id="headerGreeting">مخططك المالي الذكي</span>
       </div>
       <div class="header-inner">
         <div class="app-logo">
           <div class="app-logo-mark">
             <svg viewBox="0 0 540 325" fill="#0a0600"><path d="M216.45 37.73 C226.48 16.28 243.13 4.36 266.50 3.54 C287.23 2.82 306.24 12.42 317.56 33.46 C325.74 48.67 327.25 65.23 325.93 82.20 C323.86 109.00 314.65 133.69 303.21 157.63 C290.95 183.27 279.27 209.14 270.14 236.11 C269.70 237.39 269.49 238.88 268.10 239.66 C266.32 239.57 266.29 238.03 265.91 236.89 C256.65 208.98 244.69 182.21 231.98 155.73 C222.96 136.93 215.38 117.55 211.84 96.86 C208.65 78.22 208.26 59.67 214.88 41.54 C215.32 40.33 215.85 39.16 216.45 37.73 Z"/><path d="M507.78 222.63 C533.82 237.59 540.14 269.80 527.05 293.34 C519.76 306.47 507.98 314.48 493.91 318.79 C472.26 325.43 450.65 322.71 429.21 317.19 C405.55 311.10 383.25 301.42 361.07 291.40 C340.06 281.91 318.79 273.12 296.54 266.93 C295.75 266.71 294.99 266.39 294.26 266.04 C293.99 265.91 293.83 265.55 293.46 265.10 C295.59 263.11 298.38 263.05 300.83 262.44 C323.00 256.92 344.56 249.61 365.68 240.92 C388.50 231.54 411.35 222.29 435.61 217.09 C454.47 213.04 473.30 212.11 492.22 216.60 C497.60 217.88 502.70 219.86 507.78 222.63 Z"/><path d="M182.21 246.27 C201.52 253.63 221.03 259.51 240.69 264.31 C240.57 266.34 239.46 266.48 238.64 266.69 C212.40 273.30 188.10 284.80 163.70 296.11 C144.06 305.22 124.10 313.51 102.91 318.46 C90.33 321.39 77.63 323.39 64.70 322.39 C48.89 321.18 33.59 317.96 20.87 307.62 C7.96 297.13 2.68 283.02 2.75 266.78 C2.85 240.20 21.43 222.07 44.22 216.57 C63.71 211.87 82.92 213.23 102.16 217.61 C122.53 222.25 141.89 229.86 161.13 237.82 C168.04 240.68 175.01 243.39 182.21 246.27 Z"/></svg>
           </div>
-          <div class="app-logo-name">تـدّبير<span class="app-logo-pro">PRO</span></div>
+          <div class="app-logo-name" id="appLogoName">تـدّبير</div>
         </div>
         <div class="header-spacer"></div>
         <button class="icon-btn" id="bellBtn" aria-label="تنبيهات">🔔<span class="icon-dot" id="bellDot"></span></button>
       </div>
     </header>
 
-    <!-- Main Nav -->
+    <!-- Main Nav (4 tabs - New redesigned structure) -->
     <nav class="main-nav">
       <div class="main-nav-inner">
-        <button class="tab-btn active" data-tab="monthly">
-          <span class="tab-icon">📊</span>
-          <span class="tab-label">الشهر</span>
+        <button class="tab-btn active" data-tab="home">
+          <span class="tab-icon">🏠</span>
+          <span class="tab-label">الرئيسية</span>
         </button>
-        <button class="tab-btn" data-tab="yearly">
-          <span class="tab-icon">📅</span>
-          <span class="tab-label">السنة</span>
+        <button class="tab-btn" data-tab="money">
+          <span class="tab-icon">💰</span>
+          <span class="tab-label">أموالي</span>
         </button>
-        <button class="tab-btn" data-tab="friends">
+        <button class="tab-btn" data-tab="social">
           <span class="tab-icon">👥</span>
-          <span class="tab-label">أصدقاء</span>
+          <span class="tab-label">اجتماعي</span>
         </button>
-        <button class="tab-btn" data-tab="zakat">
-          <span class="tab-icon">🕌</span>
-          <span class="tab-label">زكاة</span>
-        </button>
-        <button class="tab-btn" data-tab="settings">
-          <span class="tab-icon">⚙️</span>
-          <span class="tab-label">إعدادات</span>
+        <button class="tab-btn" data-tab="profile">
+          <span class="tab-icon">👤</span>
+          <span class="tab-label">الملف</span>
         </button>
       </div>
     </nav>
+
+    <!-- Sub-nav for Money tab -->
+    <div class="sub-nav" id="moneySubNav" style="display:none">
+      <button class="sub-nav-btn active" data-sub="monthly">📊 الشهر</button>
+      <button class="sub-nav-btn" data-sub="yearly">📅 السنة</button>
+      <button class="sub-nav-btn" data-sub="zakat">🕌 الزكاة</button>
+    </div>
+
+    <!-- Sub-nav for Profile tab -->
+    <div class="sub-nav" id="profileSubNav" style="display:none">
+      <button class="sub-nav-btn active" data-sub="achievements">🏆 إنجازاتي</button>
+      <button class="sub-nav-btn" data-sub="settings">⚙️ الإعدادات</button>
+    </div>
 
     <!-- Month bar -->
     <div class="month-bar" id="monthBar">
@@ -3683,8 +5011,65 @@ body::before {
     <div class="app-scroll" id="appScroll">
       <main class="main" id="mainContent">
 
+        <!-- ═══ HOME TAB (new) ═══ -->
+        <div class="tab-content" id="tab-home">
+          <div class="home-welcome">
+            <div class="home-welcome-greeting" id="homeGreeting">أهلاً بك 👋</div>
+            <div class="home-welcome-sub" id="homeGreetingSub">مساعدك المالي الذكي جاهز</div>
+          </div>
+
+          <!-- Quick Stats -->
+          <div class="home-stats-row">
+            <div class="home-stat-card">
+              <div class="home-stat-icon">💰</div>
+              <div class="home-stat-value" id="homeStatSave">—</div>
+              <div class="home-stat-label">توفير الشهر</div>
+            </div>
+            <div class="home-stat-card">
+              <div class="home-stat-icon">🔥</div>
+              <div class="home-stat-value" id="homeStatStreak">—</div>
+              <div class="home-stat-label">سلسلتك</div>
+            </div>
+            <div class="home-stat-card">
+              <div class="home-stat-icon">🏆</div>
+              <div class="home-stat-value" id="homeStatXp">—</div>
+              <div class="home-stat-label">نقاط XP</div>
+            </div>
+          </div>
+
+          <!-- Fresh Content -->
+          <div id="homeFreshContent"></div>
+
+          <!-- Smart Moments -->
+          <div id="homeSmartMoments"></div>
+
+          <!-- Bot/Companion Card -->
+          <div id="homeBotCard"></div>
+
+          <!-- Smart Tools Grid -->
+          <div class="card">
+            <div class="card-head">
+              <div class="card-title">🛠️ الأدوات الذكية</div>
+            </div>
+            <div class="smart-tools-grid">
+              <button class="smart-tool-btn" id="btnOpenGift2" aria-label="صندوق اليوم">
+                <div class="smart-tool-icon">🎁</div>
+                <div class="smart-tool-label">صندوق<br>اليوم</div>
+              </button>
+              <button class="smart-tool-btn" id="btnOpenSimulator2" aria-label="ماذا لو؟">
+                <div class="smart-tool-icon">🔮</div>
+                <div class="smart-tool-label">ماذا<br>لو؟</div>
+              </button>
+              <button class="smart-tool-btn" id="btnOpenVoice2" aria-label="سجّل بصوتك">
+                <div class="smart-tool-icon">🎙️</div>
+                <div class="smart-tool-label">سجّل<br>بصوتك</div>
+              </button>
+            </div>
+          </div>
+        </div>
+
         <!-- ═══ MONTHLY TAB ═══ -->
-        <div class="tab-content" id="tab-monthly">
+        <div class="tab-content" id="tab-monthly" style="display:none">
           <!-- Greeting -->
           <div class="greeting-card" id="greetingCard">
             <div class="greeting-text">
@@ -4139,6 +5524,22 @@ body::before {
     </div>
 
     <div class="fsub-panel" id="fsub-list">
+      <!-- Smart Tools Grid -->
+      <div class="smart-tools-grid">
+        <button class="smart-tool-btn" id="btnOpenGift" aria-label="صندوق اليوم">
+          <div class="smart-tool-icon">🎁</div>
+          <div class="smart-tool-label">صندوق<br>اليوم</div>
+        </button>
+        <button class="smart-tool-btn" id="btnOpenSimulator" aria-label="ماذا لو؟">
+          <div class="smart-tool-icon">🔮</div>
+          <div class="smart-tool-label">ماذا<br>لو؟</div>
+        </button>
+        <button class="smart-tool-btn" id="btnOpenVoice" aria-label="سجّل بصوتك">
+          <div class="smart-tool-icon">🎙️</div>
+          <div class="smart-tool-label">سجّل<br>بصوتك</div>
+        </button>
+      </div>
+      
       <div class="card">
         <div class="card-head">
           <div class="card-title">➕ إضافة صديق</div>
@@ -4151,6 +5552,12 @@ body::before {
         </div>
         <div class="search-results" id="searchResults" style="display:none"></div>
       </div>
+      <!-- Fresh Content Card -->
+      <div id="freshContentContainer"></div>
+      
+      <!-- Smart Moments Cards -->
+      <div id="smartMomentsContainer"></div>
+      
       <div id="friendsList"></div>
     </div>
 
@@ -4240,6 +5647,25 @@ body::before {
         <div class="tab-content" id="tab-settings" style="display:none">
           <div class="card">
             <div class="card-head">
+              <div class="card-title">🎨 صورة العرض</div>
+              <div class="card-sub">ستظهر لأصدقائك في الشات والبروفايل</div>
+            </div>
+            <div style="display:flex;align-items:center;gap:14px;padding:4px">
+              <div class="profile-pic-wrap" style="width:80px;height:80px;flex-shrink:0">
+                <div class="conv-avatar my-profile-avatar" id="settingsProfileAvatar" style="width:80px;height:80px;font-size:28px">👤</div>
+              </div>
+              <div style="flex:1">
+                <button class="btn-primary" id="changeProfilePicBtn" style="width:100%">
+                  📷 تغيير صورة العرض
+                </button>
+                <div style="font-size:11px;color:var(--text3);margin-top:6px">
+                  الحجم الأمثل: مربعة • جودة HD
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-head">
               <div class="card-title">👤 اسمك</div>
               <div class="card-sub">سيظهر في صفحة الترحيب</div>
             </div>
@@ -4248,6 +5674,22 @@ body::before {
               <button class="btn-primary" id="saveUserNameBtn">حفظ</button>
             </div>
             <div style="font-size:11px;color:var(--text3);margin-top:8px" id="currentUserName"></div>
+          </div>
+          <div class="card">
+            <div class="card-head">
+              <div class="card-title">🌐 اللغة / Language</div>
+              <div class="card-sub">اختر لغة واجهة التطبيق</div>
+            </div>
+            <div class="lang-grid">
+              <button class="lang-btn active" data-lang="ar">
+                <span style="font-size:18px">🇸🇦</span>
+                <span>العربية</span>
+              </button>
+              <button class="lang-btn" data-lang="en">
+                <span style="font-size:18px">🇬🇧</span>
+                <span>English</span>
+              </button>
+            </div>
           </div>
           <div class="card">
             <div class="card-head">
@@ -4268,6 +5710,11 @@ body::before {
                 <span class="swatch-emoji">🌌</span>
                 <span class="swatch-name">منتصف الليل</span>
                 <span class="swatch-desc">أخضر</span>
+              </button>
+              <button class="theme-swatch rose" data-theme="rose">
+                <span class="swatch-emoji">🌸</span>
+                <span class="swatch-name">وردي</span>
+                <span class="swatch-desc">للبنات</span>
               </button>
             </div>
           </div>
@@ -4463,9 +5910,64 @@ body::before {
       <div class="chat-empty-desc">هذه بداية محادثتكما. الرسائل بينكما فقط،<br>ولا تشارك بياناتك المالية.</div>
     </div>
   </div>
-  <div class="chat-input-bar">
+  <div class="chat-input-bar" style="position:relative">
+    <button class="chat-attach-btn" id="chatAttachBtn" aria-label="إرفاق">📎</button>
     <textarea class="chat-input" id="chatInput" placeholder="اكتب رسالة..." rows="1" maxlength="1000"></textarea>
     <button class="chat-send" id="chatSendBtn" disabled aria-label="إرسال">➤</button>
+    
+    <!-- Attach Menu -->
+    <div class="attach-menu" id="attachMenu">
+      <button class="attach-menu-item" data-attach="image">
+        <span class="attach-menu-icon">🖼️</span>
+        <span>صورة عادية</span>
+      </button>
+      <button class="attach-menu-item" data-attach="ephemeral">
+        <span class="attach-menu-icon">👁️</span>
+        <span>صورة مؤقتة</span>
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- Hidden file inputs -->
+<input type="file" id="imgInputNormal" accept="image/*" style="display:none">
+<input type="file" id="imgInputEphemeral" accept="image/*" style="display:none">
+<input type="file" id="imgInputProfile" accept="image/*" style="display:none">
+
+<!-- Image Preview (before send) -->
+<div class="img-preview-overlay" id="imgPreviewOverlay">
+  <img class="img-preview-img" id="imgPreviewImg" alt="معاينة">
+  <input type="text" class="img-preview-caption" id="imgPreviewCaption" placeholder="اكتب تعليقاً (اختياري)..." maxlength="200">
+  <div class="img-preview-actions">
+    <button class="img-preview-btn cancel" id="imgPreviewCancelBtn">إلغاء</button>
+    <button class="img-preview-btn send" id="imgPreviewSendBtn">إرسال</button>
+  </div>
+</div>
+
+<!-- Image Viewer -->
+<div class="img-viewer-overlay" id="imgViewerOverlay">
+  <button class="img-viewer-close" id="imgViewerCloseBtn" aria-label="إغلاق">✕</button>
+  <div class="img-viewer-timer" id="imgViewerTimer" style="display:none">
+    <span>⏱️</span>
+    <span id="imgViewerTimerText">10</span>
+  </div>
+  <img class="img-viewer-img" id="imgViewerImg" alt="صورة">
+</div>
+
+<!-- Profile Picture Upload -->
+<div class="profile-pic-upload-overlay" id="profilePicUploadOverlay">
+  <div class="profile-pic-upload-card">
+    <div style="font-size:18px;font-weight:800;color:var(--accent-2);margin-bottom:6px">🎨 صورة العرض</div>
+    <div style="font-size:12px;color:var(--text3);margin-bottom:16px">ستظهر لأصدقائك والمستخدمين</div>
+    <div class="profile-pic-preview" id="profilePicPreview">
+      <img id="profilePicPreviewImg" alt="معاينة" style="display:none">
+      <div id="profilePicPreviewPlaceholder" style="display:flex;align-items:center;justify-content:center;height:100%;font-size:48px;color:var(--text3)">📷</div>
+    </div>
+    <button class="btn-primary" id="profilePicChooseBtn" style="width:100%;margin-bottom:8px">📂 اختر صورة</button>
+    <div class="img-preview-actions" style="max-width:100%">
+      <button class="img-preview-btn cancel" id="profilePicCancelBtn">إلغاء</button>
+      <button class="img-preview-btn send" id="profilePicSaveBtn" disabled>حفظ</button>
+    </div>
   </div>
 </div>
 
@@ -5183,7 +6685,7 @@ const App = (() => {
     // UI state
     year: new Date().getFullYear(),
     month: new Date().getMonth(),
-    tab: 'monthly',
+    tab: 'home',
     period: 'daily',
     zakatTab: 'cash',
     tipIdx: 0,
@@ -5689,7 +7191,7 @@ const App = (() => {
   // ═══ THEME ═══
   const Theme = {
     apply(theme) {
-      const valid = ['default', 'light', 'midnight'];
+      const valid = ['default', 'light', 'midnight', 'rose'];
       const t = valid.includes(theme) ? theme : 'default';
       if (t === 'default') document.documentElement.removeAttribute('data-theme');
       else document.documentElement.setAttribute('data-theme', t);
@@ -5697,9 +7199,110 @@ const App = (() => {
       // Also update theme-color meta for PWA
       const meta = document.querySelector('meta[name="theme-color"]');
       if (meta) {
-        const colors = { default: '#0a0a0a', light: '#fdf8f3', midnight: '#05070a' };
+        const colors = { default: '#0a0a0a', light: '#fdf8f3', midnight: '#05070a', rose: '#1a0d14' };
         meta.setAttribute('content', colors[t]);
       }
+    }
+  };
+
+  const Lang = {
+    apply(lang) {
+      const valid = ['ar', 'en'];
+      const l = valid.includes(lang) ? lang : 'ar';
+      store.set('lang', l);
+      document.documentElement.setAttribute('lang', l);
+      document.documentElement.setAttribute('dir', l === 'en' ? 'ltr' : 'rtl');
+      document.body.style.direction = l === 'en' ? 'ltr' : 'rtl';
+      
+      // Translate key UI elements
+      const translations = {
+        ar: {
+          home: 'الرئيسية', money: 'أموالي', social: 'اجتماعي', profile: 'الملف',
+          appName: 'تـدّبير',
+          monthly: '📊 الشهر', yearly: '📅 السنة', zakat: '🕌 الزكاة',
+          achievements: '🏆 إنجازاتي', settings: '⚙️ الإعدادات',
+          welcomeText: 'مخططك المالي الذكي'
+        },
+        en: {
+          home: 'Home', money: 'My Money', social: 'Social', profile: 'Profile',
+          appName: 'Tadbeer',
+          monthly: '📊 Month', yearly: '📅 Year', zakat: '🕌 Zakat',
+          achievements: '🏆 Achievements', settings: '⚙️ Settings',
+          welcomeText: 'Your smart financial planner'
+        }
+      };
+      
+      const T = translations[l];
+      
+      // Update main nav
+      const tabs = [
+        { tab: 'home', key: 'home', icon: '🏠' },
+        { tab: 'money', key: 'money', icon: '💰' },
+        { tab: 'social', key: 'social', icon: '👥' },
+        { tab: 'profile', key: 'profile', icon: '👤' }
+      ];
+      tabs.forEach(t => {
+        const btn = document.querySelector(`[data-tab="${t.tab}"] .tab-label`);
+        if (btn) btn.textContent = T[t.key];
+      });
+      
+      // Update sub-navs
+      const subMap = [
+        { sub: 'monthly', key: 'monthly' },
+        { sub: 'yearly', key: 'yearly' },
+        { sub: 'zakat', key: 'zakat' },
+        { sub: 'achievements', key: 'achievements' },
+        { sub: 'settings', key: 'settings' }
+      ];
+      subMap.forEach(s => {
+        const btn = document.querySelector(`[data-sub="${s.sub}"]`);
+        if (btn) btn.textContent = T[s.key];
+      });
+      
+      // App name
+      const logoName = document.getElementById('appLogoName');
+      if (logoName) logoName.textContent = T.appName;
+      
+      // Header greeting
+      const greetingEl = document.getElementById('headerGreeting');
+      if (greetingEl) greetingEl.textContent = T.welcomeText;
+      
+      // Update lang buttons active state
+      document.querySelectorAll('.lang-btn').forEach(b => {
+        b.classList.toggle('active', b.dataset.lang === l);
+      });
+    },
+    
+    current() {
+      return store.get('lang') || 'ar';
+    }
+  };
+
+  // Date/Time display
+  const DateDisplay = {
+    update() {
+      const el = document.getElementById('headerDate');
+      if (!el) return;
+      const lang = store.get('lang') || 'ar';
+      const now = new Date();
+      const days = lang === 'en' 
+        ? ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']
+        : ['الأحد', 'الإثنين', 'الثلاثاء', 'الأربعاء', 'الخميس', 'الجمعة', 'السبت'];
+      const months = lang === 'en'
+        ? ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+        : ['يناير', 'فبراير', 'مارس', 'أبريل', 'مايو', 'يونيو', 'يوليو', 'أغسطس', 'سبتمبر', 'أكتوبر', 'نوفمبر', 'ديسمبر'];
+      const dayName = days[now.getDay()];
+      const day = now.getDate();
+      const monthName = months[now.getMonth()];
+      const year = now.getFullYear();
+      
+      const prefix = lang === 'en' ? 'Today: ' : 'تاريخ اليوم: ';
+      el.textContent = `${prefix}${dayName} ${day} ${monthName} ${year}`;
+    },
+    start() {
+      this.update();
+      // Update every minute
+      setInterval(() => this.update(), 60000);
     }
   };
 
@@ -5771,7 +7374,7 @@ ${items.map(r => `<tr><td>${U.esc(r.name)}</td><td>${U.esc(r.cat)}</td><td>${r.t
   };
 
   return { store, Sel, Toast, Pts, Achievements, Streak, Entries, Goals, Budgets,
-           Notifs, Zakat, Salary, AI, Search, Theme, Export };
+           Notifs, Zakat, Salary, AI, Search, Theme, Export, Lang, DateDisplay };
 })();
 /* ═══════════════════════════════════════════════════
    TDBEER — Renderers
@@ -6430,14 +8033,152 @@ const Controllers = (() => {
   const R = Renderers;
 
   function showTab(tab) {
-    const valid = ['monthly', 'yearly', 'friends', 'zakat', 'settings'];
-    if (!valid.includes(tab)) tab = 'monthly';
-    store.set('tab', tab);
-    $$('.tab-btn').forEach(b => b.classList.toggle('active', b.dataset.tab === tab));
-    $$('.tab-content').forEach(c => c.style.display = c.id === `tab-${tab}` ? '' : 'none');
+    // New 4-tab structure with sub-tabs
+    const valid = ['home', 'money', 'social', 'profile'];
+    
+    // Legacy support - map old tab names to new ones
+    const legacyMap = {
+      'monthly': 'money:monthly',
+      'yearly': 'money:yearly',
+      'zakat': 'money:zakat',
+      'friends': 'social',
+      'settings': 'profile:settings'
+    };
+    
+    // Handle legacy or sub-tab syntax
+    let mainTab = tab;
+    let subTab = null;
+    
+    if (legacyMap[tab]) {
+      const parts = legacyMap[tab].split(':');
+      mainTab = parts[0];
+      subTab = parts[1] || null;
+    } else if (tab.includes(':')) {
+      const parts = tab.split(':');
+      mainTab = parts[0];
+      subTab = parts[1];
+    }
+    
+    if (!valid.includes(mainTab)) mainTab = 'home';
+    store.set('tab', mainTab);
+    if (subTab) store.set('subTab', subTab);
+    
+    // Update main nav
+    $$('.tab-btn').forEach(b => b.classList.toggle('active', b.dataset.tab === mainTab));
+    
+    // Handle sub-navigation visibility
+    const moneySubNav = $('#moneySubNav');
+    const profileSubNav = $('#profileSubNav');
+    if (moneySubNav) moneySubNav.style.display = mainTab === 'money' ? '' : 'none';
+    if (profileSubNav) profileSubNav.style.display = mainTab === 'profile' ? '' : 'none';
+    
+    // Map main tab to actual content tab to show
+    let actualTab;
+    if (mainTab === 'home') {
+      actualTab = 'home';
+    } else if (mainTab === 'money') {
+      const currentSub = subTab || store.get('subTab') || 'monthly';
+      actualTab = currentSub; // monthly/yearly/zakat
+      if (moneySubNav) {
+        moneySubNav.querySelectorAll('.sub-nav-btn').forEach(b => 
+          b.classList.toggle('active', b.dataset.sub === currentSub));
+      }
+    } else if (mainTab === 'social') {
+      actualTab = 'friends';
+    } else if (mainTab === 'profile') {
+      const currentSub = subTab || store.get('subTab') || 'settings';
+      actualTab = currentSub === 'achievements' ? 'settings' : 'settings'; // both under settings for now
+      if (profileSubNav) {
+        profileSubNav.querySelectorAll('.sub-nav-btn').forEach(b => 
+          b.classList.toggle('active', b.dataset.sub === currentSub));
+      }
+    }
+    
+    // Show/hide content
+    $$('.tab-content').forEach(c => c.style.display = c.id === `tab-${actualTab}` ? '' : 'none');
+    
     R.scheduledAll();
-    // Friends rendering handled by Social
-    if (tab === 'friends' && typeof Social !== 'undefined') Social.renderFriendsTab();
+    
+    // Render specific tabs
+    if (mainTab === 'home') renderHome();
+    if (mainTab === 'social' && typeof Social !== 'undefined') Social.renderFriendsTab();
+  }
+
+  function renderHome() {
+    try {
+      // Greeting
+      const hour = new Date().getHours();
+      const name = store.get('userName') || '';
+      let greet;
+      if (hour < 12) greet = '☀️ صباح الخير';
+      else if (hour < 18) greet = '🌤️ مساء الخير';
+      else greet = '🌙 مساء الخير';
+      
+      const greetingEl = $('#homeGreeting');
+      if (greetingEl) DOM.setText(greetingEl, greet + (name ? ' ' + name : ''));
+      
+      const subEl = $('#homeGreetingSub');
+      if (subEl) {
+        const daySub = ['يوم ممتاز لتخطيط مالي', 'ابدأ يومك بقرار ذكي', 'المال المدبّر أفضل', 'خطتك = نجاحك', 'كل خطوة تقربك لهدفك'];
+        DOM.setText(subEl, daySub[new Date().getDate() % daySub.length]);
+      }
+      
+      // Quick stats
+      try {
+        const y = store.get('year'), m = store.get('month');
+        const t = App.Sel.totals(y, m);
+        const streak = App.Streak.calc();
+        const points = store.get('points') || 0;
+        
+        const saveEl = $('#homeStatSave');
+        if (saveEl) DOM.setText(saveEl, t.save > 0 ? Fmt.c(t.save).replace(' ﷼', '') : '—');
+        const streakEl = $('#homeStatStreak');
+        if (streakEl) DOM.setText(streakEl, streak.current > 0 ? streak.current : '—');
+        const xpEl = $('#homeStatXp');
+        if (xpEl) DOM.setText(xpEl, points > 0 ? points : '—');
+      } catch {}
+      
+      // Fresh content
+      try {
+        const freshCont = $('#homeFreshContent');
+        if (freshCont && window.FreshContent) {
+          // Temporarily swap container
+          const origCont = $('#freshContentContainer');
+          if (origCont) {
+            freshCont.innerHTML = '';
+            // Move fresh content from original to home
+            window.FreshContent.render();
+            const freshCard = origCont.querySelector('.fresh-content-card');
+            if (freshCard) freshCont.appendChild(freshCard);
+          }
+        }
+      } catch {}
+      
+      // Smart moments
+      try {
+        const momentsCont = $('#homeSmartMoments');
+        if (momentsCont && window.SmartMoments) {
+          const origCont = $('#smartMomentsContainer');
+          if (origCont) {
+            momentsCont.innerHTML = '';
+            window.SmartMoments.render();
+            const section = origCont.querySelector('.moments-section');
+            if (section) momentsCont.appendChild(section);
+          }
+        }
+      } catch {}
+      
+      // Bot card
+      try {
+        const botCont = $('#homeBotCard');
+        if (botCont && window.Bot && window.Bot.renderBotCard) {
+          botCont.innerHTML = '';
+          window.Bot.renderBotCard(botCont);
+        }
+      } catch {}
+    } catch (e) {
+      console.warn('renderHome:', e.message);
+    }
   }
 
   function changeMonth(delta) {
@@ -6607,6 +8348,14 @@ const Controllers = (() => {
       Theme.apply(btn.dataset.theme);
       $$('.theme-swatch').forEach(s => s.classList.toggle('active', s === btn));
       Toast.show('تم تغيير الثيم ✨');
+    });
+  }
+
+  function bindLang() {
+    DOM.delegate(document, 'click', '.lang-btn[data-lang]', (e, btn) => {
+      App.Lang.apply(btn.dataset.lang);
+      App.DateDisplay.update();
+      Toast.show(btn.dataset.lang === 'en' ? 'Language changed ✨' : 'تم تغيير اللغة ✨');
     });
   }
 
@@ -6939,6 +8688,12 @@ const Controllers = (() => {
   function init() {
     // Tab switching
     DOM.delegate(document, 'click', '.tab-btn', (e, btn) => showTab(btn.dataset.tab));
+    // Sub-nav listener
+    DOM.delegate(document, 'click', '.sub-nav-btn', (e, btn) => {
+      const sub = btn.dataset.sub;
+      const mainTab = store.get('tab') || 'home';
+      showTab(mainTab + ':' + sub);
+    });
     // Month nav
     DOM.delegate(document, 'click', '[data-nav]', (e, btn) => changeMonth(parseInt(btn.dataset.nav, 10)));
     // Landing → app
@@ -6972,6 +8727,7 @@ const Controllers = (() => {
     bindForms();
     bindItemActions();
     bindTheme();
+    bindLang();
     bindDrawer();
     bindNotifs();
     bindZakat();
@@ -6981,6 +8737,10 @@ const Controllers = (() => {
     bindSavingSlider();
     bindExports();
     bindUserName();
+    // Profile picture button
+    $('#changeProfilePicBtn')?.addEventListener('click', () => {
+      if (window.ImageHandler) window.ImageHandler.openProfilePicker();
+    });
     bindData();
 
     // Escape closes overlays
@@ -7137,8 +8897,19 @@ const Social = (() => {
           displayName: data.displayName || fallbackDisplay,
           streak: typeof data.streak === 'number' ? data.streak : 0,
           maxStreak: typeof data.maxStreak === 'number' ? data.maxStreak : 0,
+          photoData: data.photoData || null,
           createdAt: data.createdAt || window.FB.serverTimestamp()
         };
+        
+        // تحديث صورة البروفايل في الإعدادات
+        try {
+          const settingsAvatar = document.getElementById('settingsProfileAvatar');
+          if (settingsAvatar && data.photoData && window.ImageHandler) {
+            window.ImageHandler.renderAvatarImage(settingsAvatar, data.photoData);
+          } else if (settingsAvatar && state.profile.displayName) {
+            settingsAvatar.textContent = state.profile.displayName[0].toUpperCase();
+          }
+        } catch {}
         // صحّح الملف إن كانت فيه حقول ناقصة
         if (!data.displayName || !data.username) {
           try {
@@ -7306,13 +9077,31 @@ const Social = (() => {
     };
     state.activeChatMessages = [];
     const initial = (state.activeChat.peerName || '?')[0].toUpperCase();
-    DOM.setText($('#chatPeerAvatar'), initial);
+    const avatarEl = $('#chatPeerAvatar');
+    if (avatarEl) {
+      avatarEl.classList.remove('has-img');
+      avatarEl.innerHTML = '';
+      DOM.setText(avatarEl, initial);
+    }
     DOM.setText($('#chatPeerName'), state.activeChat.peerName);
     DOM.setText($('#chatPeerStatus'), '@' + state.activeChat.peerUsername);
     $('#chatOverlay').classList.add('open');
     $('#chatPanel').classList.add('open');
     $('#chatInput').value = '';
     $('#chatSendBtn').disabled = true;
+    
+    // تحميل صورة البروفايل للصديق
+    (async () => {
+      try {
+        const peerDoc = await window.firebase.firestore().collection('users').doc(peer.uid).get();
+        if (peerDoc.exists) {
+          const peerData = peerDoc.data();
+          if (peerData.photoData && avatarEl && window.ImageHandler) {
+            window.ImageHandler.renderAvatarImage(avatarEl, peerData.photoData);
+          }
+        }
+      } catch (e) { console.warn('Failed to load peer avatar:', e.message); }
+    })();
 
     if (state.chatMsgUnsub) { try { state.chatMsgUnsub(); } catch {} }
     try {
@@ -7362,6 +9151,14 @@ const Social = (() => {
         }
       }
       const isMine = m.from === state.user.uid;
+      
+      // Image messages
+      if ((m.type === 'image' || m.type === 'image-ephemeral') && window.ImageHandler) {
+        const imgBubble = window.ImageHandler.renderImageBubble(m, isMine);
+        cont.appendChild(imgBubble);
+        continue;
+      }
+      
       const bubble = DOM.h('div', { class: 'msg ' + (isMine ? 'mine' : 'theirs') });
       bubble.appendChild(DOM.h('div', { class: 'msg-text' }, m.text || ''));
       const timeRow = DOM.h('div', { class: 'msg-time' }, formatMsgTime(m.at));
@@ -7705,6 +9502,10 @@ const Social = (() => {
     else if (state.currentSubTab === 'chats') renderConversations();
     else if (state.currentSubTab === 'requests') renderRequestsPanel();
     else if (state.currentSubTab === 'blocked') renderBlockedPanel();
+
+    // تحديث المحتوى الذكي
+    try { if (window.FreshContent) window.FreshContent.render(); } catch {}
+    try { if (window.SmartMoments) window.SmartMoments.render(); } catch {}
   }
 
   function renderFriendsList(myStreak) {
@@ -8632,9 +10433,20 @@ const Bot = (() => {
     const social = window.Social;
     if (!social || !social._state) return;
 
+    // تحقق من الرفيق المختار
+    const companion = window.Companion?.get();
+    const mood = window.Companion?.getMood();
+    const avatarEmoji = companion ? companion.emoji : '🤖';
+    const displayName = companion ? companion.name : BOT_INFO.displayName;
+    
+    // سجّل الزيارة وزد الرابطة
+    if (window.Companion) {
+      window.Companion.incrementBond(2);
+    }
+
     social._state.activeChat = {
       peerUid: BOT_ID,
-      peerName: BOT_INFO.displayName,
+      peerName: displayName,
       peerUsername: BOT_INFO.username,
       chatId: 'bot_' + (social._state.user?.uid || 'guest'),
       isBot: true
@@ -8642,27 +10454,49 @@ const Bot = (() => {
     social._state.activeChatMessages = state.messages;
 
     // تعبئة الواجهة
-    DOM.setText($('#chatPeerAvatar'), '🤖');
-    DOM.setText($('#chatPeerName'), BOT_INFO.displayName);
+    DOM.setText($('#chatPeerAvatar'), avatarEmoji);
+    DOM.setText($('#chatPeerName'), displayName);
     DOM.setText($('#chatPeerStatus'), '🟢 متصل الآن • @' + BOT_INFO.username);
     $('#chatOverlay').classList.add('open');
     $('#chatPanel').classList.add('open');
     $('#chatInput').value = '';
     $('#chatSendBtn').disabled = true;
 
-    // رسالة ترحيب إذا أول مرة
-    if (state.messages.length === 0) {
+    // رسالة ترحيب إذا أول مرة أو إذا الرفيق اشتاق
+    const needsGreeting = state.messages.length === 0 || (companion && mood === 'missing');
+    
+    if (needsGreeting) {
       setTimeout(() => {
         const name = store.get('userName') || 'صديقي';
         const hour = new Date().getHours();
-        let greet;
-        if (hour < 12) greet = `صباح الخير ${name}! ☀️`;
-        else if (hour < 18) greet = `مساء الخير ${name}! 🌤️`;
-        else greet = `مساء الخير ${name}! 🌆`;
+        let welcomeText;
+        
+        if (companion) {
+          // ترحيب من الرفيق حسب شخصيته
+          const greeting = window.Companion.getGreeting();
+          if (mood === 'missing') {
+            welcomeText = `${greeting}\n\n${name}، ${companion.missing}\n\nاحكِ لي، كيف حالك؟ 💛`;
+          } else {
+            let timeGreet;
+            if (hour < 12) timeGreet = '☀️ صباح الخير';
+            else if (hour < 18) timeGreet = '🌤️ مساء الخير';
+            else timeGreet = '🌙 مساء الخير';
+            
+            welcomeText = `${greeting} يا ${name}!\n${timeGreet}\n\nأنا ${companion.emoji} ${companion.name}، رفيقك في رحلتك المالية.\n\n${companion.trait.split('—')[1]?.trim() || 'جاهز للحوار'}\n\nاسألني أي شي 👇`;
+          }
+        } else {
+          // ترحيب عادي
+          let greet;
+          if (hour < 12) greet = `صباح الخير ${name}! ☀️`;
+          else if (hour < 18) greet = `مساء الخير ${name}! 🌤️`;
+          else greet = `مساء الخير ${name}! 🌆`;
+          
+          welcomeText = `${greet}\n\nأنا **تـدّبير AI** 🤖\nمساعدك المالي الذكي.\n\nأقدر أساعدك تحلل مصاريفك، تحقق أهدافك، وتكون أذكى مالياً 💰\n\nاسألني أي شي! 👇`;
+        }
 
         addMessage({
           from: BOT_ID,
-          text: `${greet}\n\nأنا **تـدّبير AI** 🤖\nمساعدك المالي الذكي.\n\nأقدر أساعدك تحلل مصاريفك، تحقق أهدافك، وتكون أذكى مالياً 💰\n\nاسألني أي شي! 👇`,
+          text: welcomeText,
           at: new Date(),
           isBot: true
         });
@@ -8799,18 +10633,33 @@ const Bot = (() => {
   // ═══ بطاقة البوت في القائمة ═══
   function renderBotCard(container) {
     if (!container) return;
+    
+    // تحقق من الرفيق المختار
+    const companion = window.Companion?.get();
+    const mood = window.Companion?.getMood();
+    const bondLevel = window.Companion?.getBondLevel();
+    
+    const avatarEmoji = companion ? companion.emoji : '🤖';
+    const displayName = companion ? companion.name : BOT_INFO.displayName;
+    const statusText = companion 
+      ? (mood === 'missing' ? '💔 اشتاق لك' : mood === 'sad' ? '😔 يفتقدك' : '😊 ' + companion.trait.split('—')[0].trim())
+      : 'مساعدك المالي الذكي';
+    
     const card = DOM.h('div', {
       class: 'bot-card',
       onclick: open
     },
-      DOM.h('div', { class: 'bot-avatar' }, '🤖'),
+      DOM.h('div', { class: 'bot-avatar' }, avatarEmoji),
       DOM.h('div', { class: 'bot-body' },
         DOM.h('div', { class: 'bot-name-row' },
-          DOM.h('span', { class: 'bot-name' }, BOT_INFO.displayName),
-          DOM.h('span', { class: 'bot-badge' }, 'AI')
+          DOM.h('span', { class: 'bot-name' }, displayName),
+          DOM.h('span', { class: 'bot-badge' }, companion ? '✨' : 'AI')
         ),
         DOM.h('div', { class: 'bot-username' }, '@' + BOT_INFO.username),
-        DOM.h('div', { class: 'bot-status' }, 'مساعدك المالي الذكي')
+        DOM.h('div', { class: 'bot-status' }, statusText),
+        companion && bondLevel ? DOM.h('div', { class: 'companion-bond' }, 
+          '💛 ' + bondLevel.label
+        ) : null
       ),
       DOM.h('button', {
         class: 'bot-chat-btn',
@@ -8819,6 +10668,17 @@ const Bot = (() => {
       }, '💬')
     );
     container.appendChild(card);
+
+    // زر إعدادات الرفيق (لتغييره)
+    if (!companion) {
+      // إذا ما في رفيق، اعرض زر اختيار
+      const pickBtn = DOM.h('button', {
+        class: 'btn-primary',
+        style: { marginTop: '8px', width: '100%', fontSize: '13px' },
+        onclick: () => window.Companion?.openPicker(true)
+      }, '🎭 اختر رفيقك الذكي');
+      container.appendChild(pickBtn);
+    }
   }
 
   // ═══ اعتراض الشات العادي للبوت ═══
@@ -8877,6 +10737,1793 @@ const Bot = (() => {
 
 window.Bot = Bot;
 
+/* ═══════════════════════════════════════════════════
+   TDBEER — Smart Features
+   1. 🎁 Daily Gift Box
+   2. 🔮 Financial Simulator
+   3. 🎙️ Voice Input
+   4. 🔊 Text-to-Speech
+═══════════════════════════════════════════════════ */
+
+const SmartFeatures = (() => {
+  const { U, Fmt, DOM, $, $$, Logger, Storage } = Tdbeer;
+  const { store, Toast, Pts, Entries } = App;
+
+  // ═══ 1. DAILY GIFT BOX ═══
+  const Gift = (() => {
+    const REWARDS = [
+      // Common (60%)
+      { type: 'xp', icon: '⭐', weight: 15, min: 10, max: 30, label: 'نقاط خبرة' },
+      { type: 'xp', icon: '💫', weight: 10, min: 30, max: 60, label: 'نقاط خبرة' },
+      { type: 'tip', icon: '💡', weight: 15, label: 'نصيحة ذهبية', tips: [
+        'وفّر ٢٠٪ من راتبك قبل أي مصروف',
+        'القاعدة الذهبية: لا تشتري ما لا تحتاج',
+        'صندوق الطوارئ = ٣ أشهر من مصاريفك',
+        'استثمر في نفسك قبل أي شيء',
+        'الديون تؤجل أحلامك — سددها أولاً',
+        'راجع اشتراكاتك شهرياً، احذف غير المستخدم',
+        'القهوة اليومية = ٥٤٠٠ ريال سنوياً',
+        'اكتب قائمة قبل التسوق — توفّر ٢٠٪'
+      ] },
+      { type: 'quote', icon: '📜', weight: 10, label: 'حكمة اليوم', quotes: [
+        '"من حفظ دينه حفظ ماله" - حديث شريف',
+        '"الاقتصاد نصف المعيشة" - عمر بن الخطاب',
+        '"ما عال من اقتصد" - النبي ﷺ',
+        '"الدين هم الليل وذل النهار" - مثل عربي',
+        '"ليس الغني عن كثرة العرض، إنما الغنى غنى النفس" - حديث شريف'
+      ] },
+      { type: 'blessing', icon: '🤲', weight: 10, label: 'دعاء', blessings: [
+        'اللهم بارك لي فيما رزقتني',
+        'اللهم اكفني بحلالك عن حرامك',
+        'اللهم اغنني بفضلك عمن سواك',
+        'اللهم ارزقني رزقاً حلالاً طيباً',
+        'بسم الله الذي لا يضر مع اسمه شيء'
+      ] },
+      // Rare (25%)
+      { type: 'xp', icon: '💎', weight: 15, min: 80, max: 150, label: 'نقاط خبرة' },
+      { type: 'badge', icon: '🌟', weight: 10, label: 'شارة نجم اليوم' },
+      // Legendary (5%)
+      { type: 'jackpot', icon: '👑', weight: 5, min: 200, max: 300, label: 'جائزة كبرى!' }
+    ];
+
+    function pickReward() {
+      const total = REWARDS.reduce((s, r) => s + r.weight, 0);
+      let rnd = Math.random() * total;
+      for (const r of REWARDS) {
+        rnd -= r.weight;
+        if (rnd <= 0) return r;
+      }
+      return REWARDS[0];
+    }
+
+    function canOpen() {
+      const last = Storage.load('giftLastOpen', 0);
+      const now = Date.now();
+      const hoursSince = (now - last) / (1000 * 60 * 60);
+      return hoursSince >= 24;
+    }
+
+    function nextOpenTime() {
+      const last = Storage.load('giftLastOpen', 0);
+      return last + (24 * 60 * 60 * 1000);
+    }
+
+    function formatTimeLeft(ms) {
+      if (ms <= 0) return '00:00:00';
+      const h = Math.floor(ms / (1000 * 60 * 60));
+      const m = Math.floor((ms % (1000 * 60 * 60)) / (1000 * 60));
+      const s = Math.floor((ms % (1000 * 60)) / 1000);
+      return `${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
+    }
+
+    let timerInterval = null;
+
+    function open() {
+      const overlay = $('#giftOverlay');
+      if (!overlay) return;
+      overlay.classList.add('open');
+      
+      const intro = $('#giftIntro');
+      const locked = $('#giftLocked');
+      const result = $('#giftResult');
+      
+      intro.style.display = 'none';
+      locked.style.display = 'none';
+      result.classList.remove('show');
+      
+      if (canOpen()) {
+        intro.style.display = 'block';
+      } else {
+        locked.style.display = 'block';
+        updateTimer();
+        timerInterval = setInterval(updateTimer, 1000);
+      }
+    }
+
+    function updateTimer() {
+      const left = nextOpenTime() - Date.now();
+      if (left <= 0) {
+        clearInterval(timerInterval);
+        $('#giftLocked').style.display = 'none';
+        $('#giftIntro').style.display = 'block';
+        return;
+      }
+      DOM.setText($('#giftTimer'), formatTimeLeft(left));
+    }
+
+    function close() {
+      $('#giftOverlay')?.classList.remove('open');
+      if (timerInterval) { clearInterval(timerInterval); timerInterval = null; }
+    }
+
+    function launchConfetti() {
+      const card = document.querySelector('.gift-card');
+      if (!card) return;
+      const colors = ['#c9a84c', '#f0d98a', '#10b981', '#3b82f6', '#ec4899', '#f97316'];
+      for (let i = 0; i < 30; i++) {
+        const piece = document.createElement('div');
+        piece.className = 'confetti-piece';
+        piece.style.left = Math.random() * 100 + '%';
+        piece.style.background = colors[Math.floor(Math.random() * colors.length)];
+        piece.style.animationDelay = (Math.random() * 0.5) + 's';
+        piece.style.animationDuration = (2 + Math.random() * 1.5) + 's';
+        card.appendChild(piece);
+        setTimeout(() => piece.remove(), 3000);
+      }
+    }
+
+    function openBox() {
+      const box = $('#giftBox');
+      const intro = $('#giftIntro');
+      
+      box.classList.remove('shaking');
+      box.classList.add('opening');
+      
+      setTimeout(() => {
+        const reward = pickReward();
+        intro.style.display = 'none';
+        
+        // Show result
+        DOM.setText($('#giftRewardIcon'), reward.icon);
+        
+        let rewardText = '';
+        let detail = '';
+        
+        if (reward.type === 'xp' || reward.type === 'jackpot') {
+          const amount = Math.floor(reward.min + Math.random() * (reward.max - reward.min));
+          rewardText = `+${amount} XP`;
+          detail = reward.type === 'jackpot' 
+            ? 'جائزة كبرى! حظك عالي اليوم 👑'
+            : 'نقاط خبرة جديدة ⭐';
+          Pts.add(amount);
+        } else if (reward.type === 'tip') {
+          const tip = reward.tips[Math.floor(Math.random() * reward.tips.length)];
+          rewardText = 'نصيحة ذهبية';
+          detail = '"' + tip + '"';
+          Pts.add(20);
+        } else if (reward.type === 'quote') {
+          const quote = reward.quotes[Math.floor(Math.random() * reward.quotes.length)];
+          rewardText = 'حكمة اليوم';
+          detail = quote;
+          Pts.add(15);
+        } else if (reward.type === 'blessing') {
+          const b = reward.blessings[Math.floor(Math.random() * reward.blessings.length)];
+          rewardText = 'دعاء للبركة';
+          detail = b + ' 🤲';
+          Pts.add(15);
+        } else if (reward.type === 'badge') {
+          rewardText = 'شارة نجم اليوم';
+          detail = 'اجمع ٥ من هذه الشارات لفتح مستوى خاص ⭐';
+          Pts.add(50);
+        }
+        
+        DOM.setText($('#giftRewardText'), rewardText);
+        DOM.setText($('#giftRewardDetail'), detail);
+        
+        $('#giftResult').classList.add('show');
+        launchConfetti();
+        
+        // Mark as opened
+        Storage.save('giftLastOpen', Date.now());
+        
+        // Haptic feedback
+        try { if (navigator.vibrate) navigator.vibrate([50, 30, 100]); } catch {}
+      }, 1000);
+    }
+
+    function collect() {
+      close();
+      Toast.show('🎉 تم استلام جائزتك!', 'success');
+      // إزالة علامة الهدية من الزر
+      $('#btnOpenGift')?.classList.remove('has-gift');
+    }
+
+    // Check if gift is available on startup
+    function checkAvailability() {
+      const btn = $('#btnOpenGift');
+      if (!btn) return;
+      if (canOpen()) {
+        btn.classList.add('has-gift');
+      } else {
+        btn.classList.remove('has-gift');
+      }
+    }
+
+    return { open, close, openBox, collect, canOpen, checkAvailability };
+  })();
+
+  // ═══ 2. FINANCIAL SIMULATOR ═══
+  const Simulator = (() => {
+    const SCENARIOS = [
+      {
+        id: 'daily_save',
+        emoji: '💰',
+        text: 'لو وفّرت مبلغاً يومياً',
+        defaultAmount: 100,
+        defaultYears: 1,
+        label1: 'المبلغ اليومي (ريال)',
+        label2: 'المدة (سنوات)',
+        calc: (a, y) => a * 365 * y,
+        headline: 'ستوفر',
+        period: (y) => `في ${y} ${y === 1 ? 'سنة' : y === 2 ? 'سنتين' : 'سنوات'}`,
+        insight: (total, a, y) => `إذا واصلت بنفس الوتيرة، ستصبح لديك ثروة صغيرة! المال الصغير المتراكم أقوى من المال الكبير المتفرق.`
+      },
+      {
+        id: 'cancel_sub',
+        emoji: '📺',
+        text: 'لو ألغيت اشتراكاً شهرياً',
+        defaultAmount: 45,
+        defaultYears: 1,
+        label1: 'قيمة الاشتراك الشهرية',
+        label2: 'المدة (سنوات)',
+        calc: (a, y) => a * 12 * y,
+        headline: 'ستوفر',
+        period: (y) => `في ${y} ${y === 1 ? 'سنة' : 'سنوات'}`,
+        insight: (total) => `الاشتراكات الصغيرة تسرق ميزانيتك بصمت. راجعها كل ٣ شهور!`
+      },
+      {
+        id: 'daily_coffee',
+        emoji: '☕',
+        text: 'لو تركت القهوة اليومية',
+        defaultAmount: 20,
+        defaultYears: 1,
+        label1: 'تكلفة القهوة اليومية',
+        label2: 'المدة (سنوات)',
+        calc: (a, y) => a * 365 * y,
+        headline: 'ستوفر',
+        period: (y) => `في ${y} ${y === 1 ? 'سنة' : 'سنوات'}`,
+        insight: (total) => `القهوة بـ ٢٠ ريال × ٣٦٥ يوم = ٧٣٠٠ ريال سنوياً! فكر فيها.`
+      },
+      {
+        id: 'double_income',
+        emoji: '📈',
+        text: 'لو ضاعفت راتبي',
+        defaultAmount: 5000,
+        defaultYears: 1,
+        label1: 'راتبك الحالي',
+        label2: 'المدة (سنوات)',
+        calc: (a, y) => a * 12 * y,
+        headline: 'راتبك الإضافي',
+        period: (y) => `في ${y} ${y === 1 ? 'سنة' : 'سنوات'}`,
+        insight: (total) => `مضاعفة الراتب = تحقيق الأهداف أسرع بكثير. ركز على تطوير مهاراتك!`
+      },
+      {
+        id: 'retirement',
+        emoji: '🏖️',
+        text: 'لو وفّرت للتقاعد',
+        defaultAmount: 500,
+        defaultYears: 30,
+        label1: 'ادخار شهري',
+        label2: 'سنوات قبل التقاعد',
+        calc: (a, y) => a * 12 * y,
+        headline: 'مدخراتك للتقاعد',
+        period: (y) => `بعد ${y} سنة`,
+        insight: (total) => `التخطيط للتقاعد يبدأ من اليوم. كل شهر تؤخره = خسارة فادحة.`
+      },
+      {
+        id: 'hajj',
+        emoji: '🕋',
+        text: 'لو وفّرت للحج والعمرة',
+        defaultAmount: 200,
+        defaultYears: 2,
+        label1: 'ادخار شهري',
+        label2: 'المدة (سنوات)',
+        calc: (a, y) => a * 12 * y,
+        headline: 'ستجمع',
+        period: (y) => `في ${y} ${y === 1 ? 'سنة' : 'سنوات'}`,
+        insight: (total) => `العمرة من ٣٠٠٠-٥٠٠٠ ريال، والحج ١٥٠٠٠-٢٥٠٠٠ ريال. خطط من اليوم!`
+      }
+    ];
+
+    let activeScenario = null;
+
+    function open() {
+      $('#simOverlay').classList.add('open');
+      renderScenarios();
+      $('#simCustomInputs').style.display = 'none';
+      $('#simResult').classList.remove('show');
+      activeScenario = null;
+    }
+
+    function close() {
+      $('#simOverlay')?.classList.remove('open');
+    }
+
+    function renderScenarios() {
+      const cont = $('#simScenarios');
+      if (!cont) return;
+      cont.innerHTML = '';
+      for (const s of SCENARIOS) {
+        const btn = DOM.h('button', {
+          class: 'sim-scenario-btn',
+          onclick: () => selectScenario(s)
+        },
+          DOM.h('span', { class: 'sim-scenario-emoji' }, s.emoji),
+          DOM.h('span', { class: 'sim-scenario-text' }, s.text)
+        );
+        cont.appendChild(btn);
+      }
+    }
+
+    function selectScenario(s) {
+      activeScenario = s;
+      $$('.sim-scenario-btn').forEach((b, i) => {
+        b.classList.toggle('active', SCENARIOS[i].id === s.id);
+      });
+      DOM.setText($('#simLabel1'), s.label1);
+      DOM.setText($('#simLabel2'), s.label2);
+      $('#simInput1').value = s.defaultAmount;
+      $('#simInput2').value = s.defaultYears;
+      $('#simCustomInputs').style.display = 'block';
+      
+      // احسب مباشرة
+      calculate();
+    }
+
+    function getEquivalents(total) {
+      const equivs = [];
+      // عمرة (تقريباً 4000 ريال)
+      const umrah = Math.floor(total / 4000);
+      if (umrah >= 1) equivs.push({ icon: '🕋', text: `${umrah} ${umrah === 1 ? 'عمرة' : 'عمرات'}` });
+      
+      // سيارة مستعملة (30000 ريال)
+      if (total >= 30000) {
+        const cars = Math.floor(total / 30000);
+        equivs.push({ icon: '🚗', text: `${cars} ${cars === 1 ? 'سيارة مستعملة' : 'سيارات'}` });
+      }
+      
+      // آيفون (4500)
+      const iphones = Math.floor(total / 4500);
+      if (iphones >= 1 && iphones <= 50) equivs.push({ icon: '📱', text: `${iphones} ${iphones === 1 ? 'آيفون' : 'آيفونات'}` });
+      
+      // عطلات (8000)
+      const trips = Math.floor(total / 8000);
+      if (trips >= 1 && trips <= 30) equivs.push({ icon: '✈️', text: `${trips} ${trips === 1 ? 'عطلة' : 'عطلات'}` });
+      
+      // صدقة (100 ريال لأسرة محتاجة)
+      const families = Math.floor(total / 1200);
+      if (families >= 1 && families <= 100) equivs.push({ icon: '🤲', text: `إطعام ${families} أسرة لشهر` });
+      
+      // حج (20000)
+      if (total >= 20000) {
+        const hajj = Math.floor(total / 20000);
+        equivs.push({ icon: '🕋', text: `${hajj} ${hajj === 1 ? 'حجة' : 'حجات'}` });
+      }
+      
+      // منزل (500000+)
+      if (total >= 500000) {
+        equivs.push({ icon: '🏠', text: 'دفعة أولى لمنزل' });
+      }
+      
+      return equivs.slice(0, 4);
+    }
+
+    function calculate() {
+      if (!activeScenario) return;
+      const a = U.num($('#simInput1').value);
+      const y = U.num($('#simInput2').value);
+      if (a <= 0 || y <= 0) return;
+      
+      const total = activeScenario.calc(a, y);
+      
+      DOM.setText($('#simResultHeadline'), activeScenario.headline);
+      DOM.setText($('#simResultNumber'), Fmt.c(total));
+      DOM.setText($('#simResultPeriod'), activeScenario.period(y));
+      
+      // Equivalents
+      const equivCont = $('#simEquivalents');
+      equivCont.innerHTML = '';
+      const equivs = getEquivalents(total);
+      for (const eq of equivs) {
+        equivCont.appendChild(DOM.h('div', { class: 'sim-equiv' },
+          DOM.h('div', { class: 'sim-equiv-icon' }, eq.icon),
+          DOM.h('div', { class: 'sim-equiv-text' }, eq.text)
+        ));
+      }
+      
+      DOM.setText($('#simInsight'), '💡 ' + activeScenario.insight(total, a, y));
+      
+      $('#simResult').classList.add('show');
+    }
+
+    return { open, close, calculate };
+  })();
+
+  // ═══ 3. VOICE INPUT ═══
+  const Voice = (() => {
+    let recognition = null;
+    let isListening = false;
+    let parsedData = null;
+
+    function isSupported() {
+      return 'webkitSpeechRecognition' in window || 'SpeechRecognition' in window;
+    }
+
+    function init() {
+      if (!isSupported()) return false;
+      const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+      recognition = new SpeechRecognition();
+      recognition.lang = 'ar-SA';
+      recognition.continuous = false;
+      recognition.interimResults = true;
+      recognition.maxAlternatives = 3;
+      
+      recognition.onresult = (e) => {
+        let final = '';
+        let interim = '';
+        for (let i = e.resultIndex; i < e.results.length; i++) {
+          const t = e.results[i][0].transcript;
+          if (e.results[i].isFinal) final += t;
+          else interim += t;
+        }
+        const display = final || interim;
+        if (display) {
+          DOM.setText($('#voiceTranscript'), display);
+          $('#voiceTranscript').classList.add('show');
+          if (final) {
+            parseTranscript(final);
+          }
+        }
+      };
+      
+      recognition.onerror = (e) => {
+        Logger.warn('Voice', e.error);
+        isListening = false;
+        updateUI();
+        let msg = 'تعذّر التسجيل';
+        if (e.error === 'no-speech') msg = 'لم أسمع شيئاً، حاول مجدداً';
+        else if (e.error === 'not-allowed') msg = 'يلزم السماح بالميكروفون';
+        else if (e.error === 'network') msg = 'مشكلة اتصال';
+        DOM.setText($('#voiceStatus'), msg);
+      };
+      
+      recognition.onend = () => {
+        isListening = false;
+        updateUI();
+        if (!parsedData) {
+          DOM.setText($('#voiceStatus'), 'اضغط الميكروفون وحاول مرة أخرى');
+        }
+      };
+      
+      return true;
+    }
+
+    function open() {
+      if (!isSupported()) {
+        Toast.show('المتصفح لا يدعم التسجيل الصوتي', 'warn');
+        return;
+      }
+      if (!recognition) init();
+      $('#voiceOverlay').classList.add('open');
+      reset();
+    }
+
+    function reset() {
+      isListening = false;
+      parsedData = null;
+      $('#voiceTranscript').classList.remove('show');
+      $('#voiceParsed').classList.remove('show');
+      $('#voiceActions').style.display = 'none';
+      $('#voiceExamples').style.display = 'block';
+      DOM.setText($('#voiceTranscript'), '');
+      DOM.setText($('#voiceStatus'), 'اضغط على الميكروفون للبدء');
+      updateUI();
+    }
+
+    function close() {
+      if (isListening && recognition) {
+        try { recognition.stop(); } catch {}
+      }
+      $('#voiceOverlay')?.classList.remove('open');
+    }
+
+    function toggle() {
+      if (!recognition) {
+        if (!init()) {
+          Toast.show('المتصفح لا يدعم التسجيل', 'warn');
+          return;
+        }
+      }
+      if (isListening) {
+        try { recognition.stop(); } catch {}
+        isListening = false;
+        updateUI();
+      } else {
+        parsedData = null;
+        $('#voiceParsed').classList.remove('show');
+        $('#voiceActions').style.display = 'none';
+        $('#voiceExamples').style.display = 'none';
+        try {
+          recognition.start();
+          isListening = true;
+          DOM.setText($('#voiceStatus'), '🎤 أستمع إليك الآن...');
+          updateUI();
+        } catch (e) {
+          Logger.warn('Voice.start', e.message);
+        }
+      }
+    }
+
+    function updateUI() {
+      const btn = $('#voiceMicBtn');
+      if (!btn) return;
+      btn.classList.toggle('listening', isListening);
+      btn.textContent = isListening ? '⏹️' : '🎤';
+    }
+
+    // ═══ Parse Arabic speech to expense/income ═══
+    function parseTranscript(text) {
+      // استخراج المبلغ
+      const amountMatch = text.match(/(\d+(?:\.\d+)?)/);
+      if (!amountMatch) {
+        DOM.setText($('#voiceStatus'), '⚠️ لم أتعرّف على مبلغ. قل رقماً واضحاً');
+        return;
+      }
+      const amount = parseFloat(amountMatch[1]);
+      
+      // تحديد نوع المعاملة
+      const lower = text.toLowerCase();
+      const isIncome = /راتب|دخل|وصل|استلمت|أخذت|ربحت/.test(lower);
+      
+      // تحديد الفئة
+      const categories = [
+        { regex: /قهو|شاي|ستارباكس|نسكافيه/, cat: '☕', name: 'قهوة' },
+        { regex: /أكل|غدا|فطور|عشا|مطعم|برجر|بيتزا|شاورما/, cat: '🍔', name: 'أكل' },
+        { regex: /بنزين|وقود|محطة/, cat: '⛽', name: 'بنزين' },
+        { regex: /مواصلا|تاكسي|أوبر|كريم|نقل/, cat: '🚗', name: 'مواصلات' },
+        { regex: /تسوق|ملابس|حذاء|شنطة|مول/, cat: '🛒', name: 'تسوق' },
+        { regex: /كهربا|ماء|اتصال|نت|فاتورة/, cat: '⚡', name: 'فاتورة' },
+        { regex: /هدية|هداي/, cat: '🎁', name: 'هدية' },
+        { regex: /دوا|طبيب|صيدلية|مستشفى/, cat: '💊', name: 'صحة' },
+        { regex: /ترفيه|سينما|لعبة|فيلم/, cat: '🎬', name: 'ترفيه' },
+        { regex: /راتب/, cat: '💵', name: 'راتب' },
+        { regex: /حر|freelance|عمل حر/, cat: '💼', name: 'عمل حر' }
+      ];
+      
+      let matchedCat = null;
+      let catName = 'متفرقات';
+      for (const c of categories) {
+        if (c.regex.test(lower)) {
+          matchedCat = c.cat;
+          catName = c.name;
+          break;
+        }
+      }
+      
+      if (!matchedCat) {
+        matchedCat = isIncome ? '💵' : '➕';
+      }
+      
+      // استخراج الاسم (بدون رقم)
+      let name = text.replace(/\d+(?:\.\d+)?/g, '')
+                    .replace(/ريال|ريالات|ر\.س|sr|sar/gi, '')
+                    .replace(/صرفت|دفعت|اشتريت|أخذت|وصل|استلمت|على|في|من|الى|إلى/g, '')
+                    .trim();
+      if (!name || name.length < 2) name = catName;
+      if (name.length > 40) name = name.slice(0, 40);
+      
+      parsedData = {
+        name,
+        amount,
+        cat: matchedCat,
+        type: isIncome ? 'income' : 'expense'
+      };
+      
+      // عرض النتيجة
+      const detail = $('#voiceParsedDetail');
+      detail.innerHTML = '';
+      detail.appendChild(DOM.h('span', null, `${matchedCat} ${name} — ${isIncome ? '📈 دخل' : '📉 مصروف'}`));
+      detail.appendChild(DOM.h('strong', { style: { color: isIncome ? 'var(--green-2)' : 'var(--danger)' } }, Fmt.c(amount)));
+      
+      $('#voiceParsed').classList.add('show');
+      $('#voiceActions').style.display = 'flex';
+      DOM.setText($('#voiceStatus'), '✅ فهمت! اضغط للتأكيد');
+    }
+
+    function confirm() {
+      if (!parsedData) return;
+      try {
+        if (parsedData.type === 'income') {
+          Entries.addIncome({
+            name: parsedData.name,
+            amt: parsedData.amount,
+            cat: parsedData.cat
+          });
+          Toast.show(`📈 أُضيف دخل ${Fmt.c(parsedData.amount)}`, 'success');
+        } else {
+          Entries.addVariable({
+            name: parsedData.name,
+            amt: parsedData.amount,
+            cat: parsedData.cat
+          });
+          Toast.show(`📉 أُضيف مصروف ${Fmt.c(parsedData.amount)}`, 'success');
+        }
+        try { if (typeof Renderers !== 'undefined') Renderers.scheduledAll(); } catch {}
+        Pts.add(10); // مكافأة استخدام الصوت
+        close();
+      } catch (e) {
+        Toast.show('فشل الإضافة', 'danger');
+        Logger.error('Voice.confirm', e);
+      }
+    }
+
+    return { open, close, toggle, confirm, reset, isSupported };
+  })();
+
+  // ═══ EVENTS BINDING ═══
+  function bindEvents() {
+    // Gift
+    $('#btnOpenGift')?.addEventListener('click', Gift.open);
+    $('#btnOpenGift2')?.addEventListener('click', Gift.open);
+    $('#giftCloseBtn')?.addEventListener('click', Gift.close);
+    $('#giftOpenBtn')?.addEventListener('click', Gift.openBox);
+    $('#giftBox')?.addEventListener('click', Gift.openBox);
+    $('#giftCollectBtn')?.addEventListener('click', Gift.collect);
+    $('#giftOverlay')?.addEventListener('click', (e) => {
+      if (e.target.id === 'giftOverlay') Gift.close();
+    });
+
+    // Simulator
+    $('#btnOpenSimulator')?.addEventListener('click', Simulator.open);
+    $('#btnOpenSimulator2')?.addEventListener('click', Simulator.open);
+    $('#simCloseBtn')?.addEventListener('click', Simulator.close);
+    $('#simCalcBtn')?.addEventListener('click', Simulator.calculate);
+    $('#simInput1')?.addEventListener('input', Simulator.calculate);
+    $('#simInput2')?.addEventListener('input', Simulator.calculate);
+    $('#simOverlay')?.addEventListener('click', (e) => {
+      if (e.target.id === 'simOverlay') Simulator.close();
+    });
+
+    // Voice
+    $('#btnOpenVoice')?.addEventListener('click', Voice.open);
+    $('#btnOpenVoice2')?.addEventListener('click', Voice.open);
+    $('#voiceCloseBtn')?.addEventListener('click', Voice.close);
+    $('#voiceMicBtn')?.addEventListener('click', Voice.toggle);
+    $('#voiceConfirmBtn')?.addEventListener('click', Voice.confirm);
+    $('#voiceCancelBtn')?.addEventListener('click', Voice.reset);
+    $('#voiceOverlay')?.addEventListener('click', (e) => {
+      if (e.target.id === 'voiceOverlay') Voice.close();
+    });
+
+    // ESC key
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        if ($('#giftOverlay')?.classList.contains('open')) Gift.close();
+        else if ($('#simOverlay')?.classList.contains('open')) Simulator.close();
+        else if ($('#voiceOverlay')?.classList.contains('open')) Voice.close();
+      }
+    });
+  }
+
+  function init() {
+    try { bindEvents(); } catch (e) { console.warn('SmartFeatures.bindEvents failed:', e.message); }
+    // تحقق من توفر الهدية بعد تحميل DOM
+    try { setTimeout(() => { try { Gift.checkAvailability(); } catch {} }, 500); } catch {}
+    // افحص كل دقيقة
+    try { setInterval(() => { try { Gift.checkAvailability(); } catch {} }, 60000); } catch {}
+  }
+
+  return { init, Gift, Simulator, Voice };
+})();
+
+window.SmartFeatures = SmartFeatures;
+
+/* ═══════════════════════════════════════════════════
+   TDBEER — Companion (AI Companion with Personality)
+═══════════════════════════════════════════════════ */
+
+const Companion = (() => {
+  const { DOM, $, Logger, Storage, U, Fmt } = Tdbeer;
+  const { Toast } = App;
+
+  const CHARACTERS = {
+    fox: {
+      id: 'fox', emoji: '🦊', name: 'الثعلب الذكي',
+      trait: 'ذكي ومحسوب — يحب الخطط الذكية والمكر المالي',
+      greeting: ['مرحى!', 'أهلاً يا ذكي!', 'يا صاحب الذكاء!'],
+      happy: 'ذكاؤك يبهرني!',
+      sad: 'الخطة المحكمة تحتاج صبر.',
+      missing: 'أين كنت؟ افتقدت حواراتنا الذكية 🦊'
+    },
+    lion: {
+      id: 'lion', emoji: '🦁', name: 'الأسد القوي',
+      trait: 'شجاع ومواجه — يحب القرارات الحازمة والنتائج الكبيرة',
+      greeting: ['هيه بطل!', 'يا ملك!', 'يا أسد!'],
+      happy: 'هذه روح البطل!',
+      sad: 'الأسود لا يستسلمون!',
+      missing: 'عدت أخيراً! الأسود تنتظر معاركها 🦁'
+    },
+    bear: {
+      id: 'bear', emoji: '🐻', name: 'الدب الحكيم',
+      trait: 'هادئ وحكيم — يحب التفكير العميق والقرارات المحسوبة',
+      greeting: ['سلام عليك', 'أهلاً يا صديقي', 'يا هلا والله'],
+      happy: 'الهدوء يجلب الحكمة.',
+      sad: 'العاصفة تمر دائماً.',
+      missing: 'اشتقت لحديثنا الهادئ 🐻'
+    },
+    falcon: {
+      id: 'falcon', emoji: '🦅', name: 'الصقر الرشيق',
+      trait: 'سريع ودقيق — يحب القرارات السريعة والاستثمار الذكي',
+      greeting: ['يا صقر!', 'أهلاً يا سريع!', 'يا رشيق!'],
+      happy: 'الصقر يحلّق عالياً!',
+      sad: 'الصقور لا تخاف الرياح.',
+      missing: 'طال غيابك يا صقري 🦅'
+    },
+    turtle: {
+      id: 'turtle', emoji: '🐢', name: 'السلحفاة الصبورة',
+      trait: 'صبور ومنتظم — يحب الخطط طويلة المدى والثبات',
+      greeting: ['مرحباً بك', 'سلام يا صديق', 'أهلاً'],
+      happy: 'الصبر مفتاح الفرج.',
+      sad: 'خطوة خطوة نصل.',
+      missing: 'رجعت يا صاحبي 🐢 الصبر كان عناءً'
+    }
+  };
+
+  let state = {
+    selected: null,
+    bond: 0,
+    lastVisit: 0,
+    daysSinceLastVisit: 0
+  };
+
+  function load() {
+    state.selected = Storage.load('companion_selected', null);
+    state.bond = Storage.load('companion_bond', 0);
+    state.lastVisit = Storage.load('companion_lastVisit', Date.now());
+    const now = Date.now();
+    state.daysSinceLastVisit = Math.floor((now - state.lastVisit) / (1000 * 60 * 60 * 24));
+  }
+
+  function save() {
+    Storage.save('companion_selected', state.selected);
+    Storage.save('companion_bond', state.bond);
+    Storage.save('companion_lastVisit', state.lastVisit);
+  }
+
+  function get() {
+    if (!state.selected) return null;
+    return CHARACTERS[state.selected];
+  }
+
+  function getMood() {
+    if (state.daysSinceLastVisit >= 3) return 'missing';
+    if (state.daysSinceLastVisit >= 1) return 'sad';
+    return 'happy';
+  }
+
+  function getBondLevel() {
+    if (state.bond >= 100) return { level: 5, label: 'أخوّة' };
+    if (state.bond >= 50) return { level: 4, label: 'صديق مقرّب' };
+    if (state.bond >= 20) return { level: 3, label: 'صديق' };
+    if (state.bond >= 5) return { level: 2, label: 'متعارف' };
+    return { level: 1, label: 'جديد' };
+  }
+
+  function incrementBond(amount = 1) {
+    state.bond += amount;
+    state.lastVisit = Date.now();
+    state.daysSinceLastVisit = 0;
+    save();
+  }
+
+  function markVisit() {
+    state.lastVisit = Date.now();
+    state.daysSinceLastVisit = 0;
+    save();
+  }
+
+  function openPicker(isFirstTime = false) {
+    const overlay = $('#companionPickerOverlay');
+    const list = $('#companionList');
+    if (!overlay || !list) return;
+    
+    list.innerHTML = '';
+    let tempSelected = null;
+    
+    for (const key of Object.keys(CHARACTERS)) {
+      const c = CHARACTERS[key];
+      const opt = DOM.h('button', {
+        class: 'companion-option',
+        'data-id': c.id,
+        onclick: (e) => {
+          tempSelected = c.id;
+          document.querySelectorAll('.companion-option').forEach(x => x.classList.remove('selected'));
+          e.currentTarget.classList.add('selected');
+          $('#companionConfirmBtn').classList.add('active');
+        }
+      },
+        DOM.h('span', { class: 'companion-emoji' }, c.emoji),
+        DOM.h('div', { class: 'companion-info' },
+          DOM.h('div', { class: 'companion-name' }, c.name),
+          DOM.h('div', { class: 'companion-trait' }, c.trait)
+        )
+      );
+      list.appendChild(opt);
+    }
+    
+    $('#companionConfirmBtn').classList.remove('active');
+    $('#companionConfirmBtn').onclick = () => {
+      if (!tempSelected) return;
+      state.selected = tempSelected;
+      save();
+      overlay.classList.remove('open');
+      const c = CHARACTERS[tempSelected];
+      Toast.show(`✨ ${c.emoji} ${c.name} رفيقك الآن!`, 'success');
+      // تحديث البوت
+      if (window.Social?.renderFriendsTab) window.Social.renderFriendsTab();
+    };
+    
+    overlay.classList.add('open');
+  }
+
+  function closePicker() {
+    $('#companionPickerOverlay')?.classList.remove('open');
+  }
+
+  function getGreeting() {
+    const c = get();
+    if (!c) return null;
+    const mood = getMood();
+    if (mood === 'missing') return c.missing;
+    const greeting = c.greeting[Math.floor(Math.random() * c.greeting.length)];
+    return greeting;
+  }
+
+  function personalizeMessage(text) {
+    const c = get();
+    if (!c) return text;
+    // أضف روح الشخصية
+    return text;
+  }
+
+  return {
+    load, save, get, getMood, getBondLevel, incrementBond, markVisit,
+    openPicker, closePicker, getGreeting, personalizeMessage,
+    CHARACTERS
+  };
+})();
+
+window.Companion = Companion;
+
+/* ═══════════════════════════════════════════════════
+   TDBEER — Smart Moments (Contextual Cards)
+═══════════════════════════════════════════════════ */
+
+const SmartMoments = (() => {
+  const { DOM, $, Logger, Storage, U, Fmt } = Tdbeer;
+  const { store, Sel, Streak } = App;
+
+  function getDismissed() {
+    const today = new Date().toISOString().slice(0, 10);
+    const data = Storage.load('moments_dismissed', {});
+    if (data._date !== today) return {};
+    return data;
+  }
+
+  function dismiss(id) {
+    const today = new Date().toISOString().slice(0, 10);
+    const data = Storage.load('moments_dismissed', {});
+    if (data._date !== today) Object.keys(data).forEach(k => delete data[k]);
+    data._date = today;
+    data[id] = true;
+    Storage.save('moments_dismissed', data);
+    render();
+  }
+
+  function getMoments() {
+    const moments = [];
+    const now = new Date();
+    const day = now.getDate();
+    const month = now.getMonth();
+    const hour = now.getHours();
+    const weekday = now.getDay(); // 0=Sunday
+    const y = store.get('year'), m = store.get('month');
+    const t = Sel.totals(y, m);
+    const streak = Streak.calc();
+
+    // 💰 يوم الراتب (أول ٣ أيام من الشهر)
+    if (day <= 3) {
+      moments.push({
+        id: 'salary_day',
+        icon: '💰',
+        type: 'special',
+        title: 'وصل راتبك؟',
+        desc: 'ابدأ شهرك بتخطيط ذكي — وزّع الراتب قبل الإنفاق',
+        action: () => { 
+          document.querySelector('[data-tab="money"]')?.click();
+          setTimeout(() => Toast.show('💡 جرّب إضافة الراتب الآن', 'info'), 300);
+        }
+      });
+    }
+
+    // ⚠️ نهاية الشهر
+    const daysInMonth = new Date(now.getFullYear(), now.getMonth() + 1, 0).getDate();
+    if (day >= daysInMonth - 3 && day <= daysInMonth) {
+      moments.push({
+        id: 'month_end',
+        icon: '📊',
+        type: 'info',
+        title: `باقي ${daysInMonth - day + 1} ${daysInMonth - day + 1 === 1 ? 'يوم' : 'أيام'} على نهاية الشهر`,
+        desc: 'راجع إنجازاتك المالية واستعد للشهر القادم',
+        action: () => {
+          document.querySelector('[data-tab="money"]')?.click();
+        }
+      });
+    }
+
+    // 🔥 Streak warning - لم يسجل اليوم
+    const todayStr = now.toISOString().slice(0, 10);
+    const lastCheckin = Storage.load('lastCheckinDate', '');
+    if (streak.current > 0 && lastCheckin !== todayStr) {
+      moments.push({
+        id: 'streak_warning',
+        icon: '🔥',
+        type: 'urgent',
+        title: `احمِ سلسلتك (${streak.current} يوم)!`,
+        desc: 'سجّل حضورك اليوم قبل أن تنكسر السلسلة',
+        action: () => {
+          document.querySelector('[data-tab="money"]')?.click();
+          setTimeout(() => Toast.show('سجّل حضورك اليوم 🔥', 'warn'), 300);
+        }
+      });
+    }
+
+    // 🎯 صباح الخير
+    if (hour >= 6 && hour < 11 && lastCheckin !== todayStr) {
+      moments.push({
+        id: 'morning_ritual',
+        icon: '☀️',
+        type: 'success',
+        title: 'صباح الخير! جاهز ليوم منتج؟',
+        desc: 'ابدأ بطقسك اليومي — تسجيل حضور + مراجعة ميزانيتك',
+        action: () => document.querySelector('[data-tab="money"]')?.click()
+      });
+    }
+
+    // 📈 تجاوز الميزانية
+    if (t.spendPct >= 90) {
+      moments.push({
+        id: 'budget_warning',
+        icon: '⚠️',
+        type: 'urgent',
+        title: 'تجاوزت ٩٠٪ من دخلك هذا الشهر',
+        desc: 'انتبه! راجع مصاريفك قبل نهاية الشهر',
+        action: () => document.querySelector('[data-tab="money"]')?.click()
+      });
+    }
+
+    // 💎 إنجاز كبير
+    if (t.savePct >= 30 && t.save > 0) {
+      moments.push({
+        id: 'great_saving',
+        icon: '🎉',
+        type: 'success',
+        title: `رائع! وفّرت ${t.savePct}٪ هذا الشهر`,
+        desc: `أنت من أذكى الموفّرين! استمر على هذا المسار`,
+        action: () => {}
+      });
+    }
+
+    // 🕌 نصائح إسلامية موسمية
+    // رمضان - تقريباً حسب الشهر
+    if (month === 2) { // مارس/ذو الحجة تقريباً
+      moments.push({
+        id: 'ramadan_prep',
+        icon: '🌙',
+        type: 'special',
+        title: 'رمضان قريب',
+        desc: 'ابدأ خطة الميزانية الرمضانية والصدقات من الآن',
+        action: () => document.querySelector('[data-tab="money"]')?.click()
+      });
+    }
+
+    // 🎁 هدية يومية متاحة
+    const lastGift = Storage.load('giftLastOpen', 0);
+    if (Date.now() - lastGift >= 24 * 60 * 60 * 1000) {
+      moments.push({
+        id: 'gift_available',
+        icon: '🎁',
+        type: 'special',
+        title: 'صندوق اليوم جاهز!',
+        desc: 'افتح الصندوق واكسب مفاجأة يومية',
+        action: () => window.SmartFeatures?.Gift?.open()
+      });
+    }
+
+    // 👋 مستخدم جديد
+    const userCreated = Storage.load('userCreatedAt', null);
+    if (!userCreated) {
+      Storage.save('userCreatedAt', Date.now());
+    }
+    const ageInDays = userCreated ? Math.floor((Date.now() - userCreated) / (1000 * 60 * 60 * 24)) : 0;
+    if (ageInDays < 3) {
+      moments.push({
+        id: 'welcome_tour',
+        icon: '👋',
+        type: 'info',
+        title: 'مرحباً بك في تـدّبير!',
+        desc: 'جرّب ميزات الذكاء الاصطناعي وابدأ رحلتك المالية',
+        action: () => {
+          if (!window.Companion?.get()) window.Companion?.openPicker(true);
+        }
+      });
+    }
+
+    // 🔮 لا يوجد بيانات
+    if (t.income === 0 && t.expense === 0) {
+      moments.push({
+        id: 'no_data',
+        icon: '📝',
+        type: 'info',
+        title: 'ابدأ بتسجيل بياناتك',
+        desc: 'أضف راتبك أو مصاريفك الشهرية من تبويب الشهر',
+        action: () => document.querySelector('[data-tab="money"]')?.click()
+      });
+    }
+
+    return moments;
+  }
+
+  function render() {
+    const cont = $('#smartMomentsContainer');
+    if (!cont) return;
+    cont.innerHTML = '';
+
+    const dismissed = getDismissed();
+    const moments = getMoments().filter(m => !dismissed[m.id]);
+    
+    if (moments.length === 0) return;
+
+    const section = DOM.h('div', { class: 'moments-section' });
+    section.appendChild(DOM.h('div', { class: 'moments-section-title' }, '✨ ', 'لحظات ذكية'));
+
+    for (const m of moments.slice(0, 4)) {
+      const card = DOM.h('div', {
+        class: 'moment-card ' + (m.type || 'info'),
+        onclick: () => { try { m.action(); } catch {} }
+      },
+        DOM.h('div', { class: 'moment-icon' }, m.icon),
+        DOM.h('div', { class: 'moment-body' },
+          DOM.h('div', { class: 'moment-title' }, m.title),
+          DOM.h('div', { class: 'moment-desc' }, m.desc)
+        ),
+        DOM.h('button', {
+          class: 'moment-dismiss',
+          onclick: (e) => { e.stopPropagation(); dismiss(m.id); },
+          'aria-label': 'إخفاء'
+        }, '✕')
+      );
+      section.appendChild(card);
+    }
+
+    cont.appendChild(section);
+  }
+
+  return { render, dismiss, getMoments };
+})();
+
+window.SmartMoments = SmartMoments;
+
+/* ═══════════════════════════════════════════════════
+   TDBEER — Fresh Content (Daily Refresh)
+═══════════════════════════════════════════════════ */
+
+const FreshContent = (() => {
+  const { DOM, $, Logger, Storage, U, Fmt } = Tdbeer;
+  const { Pts, Toast } = App;
+
+  // محتوى متنوع - يُختار حسب اليوم
+  const TIPS = [
+    { title: 'قاعدة ٥٠/٣٠/٢٠', body: '<b>٥٠٪</b> احتياجات أساسية، <b>٣٠٪</b> ترفيه ورغبات، <b>٢٠٪</b> ادخار واستثمار. جرّب هذه القاعدة هذا الشهر.' },
+    { title: 'ادخر قبل أن تصرف', body: 'بمجرد وصول راتبك، <b>حوّل ٢٠٪</b> فوراً لحساب الادخار. ما ستراه هو ما ستصرفه.' },
+    { title: 'قاعدة الـ ٢٤ ساعة', body: 'قبل أي شراء فوق <b>٣٠٠ ريال</b>، انتظر ٢٤ ساعة. كثير من الرغبات تختفي بعدها!' },
+    { title: 'تتبّع حتى الصغير', body: 'القهوة اليومية بـ ٢٠ ريال = <b>٧٣٠٠ ريال سنوياً</b>. الأرقام الصغيرة تصنع الفرق الكبير.' },
+    { title: 'اجعل أهدافك بصرية', body: 'اكتب أهدافك المالية في ورقة وعلّقها. <b>البصر أقوى من العقل</b> في تذكيرك بالهدف.' },
+    { title: 'ميّز بين الحاجة والرغبة', body: 'قبل كل شراء اسأل: <b>هل أحتاج هذا فعلاً؟</b> ٨٠٪ من المشتريات الكمالية تُرمى خلال سنة.' },
+    { title: 'استثمر في نفسك', body: 'أفضل استثمار هو تعلّم مهارة جديدة. الكتاب بـ ٥٠ ريال قد يضاعف دخلك!' },
+    { title: 'راجع اشتراكاتك', body: 'كل ٣ أشهر، راجع اشتراكاتك الشهرية واحذف غير المستخدم. قد توفّر <b>٢٠٠+ ريال شهرياً</b>.' }
+  ];
+
+  const QUOTES = [
+    { title: 'حكمة اليوم', body: '<b>"من حفظ ماله حفظ كرامته"</b><br>الإمام علي بن أبي طالب' },
+    { title: 'حكمة اليوم', body: '<b>"الاقتصاد نصف المعيشة"</b><br>عمر بن الخطاب رضي الله عنه' },
+    { title: 'حكمة اليوم', body: '<b>"ما عال من اقتصد"</b><br>حديث شريف - رواه أحمد' },
+    { title: 'حكمة اليوم', body: '<b>"ليس الغِنى عن كثرة العَرَض، إنما الغنى غنى النفس"</b><br>حديث شريف - متفق عليه' },
+    { title: 'حكمة اليوم', body: '<b>"إن الله يحب إذا عمل أحدكم عملاً أن يتقنه"</b><br>حديث شريف - الطبراني' },
+    { title: 'حكمة اليوم', body: '<b>"القناعة كنز لا يفنى"</b><br>مثل عربي شهير' }
+  ];
+
+  const INSIGHTS = [
+    { title: 'معلومة مالية', body: 'لو وفّرت <b>١٠ ريال يومياً</b> لمدة ٣٠ سنة (بفائدة ٥٪) = <b>٢٤٥,٠٠٠ ريال!</b> المال يصنع المال.' },
+    { title: 'معلومة مالية', body: 'الشخص المتوسط يتخذ <b>٣٥,٠٠٠ قرار يومياً</b>. اجعل قراراتك المالية واعية - ليست تلقائية.' },
+    { title: 'معلومة مالية', body: '<b>صندوق الطوارئ</b> المثالي = ٣-٦ أشهر من مصاريفك. يحميك من الديون عند المفاجآت.' },
+    { title: 'معلومة مالية', body: 'الأثرياء يقرأون <b>متوسط ٥٢ كتاباً سنوياً</b>، بينما الفقراء يقرأون أقل من ٣. القراءة = ثروة.' },
+    { title: 'معلومة مالية', body: 'كل <b>١٠٠ ريال</b> تنفقها على ترفيه غير ضروري = ساعة من راتبك الشهري (لو راتبك ١٥,٠٠٠).' }
+  ];
+
+  const CHALLENGES = [
+    { title: 'تحدي اليوم 🎯', body: '<b>لا تشتري قهوة خارج البيت اليوم.</b> ستوفّر ٢٠ ريال تقريباً. جمعها ٧ أيام = ١٤٠ ريال!' },
+    { title: 'تحدي اليوم 🎯', body: '<b>اكتب ٣ أهداف مالية</b> تريد تحقيقها هذا العام. البدء بالكتابة يضاعف احتمالية النجاح ٤٢٪.' },
+    { title: 'تحدي اليوم 🎯', body: '<b>راجع إيصالاتك اليوم.</b> كم بند ما كنت بحاجة له فعلاً؟ تعلّم من الماضي.' },
+    { title: 'تحدي اليوم 🎯', body: '<b>لا تطلب طعاماً جاهزاً اليوم.</b> اطبخ أو كل من البيت. توفير ٥٠-٨٠ ريال بسهولة.' },
+    { title: 'تحدي اليوم 🎯', body: '<b>ضع ٥٠ ريال جانباً الآن</b> لم تكن تنوي ادخارها. صندوق التحديات.' }
+  ];
+
+  // يعطي محتوى اليوم (ثابت لليوم نفسه)
+  function getDaily() {
+    const today = new Date().toISOString().slice(0, 10);
+    const saved = Storage.load('fresh_today', null);
+    if (saved && saved.date === today) return saved;
+
+    // توليد محتوى جديد
+    const allTypes = [
+      { type: 'tip', icon: '💡', list: TIPS },
+      { type: 'quote', icon: '📜', list: QUOTES },
+      { type: 'insight', icon: '🔍', list: INSIGHTS },
+      { type: 'challenge', icon: '🎯', list: CHALLENGES }
+    ];
+    
+    // اختر نوع حسب اليوم
+    const dayNum = Math.floor(new Date(today).getTime() / (1000 * 60 * 60 * 24));
+    const typeIdx = dayNum % allTypes.length;
+    const selectedType = allTypes[typeIdx];
+    const item = selectedType.list[dayNum % selectedType.list.length];
+
+    const result = {
+      date: today,
+      type: selectedType.type,
+      icon: selectedType.icon,
+      title: item.title,
+      body: item.body,
+      read: false,
+      liked: false
+    };
+    Storage.save('fresh_today', result);
+    return result;
+  }
+
+  function markRead() {
+    const today = getDaily();
+    if (!today.read) {
+      today.read = true;
+      Storage.save('fresh_today', today);
+      try { Pts.add(5); } catch {}
+    }
+  }
+
+  function toggleLike() {
+    const today = getDaily();
+    today.liked = !today.liked;
+    Storage.save('fresh_today', today);
+    if (today.liked) {
+      Toast.show('❤️ شكراً لملاحظاتك!', 'success');
+      try { Pts.add(3); } catch {}
+    }
+    render();
+  }
+
+  function share() {
+    const today = getDaily();
+    const text = `${today.title}\n\n${today.body.replace(/<[^>]+>/g, '')}\n\n— تـدّبير`;
+    if (navigator.share) {
+      navigator.share({ text, title: today.title }).catch(() => {});
+    } else if (navigator.clipboard) {
+      navigator.clipboard.writeText(text).then(() => {
+        Toast.show('📋 تم النسخ!', 'success');
+      }).catch(() => {});
+    }
+  }
+
+  function formatDate() {
+    const days = ['الأحد', 'الإثنين', 'الثلاثاء', 'الأربعاء', 'الخميس', 'الجمعة', 'السبت'];
+    const now = new Date();
+    return days[now.getDay()] + ' ' + now.getDate() + '/' + (now.getMonth() + 1);
+  }
+
+  function render() {
+    const cont = $('#freshContentContainer');
+    if (!cont) return;
+    cont.innerHTML = '';
+
+    const content = getDaily();
+    if (!content) return;
+
+    const card = DOM.h('div', { class: 'fresh-content-card' },
+      DOM.h('div', { class: 'fresh-content-header' },
+        DOM.h('span', { class: 'fresh-content-type-icon' }, content.icon),
+        DOM.h('span', { class: 'fresh-content-badge' }, 'محتوى اليوم'),
+        DOM.h('span', { class: 'fresh-content-date' }, formatDate())
+      ),
+      DOM.h('div', { class: 'fresh-content-title' }, content.title),
+      DOM.h('div', {
+        class: 'fresh-content-body',
+        _html: content.body
+      })
+    );
+
+    // Handle _html (innerHTML for body)
+    const bodyDiv = card.querySelector('.fresh-content-body');
+    if (bodyDiv) bodyDiv.innerHTML = content.body;
+
+    const footer = DOM.h('div', { class: 'fresh-content-footer' },
+      DOM.h('button', {
+        class: 'fresh-action-btn' + (content.liked ? ' primary' : ''),
+        onclick: toggleLike
+      }, content.liked ? '❤️ أعجبني' : '🤍 أعجبني'),
+      DOM.h('button', {
+        class: 'fresh-action-btn',
+        onclick: share
+      }, '📤 مشاركة'),
+      DOM.h('button', {
+        class: 'fresh-action-btn' + (content.read ? ' primary' : ''),
+        onclick: () => { markRead(); render(); }
+      }, content.read ? '✓ تم' : '📖 قرأت')
+    );
+
+    card.appendChild(footer);
+    cont.appendChild(card);
+  }
+
+  return { render, getDaily, markRead, toggleLike, share };
+})();
+
+window.FreshContent = FreshContent;
+
+/* ═══════════════════════════════════════════════════
+   TDBEER — Image Handler (Profile + Chat Images)
+═══════════════════════════════════════════════════ */
+
+const ImageHandler = (() => {
+  const { DOM, $, $$, Logger, U, Fmt } = Tdbeer;
+  const { Toast } = App;
+
+  const state = {
+    pendingImage: null, // { dataUrl, ephemeral }
+    pendingProfile: null, // { dataUrl }
+    viewerTimer: null,
+    viewerTimeLeft: 0
+  };
+
+  // ═══ IMAGE COMPRESSION ═══
+  // يضغط الصورة ويحولها إلى Base64 صغير
+  async function compressImage(file, options = {}) {
+    const maxWidth = options.maxWidth || 800;
+    const maxHeight = options.maxHeight || 800;
+    const quality = options.quality || 0.75;
+    
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onerror = () => reject(new Error('فشل قراءة الملف'));
+      reader.onload = (e) => {
+        const img = new Image();
+        img.onerror = () => reject(new Error('صورة غير صالحة'));
+        img.onload = () => {
+          let w = img.width;
+          let h = img.height;
+          
+          // احسب الأبعاد الجديدة مع الحفاظ على النسبة
+          if (w > h) {
+            if (w > maxWidth) {
+              h = (h * maxWidth) / w;
+              w = maxWidth;
+            }
+          } else {
+            if (h > maxHeight) {
+              w = (w * maxHeight) / h;
+              h = maxHeight;
+            }
+          }
+          
+          const canvas = document.createElement('canvas');
+          canvas.width = w;
+          canvas.height = h;
+          const ctx = canvas.getContext('2d');
+          ctx.drawImage(img, 0, 0, w, h);
+          
+          const dataUrl = canvas.toDataURL('image/jpeg', quality);
+          resolve(dataUrl);
+        };
+        img.src = e.target.result;
+      };
+      reader.readAsDataURL(file);
+    });
+  }
+
+  // حساب حجم Base64
+  function getBase64Size(dataUrl) {
+    // base64 يحسب بالتقريب: length * 0.75
+    const base64 = dataUrl.split(',')[1] || '';
+    return Math.ceil(base64.length * 0.75);
+  }
+
+  function formatSize(bytes) {
+    if (bytes < 1024) return bytes + ' B';
+    if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(1) + ' KB';
+    return (bytes / (1024 * 1024)).toFixed(1) + ' MB';
+  }
+
+  // ═══ PROFILE PICTURE ═══
+  function openProfilePicker() {
+    const overlay = $('#profilePicUploadOverlay');
+    if (!overlay) return;
+    
+    state.pendingProfile = null;
+    
+    // reset UI
+    $('#profilePicPreviewImg').style.display = 'none';
+    $('#profilePicPreviewPlaceholder').style.display = 'flex';
+    $('#profilePicSaveBtn').disabled = true;
+    
+    // Load current profile pic if exists
+    const social = window.Social;
+    const currentPic = social?._state?.profile?.photoData;
+    if (currentPic) {
+      $('#profilePicPreviewImg').src = currentPic;
+      $('#profilePicPreviewImg').style.display = 'block';
+      $('#profilePicPreviewPlaceholder').style.display = 'none';
+    }
+    
+    overlay.classList.add('open');
+  }
+
+  function closeProfilePicker() {
+    $('#profilePicUploadOverlay')?.classList.remove('open');
+    state.pendingProfile = null;
+  }
+
+  async function handleProfileFileSelect(file) {
+    if (!file || !file.type.startsWith('image/')) {
+      Toast.show('يجب اختيار صورة', 'warn');
+      return;
+    }
+    
+    try {
+      Toast.show('⏳ جاري الضغط...', 'info');
+      // صورة بروفايل: 400x400، جودة 0.85
+      const dataUrl = await compressImage(file, { 
+        maxWidth: 400, 
+        maxHeight: 400, 
+        quality: 0.85 
+      });
+      
+      const size = getBase64Size(dataUrl);
+      console.log('[Image] Profile compressed size:', formatSize(size));
+      
+      if (size > 500 * 1024) {
+        Toast.show('الصورة كبيرة جداً', 'warn');
+        return;
+      }
+      
+      // Preview
+      $('#profilePicPreviewImg').src = dataUrl;
+      $('#profilePicPreviewImg').style.display = 'block';
+      $('#profilePicPreviewPlaceholder').style.display = 'none';
+      $('#profilePicSaveBtn').disabled = false;
+      state.pendingProfile = { dataUrl, size };
+      
+    } catch (e) {
+      Logger.error('Image.profile', e);
+      Toast.show('فشل معالجة الصورة', 'danger');
+    }
+  }
+
+  async function saveProfilePicture() {
+    if (!state.pendingProfile) return;
+    
+    const social = window.Social;
+    if (!social?._state?.user) {
+      Toast.show('يجب تسجيل الدخول', 'warn');
+      return;
+    }
+    
+    try {
+      Toast.show('⏳ جاري الحفظ...', 'info');
+      const db = window.firebase.firestore();
+      const uid = social._state.user.uid;
+      
+      // احفظ في وثيقة المستخدم
+      await db.collection('users').doc(uid).update({
+        photoData: state.pendingProfile.dataUrl,
+        photoUpdatedAt: window.firebase.firestore.FieldValue.serverTimestamp()
+      });
+      
+      // حدّث الحالة المحلية
+      if (social._state.profile) {
+        social._state.profile.photoData = state.pendingProfile.dataUrl;
+      }
+      
+      Toast.show('✅ تم حفظ صورة العرض', 'success');
+      closeProfilePicker();
+      
+      // تحديث الواجهة
+      updateProfilePicDisplay();
+      
+    } catch (e) {
+      Logger.error('Image.save', e);
+      Toast.show('فشل الحفظ: ' + (e.message || ''), 'danger');
+    }
+  }
+
+  // تحديث عرض صورة البروفايل في كل الأماكن
+  function updateProfilePicDisplay() {
+    try {
+      const social = window.Social;
+      const myPic = social?._state?.profile?.photoData;
+      
+      // في الإعدادات / البروفايل
+      document.querySelectorAll('.user-profile-avatar, .my-profile-avatar').forEach(el => {
+        renderAvatarImage(el, myPic);
+      });
+      
+      // إعادة render للأصدقاء
+      if (social?.renderFriendsTab) social.renderFriendsTab();
+      
+    } catch (e) { Logger.warn('Image.updateDisplay', e.message); }
+  }
+
+  // تحويل avatar عادي إلى avatar مع صورة
+  function renderAvatarImage(element, dataUrl) {
+    if (!element) return;
+    if (dataUrl) {
+      element.classList.add('has-img');
+      element.innerHTML = '';
+      const img = document.createElement('img');
+      img.src = dataUrl;
+      img.alt = 'صورة';
+      element.appendChild(img);
+    } else {
+      element.classList.remove('has-img');
+      // Keep original content
+    }
+  }
+
+  // ═══ CHAT IMAGE MESSAGES ═══
+  async function handleChatImageSelect(file, ephemeral = false) {
+    if (!file || !file.type.startsWith('image/')) {
+      Toast.show('يجب اختيار صورة', 'warn');
+      return;
+    }
+    
+    try {
+      Toast.show('⏳ جاري الضغط...', 'info');
+      // صور الشات: 800x800، جودة 0.75
+      const dataUrl = await compressImage(file, { 
+        maxWidth: 800, 
+        maxHeight: 800, 
+        quality: 0.75 
+      });
+      
+      const size = getBase64Size(dataUrl);
+      console.log('[Image] Chat size:', formatSize(size), 'ephemeral:', ephemeral);
+      
+      if (size > 700 * 1024) {
+        Toast.show('الصورة كبيرة - جرّب صورة أصغر', 'warn');
+        return;
+      }
+      
+      // Preview
+      state.pendingImage = { dataUrl, ephemeral, size };
+      showImagePreview();
+      
+    } catch (e) {
+      Logger.error('Image.chat', e);
+      Toast.show('فشل معالجة الصورة', 'danger');
+    }
+  }
+
+  function showImagePreview() {
+    if (!state.pendingImage) return;
+    const overlay = $('#imgPreviewOverlay');
+    const img = $('#imgPreviewImg');
+    const caption = $('#imgPreviewCaption');
+    const sendBtn = $('#imgPreviewSendBtn');
+    
+    if (!overlay || !img) return;
+    
+    img.src = state.pendingImage.dataUrl;
+    if (caption) caption.value = '';
+    
+    // Update send button label
+    if (sendBtn) {
+      sendBtn.textContent = state.pendingImage.ephemeral ? '👁️ إرسال مؤقتة' : '📤 إرسال';
+      sendBtn.className = 'img-preview-btn ' + (state.pendingImage.ephemeral ? 'ephemeral' : 'send');
+    }
+    
+    overlay.classList.add('open');
+  }
+
+  function closeImagePreview() {
+    $('#imgPreviewOverlay')?.classList.remove('open');
+    state.pendingImage = null;
+  }
+
+  async function sendImageMessage() {
+    if (!state.pendingImage) return;
+    
+    const social = window.Social;
+    if (!social?._state?.activeChat) {
+      Toast.show('لا يوجد محادثة نشطة', 'warn');
+      return;
+    }
+    
+    const chat = social._state.activeChat;
+    
+    if (chat.isBot) {
+      Toast.show('🤖 البوت لا يستقبل صور', 'warn');
+      return;
+    }
+    
+    try {
+      const user = social._state.user;
+      if (!user) throw new Error('Not signed in');
+      
+      const db = window.firebase.firestore();
+      const caption = $('#imgPreviewCaption')?.value?.trim() || '';
+      
+      const msgData = {
+        from: user.uid,
+        to: chat.peerUid,
+        type: state.pendingImage.ephemeral ? 'image-ephemeral' : 'image',
+        imageData: state.pendingImage.dataUrl,
+        imageSize: state.pendingImage.size,
+        text: caption || (state.pendingImage.ephemeral ? '👁️ صورة مؤقتة' : '🖼️ صورة'),
+        at: window.firebase.firestore.FieldValue.serverTimestamp(),
+        read: false,
+        viewed: false
+      };
+      
+      const chatId = chat.chatId;
+      await db.collection('chats').doc(chatId)
+        .collection('messages').add(msgData);
+      
+      Toast.show(state.pendingImage.ephemeral ? '👁️ تم الإرسال (مؤقتة)' : '✅ تم الإرسال', 'success');
+      closeImagePreview();
+      
+    } catch (e) {
+      Logger.error('Image.send', e);
+      Toast.show('فشل الإرسال: ' + (e.message || ''), 'danger');
+    }
+  }
+
+  // ═══ IMAGE VIEWER ═══
+  function openImageViewer(dataUrl, ephemeralMessage = null) {
+    const overlay = $('#imgViewerOverlay');
+    const img = $('#imgViewerImg');
+    const timer = $('#imgViewerTimer');
+    const timerText = $('#imgViewerTimerText');
+    
+    if (!overlay || !img) return;
+    
+    img.src = dataUrl;
+    overlay.classList.add('open');
+    
+    // Ephemeral: show timer and auto-close
+    if (ephemeralMessage) {
+      state.viewerTimeLeft = 10;
+      if (timer) timer.style.display = 'flex';
+      if (timerText) timerText.textContent = state.viewerTimeLeft;
+      
+      state.viewerTimer = setInterval(() => {
+        state.viewerTimeLeft--;
+        if (timerText) timerText.textContent = state.viewerTimeLeft;
+        
+        if (state.viewerTimeLeft <= 0) {
+          // احذف الصورة من Firestore
+          markEphemeralViewed(ephemeralMessage);
+          closeImageViewer();
+        }
+      }, 1000);
+    } else {
+      if (timer) timer.style.display = 'none';
+    }
+  }
+
+  function closeImageViewer() {
+    $('#imgViewerOverlay')?.classList.remove('open');
+    if (state.viewerTimer) {
+      clearInterval(state.viewerTimer);
+      state.viewerTimer = null;
+    }
+  }
+
+  async function markEphemeralViewed(msg) {
+    try {
+      const social = window.Social;
+      if (!social?._state?.activeChat) return;
+      
+      const chatId = social._state.activeChat.chatId;
+      const db = window.firebase.firestore();
+      
+      // حدّث الرسالة - احذف imageData
+      await db.collection('chats').doc(chatId)
+        .collection('messages').doc(msg.id)
+        .update({
+          imageData: null,
+          viewed: true,
+          viewedAt: window.firebase.firestore.FieldValue.serverTimestamp()
+        });
+      
+      console.log('[Image] Ephemeral marked as viewed');
+    } catch (e) {
+      console.warn('[Image] markViewed error:', e.message);
+    }
+  }
+
+  // ═══ RENDER MESSAGE BUBBLE ═══
+  function renderImageBubble(msg, isMine) {
+    const bubble = DOM.h('div', { class: 'msg ' + (isMine ? 'mine' : 'theirs') });
+    
+    const isEphemeral = msg.type === 'image-ephemeral';
+    const hasData = !!msg.imageData;
+    
+    if (isEphemeral && !hasData) {
+      // Image was viewed and deleted
+      const locked = DOM.h('div', { class: 'msg-img-locked' },
+        DOM.h('div', { class: 'msg-img-locked-icon' }, '👁️'),
+        DOM.h('div', { class: 'msg-img-locked-text' }, 'تم عرض الصورة'),
+        DOM.h('div', { class: 'msg-img-locked-hint' }, 'اختفت بعد المشاهدة')
+      );
+      bubble.appendChild(locked);
+    } else if (hasData) {
+      const wrap = DOM.h('div', {
+        class: 'msg-img-wrap' + (isEphemeral ? ' msg-img-ephemeral' : '')
+      });
+      
+      if (isEphemeral && !isMine && !msg.viewed) {
+        // Receiver sees ephemeral badge
+        wrap.appendChild(DOM.h('div', { class: 'msg-img-ephemeral-badge' }, '👁️ مؤقتة'));
+      } else if (isEphemeral) {
+        wrap.appendChild(DOM.h('div', { class: 'msg-img-ephemeral-badge' }, '👁️'));
+      }
+      
+      const img = DOM.h('img', {
+        src: msg.imageData,
+        alt: 'صورة',
+        loading: 'lazy'
+      });
+      wrap.appendChild(img);
+      
+      wrap.onclick = () => {
+        if (isEphemeral && !isMine && !msg.viewed) {
+          // فتح مع عداد + حذف بعد المشاهدة
+          openImageViewer(msg.imageData, msg);
+        } else {
+          openImageViewer(msg.imageData, null);
+        }
+      };
+      
+      bubble.appendChild(wrap);
+    }
+    
+    // Caption
+    if (msg.text && msg.text !== '🖼️ صورة' && msg.text !== '👁️ صورة مؤقتة') {
+      bubble.appendChild(DOM.h('div', { 
+        class: 'msg-text',
+        style: { marginTop: '6px', fontSize: '13px' }
+      }, msg.text));
+    }
+    
+    // Time
+    const t = msg.at?.toDate ? msg.at.toDate() : (msg.createdAt ? new Date(msg.createdAt) : new Date());
+    const timeStr = t.toLocaleTimeString('ar-SA', { hour: '2-digit', minute: '2-digit' });
+    bubble.appendChild(DOM.h('div', { class: 'msg-time' }, timeStr));
+    
+    return bubble;
+  }
+
+  // ═══ ATTACH MENU ═══
+  function toggleAttachMenu(force) {
+    const menu = $('#attachMenu');
+    const btn = $('#chatAttachBtn');
+    if (!menu || !btn) return;
+    
+    const willOpen = force !== undefined ? force : !menu.classList.contains('open');
+    menu.classList.toggle('open', willOpen);
+    btn.classList.toggle('active', willOpen);
+  }
+
+  // ═══ EVENTS ═══
+  function bindEvents() {
+    // Attach button
+    $('#chatAttachBtn')?.addEventListener('click', (e) => {
+      e.stopPropagation();
+      toggleAttachMenu();
+    });
+    
+    // Close menu when clicking outside
+    document.addEventListener('click', (e) => {
+      const menu = $('#attachMenu');
+      if (menu?.classList.contains('open')) {
+        if (!e.target.closest('#attachMenu') && !e.target.closest('#chatAttachBtn')) {
+          toggleAttachMenu(false);
+        }
+      }
+    });
+    
+    // Attach menu items
+    DOM.delegate(document, 'click', '.attach-menu-item', (e, btn) => {
+      toggleAttachMenu(false);
+      const type = btn.dataset.attach;
+      if (type === 'image') {
+        $('#imgInputNormal')?.click();
+      } else if (type === 'ephemeral') {
+        $('#imgInputEphemeral')?.click();
+      }
+    });
+    
+    // File inputs
+    $('#imgInputNormal')?.addEventListener('change', (e) => {
+      const file = e.target.files?.[0];
+      if (file) handleChatImageSelect(file, false);
+      e.target.value = ''; // reset
+    });
+    
+    $('#imgInputEphemeral')?.addEventListener('change', (e) => {
+      const file = e.target.files?.[0];
+      if (file) handleChatImageSelect(file, true);
+      e.target.value = '';
+    });
+    
+    $('#imgInputProfile')?.addEventListener('change', (e) => {
+      const file = e.target.files?.[0];
+      if (file) handleProfileFileSelect(file);
+      e.target.value = '';
+    });
+    
+    // Image preview buttons
+    $('#imgPreviewCancelBtn')?.addEventListener('click', closeImagePreview);
+    $('#imgPreviewSendBtn')?.addEventListener('click', sendImageMessage);
+    
+    // Image viewer
+    $('#imgViewerCloseBtn')?.addEventListener('click', closeImageViewer);
+    $('#imgViewerOverlay')?.addEventListener('click', (e) => {
+      if (e.target.id === 'imgViewerOverlay') closeImageViewer();
+    });
+    
+    // Profile picture modal
+    $('#profilePicChooseBtn')?.addEventListener('click', () => {
+      $('#imgInputProfile')?.click();
+    });
+    $('#profilePicCancelBtn')?.addEventListener('click', closeProfilePicker);
+    $('#profilePicSaveBtn')?.addEventListener('click', saveProfilePicture);
+  }
+
+  function init() {
+    try { bindEvents(); } catch (e) { Logger.warn('Image.init', e.message); }
+  }
+
+  return { 
+    init, 
+    openProfilePicker, closeProfilePicker,
+    renderImageBubble,
+    openImageViewer, closeImageViewer,
+    renderAvatarImage, updateProfilePicDisplay,
+    compressImage
+  };
+})();
+
+window.ImageHandler = ImageHandler;
+
 
 (function bootstrap() {
   const { U, Storage, Logger } = Tdbeer;
@@ -8903,6 +12550,12 @@ window.Bot = Bot;
       document.querySelectorAll('.theme-swatch').forEach(s => {
         s.classList.toggle('active', s.dataset.theme === store.get('theme'));
       });
+      
+      // Apply language
+      try { App.Lang.apply(store.get('lang') || 'ar'); } catch {}
+      
+      // Start date display
+      try { App.DateDisplay.start(); } catch {}
     } catch (e) {
       Logger.error('Bootstrap.loadState', e);
     }
@@ -8953,7 +12606,7 @@ window.Bot = Bot;
       document.getElementById('appModal').classList.add('open');
     }
     const tab = params.get('tab');
-    if (tab && ['monthly', 'yearly', 'friends', 'zakat', 'settings'].includes(tab)) {
+    if (tab && ['home', 'money', 'social', 'profile', 'monthly', 'yearly', 'friends', 'zakat', 'settings'].includes(tab)) {
       Controllers.showTab(tab);
     }
   }
@@ -9007,15 +12660,40 @@ window.Bot = Bot;
       store.set('initialized', true);
 
       // Social init (waits for fb-ready event internally)
-      if (typeof Social !== 'undefined' && Social.bindEvents) {
-        Social.bindEvents();
-        Social.init();
-      }
+      try {
+        if (typeof Social !== 'undefined' && Social.bindEvents) {
+          Social.bindEvents();
+          Social.init();
+        }
+      } catch (e) { Logger.warn('Bootstrap.Social', e.message); }
 
       // Bot init
-      if (typeof Bot !== 'undefined' && Bot.init) {
-        Bot.init();
-      }
+      try {
+        if (typeof Bot !== 'undefined' && Bot.init) {
+          Bot.init();
+        }
+      } catch (e) { Logger.warn('Bootstrap.Bot', e.message); }
+
+      // Smart Features init (Gift, Simulator, Voice)
+      try {
+        if (typeof SmartFeatures !== 'undefined' && SmartFeatures.init) {
+          SmartFeatures.init();
+        }
+      } catch (e) { Logger.warn('Bootstrap.SmartFeatures', e.message); }
+
+      // Companion load
+      try {
+        if (typeof Companion !== 'undefined' && Companion.load) {
+          Companion.load();
+        }
+      } catch (e) { Logger.warn('Bootstrap.Companion', e.message); }
+
+      // Image Handler init
+      try {
+        if (typeof ImageHandler !== 'undefined' && ImageHandler.init) {
+          ImageHandler.init();
+        }
+      } catch (e) { Logger.warn('Bootstrap.ImageHandler', e.message); }
 
       // Tests
       if (new URLSearchParams(location.search).has('test')) {
@@ -9230,5 +12908,116 @@ const Tests = (() => {
 })();
 
 </script>
+
+<!-- ═══ DAILY GIFT BOX ═══ -->
+<div class="gift-overlay" id="giftOverlay">
+  <div class="gift-card">
+    <button class="gift-close-btn" id="giftCloseBtn" aria-label="إغلاق">✕</button>
+    
+    <div id="giftIntro">
+      <div class="gift-box-visual shaking" id="giftBox">🎁</div>
+      <div class="gift-title">صندوق اليوم</div>
+      <div class="gift-desc">افتح الصندوق واكسب مفاجأة يومية!<br>قد تكون نقاط، شارة، أو نصيحة ذهبية</div>
+      <button class="gift-open-btn" id="giftOpenBtn">🎁 افتح الصندوق</button>
+    </div>
+    
+    <div id="giftLocked" style="display:none">
+      <div class="gift-box-visual" style="font-size:80px;opacity:.4">🔒</div>
+      <div class="gift-title">عُد غداً!</div>
+      <div class="gift-locked-label">الصندوق القادم بعد</div>
+      <div class="gift-locked-timer" id="giftTimer">00:00:00</div>
+      <div class="gift-desc">اصبر قليلاً، مفاجأة جديدة بانتظارك 💫</div>
+    </div>
+    
+    <div class="gift-result" id="giftResult">
+      <div class="gift-reward-icon" id="giftRewardIcon">🎉</div>
+      <div class="gift-reward-text" id="giftRewardText">مبروك!</div>
+      <div class="gift-reward-detail" id="giftRewardDetail"></div>
+      <button class="gift-open-btn" id="giftCollectBtn">✨ استلام الجائزة</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ FINANCIAL SIMULATOR ═══ -->
+<div class="sim-overlay" id="simOverlay">
+  <div class="sim-modal">
+    <div class="sim-header">
+      <div class="sim-icon-big">🔮</div>
+      <div>
+        <div class="sim-title">ماذا لو؟</div>
+        <div class="sim-subtitle">جرّب سيناريوهات مالية مختلفة</div>
+      </div>
+      <button class="sim-close" id="simCloseBtn" aria-label="إغلاق">✕</button>
+    </div>
+    
+    <div class="sim-scenarios" id="simScenarios"></div>
+    
+    <div class="sim-custom-inputs" id="simCustomInputs" style="display:none">
+      <div class="sim-custom-row">
+        <span class="sim-custom-label" id="simLabel1">المبلغ اليومي</span>
+        <input type="number" class="sim-custom-input" id="simInput1" value="100" min="0" step="1">
+      </div>
+      <div class="sim-custom-row">
+        <span class="sim-custom-label" id="simLabel2">المدة (سنوات)</span>
+        <input type="number" class="sim-custom-input" id="simInput2" value="1" min="1" max="30" step="1">
+      </div>
+      <button class="sim-calc-btn" id="simCalcBtn">احسب النتيجة</button>
+    </div>
+    
+    <div class="sim-result" id="simResult">
+      <div class="sim-result-headline" id="simResultHeadline">ستوفر</div>
+      <div class="sim-result-number" id="simResultNumber">0 ﷼</div>
+      <div class="sim-result-period" id="simResultPeriod">في سنة واحدة</div>
+      
+      <div class="sim-equivalents" id="simEquivalents"></div>
+      
+      <div style="font-size:12px;color:var(--text3);line-height:1.6;margin-top:var(--s-3);padding-top:var(--s-3);border-top:1px solid var(--border)" id="simInsight"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ VOICE INPUT ═══ -->
+<div class="voice-overlay" id="voiceOverlay">
+  <div class="voice-modal">
+    <button class="voice-close" id="voiceCloseBtn" aria-label="إغلاق">✕</button>
+    <div class="voice-title">🎙️ سجّل بصوتك</div>
+    <div class="voice-subtitle">قل مصروفك بلغتك الطبيعية</div>
+    
+    <button class="voice-mic-btn" id="voiceMicBtn" aria-label="تسجيل">🎤</button>
+    
+    <div class="voice-status" id="voiceStatus">اضغط على الميكروفون للبدء</div>
+    
+    <div class="voice-transcript" id="voiceTranscript"></div>
+    
+    <div class="voice-examples" id="voiceExamples">
+      <div class="voice-example-title">💡 جرّب مثلاً:</div>
+      <div class="voice-example-line">• "صرفت 50 ريال على القهوة"</div>
+      <div class="voice-example-line">• "أخذت راتبي 8000 ريال"</div>
+      <div class="voice-example-line">• "دفعت 200 للبنزين"</div>
+      <div class="voice-example-line">• "عطيت هدية 100 ريال"</div>
+    </div>
+    
+    <div class="voice-parsed" id="voiceParsed">
+      <div class="voice-parsed-title">✓ فهمت:</div>
+      <div class="voice-parsed-detail" id="voiceParsedDetail"></div>
+    </div>
+    
+    <div class="voice-actions" id="voiceActions" style="display:none">
+      <button class="voice-action-btn cancel" id="voiceCancelBtn">إلغاء</button>
+      <button class="voice-action-btn confirm" id="voiceConfirmBtn">✓ إضافة</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ COMPANION PICKER ═══ -->
+<div class="companion-picker-overlay" id="companionPickerOverlay">
+  <div class="companion-picker">
+    <div class="companion-picker-title">🎭 اختر رفيقك المالي</div>
+    <div class="companion-picker-sub">صديق ذكي يرافقك في رحلتك المالية<br>ويتعلم أسلوبك ويكبر معك</div>
+    <div class="companion-list" id="companionList"></div>
+    <button class="companion-confirm" id="companionConfirmBtn">✨ اختيار هذا الرفيق</button>
+  </div>
+</div>
+
 </body>
 </html>
