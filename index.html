@@ -2032,6 +2032,473 @@ body::before {
   background: var(--accent-dim);
 }
 
+/* ── AUTH MODAL ── */
+.auth-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,.8);
+  backdrop-filter: blur(8px);
+  z-index: 500;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: var(--s-4);
+  padding-top: calc(var(--s-4) + env(safe-area-inset-top));
+  padding-bottom: calc(var(--s-4) + env(safe-area-inset-bottom));
+}
+.auth-overlay.open { display: flex; animation: fadeIn var(--t-med); }
+.auth-box {
+  background: var(--bg2);
+  border: 1px solid var(--border2);
+  border-radius: var(--r-xl);
+  padding: var(--s-5);
+  width: 100%;
+  max-width: 380px;
+  box-shadow: var(--shadow-3);
+  max-height: 100%;
+  overflow-y: auto;
+}
+.auth-head {
+  text-align: center;
+  margin-bottom: var(--s-4);
+}
+.auth-icon {
+  width: 64px; height: 64px;
+  margin: 0 auto var(--s-3);
+  background: linear-gradient(135deg, var(--accent), var(--accent-2));
+  border-radius: 18px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 30px;
+  box-shadow: 0 8px 24px var(--accent-glow);
+}
+.auth-title { font-size: 20px; font-weight: 800; color: var(--text); }
+.auth-sub { font-size: 12px; color: var(--text3); margin-top: 4px; }
+
+.auth-tabs { display: flex; gap: 4px; margin-bottom: var(--s-3); background: var(--bg4); border-radius: 10px; padding: 3px; }
+.auth-tab {
+  flex: 1;
+  padding: 8px;
+  border-radius: 8px;
+  color: var(--text3);
+  font-size: 12px;
+  font-weight: 700;
+  background: transparent;
+  transition: all var(--t-fast);
+}
+.auth-tab.active {
+  background: var(--accent);
+  color: #0a0600;
+}
+
+.auth-form { display: flex; flex-direction: column; gap: var(--s-2); }
+.auth-input {
+  background: var(--bg4);
+  border: 1.5px solid var(--border);
+  border-radius: 10px;
+  padding: 12px 14px;
+  color: var(--text);
+  font-size: 14px;
+  direction: ltr;
+  text-align: right;
+  -webkit-appearance: none;
+  transition: border-color var(--t-fast);
+}
+.auth-input:focus { border-color: var(--accent); }
+.auth-input[type="text"], .auth-input.arabic { direction: rtl; text-align: right; }
+.auth-input.error { border-color: var(--danger); animation: shake .4s; }
+
+.auth-btn-primary {
+  background: linear-gradient(135deg, var(--accent), var(--accent-2));
+  color: #0a0600;
+  padding: 13px;
+  border-radius: 11px;
+  font-size: 14px;
+  font-weight: 800;
+  transition: all var(--t-fast);
+  box-shadow: 0 4px 14px var(--accent-glow);
+  margin-top: var(--s-2);
+}
+.auth-btn-primary:hover { transform: translateY(-1px); }
+.auth-btn-primary:active { transform: translateY(0); opacity: .9; }
+.auth-btn-primary:disabled { opacity: .5; cursor: not-allowed; transform: none; }
+
+.auth-divider {
+  display: flex;
+  align-items: center;
+  gap: var(--s-2);
+  margin: var(--s-3) 0;
+  font-size: 11px;
+  color: var(--text3);
+}
+.auth-divider::before, .auth-divider::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--border);
+}
+
+.auth-google-btn {
+  background: var(--bg4);
+  border: 1.5px solid var(--border2);
+  padding: 12px;
+  border-radius: 11px;
+  color: var(--text);
+  font-size: 13px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  transition: all var(--t-fast);
+  width: 100%;
+}
+.auth-google-btn:hover { background: var(--bg5); border-color: var(--text3); }
+.auth-google-icon {
+  width: 18px; height: 18px;
+  background: #fff;
+  border-radius: 4px;
+  display: flex; align-items: center; justify-content: center;
+  font-weight: 900;
+  color: #4285f4;
+  font-size: 12px;
+}
+
+.auth-footer {
+  margin-top: var(--s-3);
+  text-align: center;
+  font-size: 11px;
+  color: var(--text3);
+}
+.auth-footer a, .auth-footer button {
+  color: var(--accent-2);
+  text-decoration: none;
+  background: none;
+  border: none;
+  font: inherit;
+  cursor: pointer;
+}
+.auth-error {
+  background: rgba(239,68,68,.1);
+  border: 1px solid rgba(239,68,68,.3);
+  border-radius: 8px;
+  padding: 9px 12px;
+  color: var(--danger);
+  font-size: 12px;
+  margin-bottom: var(--s-2);
+  display: none;
+}
+.auth-error.show { display: block; }
+
+.auth-close {
+  position: absolute;
+  top: calc(var(--s-3) + env(safe-area-inset-top));
+  left: var(--s-3);
+  width: 32px; height: 32px;
+  border-radius: 50%;
+  background: var(--bg3);
+  border: 1px solid var(--border2);
+  color: var(--text2);
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ── ACCOUNT SECTION (settings) ── */
+.account-card {
+  display: flex;
+  align-items: center;
+  gap: var(--s-3);
+  padding: var(--s-3);
+  background: var(--bg4);
+  border-radius: var(--r-md);
+  margin-bottom: var(--s-2);
+}
+.account-avatar {
+  width: 48px; height: 48px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--accent), var(--accent-2));
+  display: flex; align-items: center; justify-content: center;
+  font-size: 20px;
+  font-weight: 800;
+  color: #0a0600;
+  flex-shrink: 0;
+}
+.account-info { flex: 1; min-width: 0; }
+.account-name {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--text);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.account-username {
+  font-size: 11px;
+  color: var(--text3);
+  margin-top: 2px;
+}
+
+/* ── FRIENDS TAB ── */
+.friends-header {
+  background: linear-gradient(135deg, #0d0d0d, #1a1400);
+  border: 1px solid var(--accent-bd);
+  border-radius: var(--r-md);
+  padding: var(--s-4);
+  margin-bottom: var(--s-3);
+  position: relative;
+  overflow: hidden;
+}
+.friends-header::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--accent), transparent);
+}
+.my-code-label {
+  font-size: 10px;
+  letter-spacing: 2px;
+  color: var(--text3);
+  text-transform: uppercase;
+}
+.my-username {
+  font-size: 22px;
+  font-weight: 800;
+  color: var(--accent-2);
+  margin-top: 4px;
+  direction: ltr;
+  text-align: right;
+  font-family: 'Courier New', monospace;
+  letter-spacing: .5px;
+}
+.friends-stat-row {
+  display: flex;
+  gap: var(--s-2);
+  margin-top: var(--s-3);
+}
+.friends-stat {
+  flex: 1;
+  background: rgba(255,255,255,.04);
+  border-radius: 10px;
+  padding: 10px;
+  text-align: center;
+}
+.friends-stat-num {
+  font-size: 18px;
+  font-weight: 800;
+  color: var(--accent-2);
+  font-variant-numeric: tabular-nums;
+}
+.friends-stat-lbl {
+  font-size: 9px;
+  color: var(--text3);
+  margin-top: 2px;
+  text-transform: uppercase;
+  letter-spacing: .5px;
+}
+
+.add-friend-row {
+  display: flex;
+  gap: 6px;
+  margin-bottom: var(--s-3);
+}
+.add-friend-input {
+  flex: 1;
+  background: var(--bg4);
+  border: 1.5px solid var(--border);
+  border-radius: 10px;
+  padding: 11px 14px;
+  color: var(--text);
+  font-size: 14px;
+  direction: ltr;
+  text-align: right;
+  -webkit-appearance: none;
+  font-family: 'Courier New', monospace;
+}
+.add-friend-input:focus { border-color: var(--accent); }
+
+.friend-card {
+  display: flex;
+  align-items: center;
+  gap: var(--s-3);
+  padding: var(--s-3);
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: var(--r-md);
+  margin-bottom: var(--s-2);
+  transition: border-color var(--t-fast);
+}
+.friend-card:hover { border-color: var(--accent-bd); }
+.friend-avatar {
+  width: 44px; height: 44px;
+  border-radius: 50%;
+  background: var(--bg5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  font-weight: 800;
+  color: var(--accent-2);
+  flex-shrink: 0;
+}
+.friend-avatar.gold { background: linear-gradient(135deg, var(--accent), var(--accent-2)); color: #0a0600; }
+.friend-avatar.bronze { background: linear-gradient(135deg, #cd7f32, #e8a060); color: #0a0600; }
+.friend-avatar.obsidian { background: linear-gradient(135deg, #a0a0c0, #d0d0e8); color: #0a0600; }
+.friend-body { flex: 1; min-width: 0; }
+.friend-name {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--text);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.friend-username {
+  font-size: 11px;
+  color: var(--text3);
+  margin-top: 1px;
+  direction: ltr;
+  text-align: right;
+  font-family: 'Courier New', monospace;
+}
+.friend-streak {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  padding: 0 8px;
+}
+.friend-streak-num {
+  font-size: 18px;
+  font-weight: 800;
+  color: var(--accent-2);
+  font-variant-numeric: tabular-nums;
+  display: flex;
+  align-items: center;
+  gap: 2px;
+}
+.friend-streak-lbl {
+  font-size: 9px;
+  color: var(--text3);
+}
+.friend-rank {
+  font-size: 13px;
+  font-weight: 800;
+  color: var(--text3);
+  min-width: 28px;
+  text-align: center;
+}
+.friend-rank.gold { color: #ffd700; }
+.friend-rank.silver { color: #c0c0c0; }
+.friend-rank.bronze { color: #cd7f32; }
+
+.friend-req-card {
+  background: var(--bg3);
+  border: 1px solid var(--accent-bd);
+  border-radius: var(--r-md);
+  padding: var(--s-3);
+  margin-bottom: var(--s-2);
+  display: flex;
+  align-items: center;
+  gap: var(--s-3);
+}
+.friend-req-actions {
+  display: flex;
+  gap: 4px;
+}
+.friend-req-btn {
+  padding: 8px 10px;
+  border-radius: 8px;
+  font-size: 11px;
+  font-weight: 700;
+  transition: all var(--t-fast);
+  min-width: 32px;
+}
+.friend-req-btn.accept {
+  background: var(--green-dim);
+  border: 1px solid rgba(16,185,129,.4);
+  color: var(--green-2);
+}
+.friend-req-btn.accept:hover { background: var(--green); color: #fff; }
+.friend-req-btn.reject {
+  background: rgba(239,68,68,.1);
+  border: 1px solid rgba(239,68,68,.3);
+  color: var(--danger);
+}
+.friend-req-btn.reject:hover { background: var(--danger); color: #fff; }
+
+.friend-del-btn {
+  background: transparent;
+  border: 1px solid var(--border2);
+  color: var(--text3);
+  border-radius: 8px;
+  padding: 6px 10px;
+  font-size: 11px;
+  transition: all var(--t-fast);
+}
+.friend-del-btn:hover { color: var(--danger); border-color: var(--danger); }
+
+.friends-section-title {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--text3);
+  letter-spacing: .8px;
+  text-transform: uppercase;
+  margin: var(--s-3) 0 var(--s-2);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.friends-section-title .count {
+  background: var(--bg4);
+  color: var(--text2);
+  padding: 1px 7px;
+  border-radius: 10px;
+  font-size: 10px;
+}
+
+.friends-empty {
+  text-align: center;
+  padding: var(--s-8) var(--s-4);
+  color: var(--text3);
+}
+.friends-empty-icon {
+  font-size: 44px;
+  opacity: .25;
+  margin-bottom: var(--s-2);
+}
+
+.sign-in-prompt {
+  text-align: center;
+  padding: var(--s-8) var(--s-4);
+}
+.sign-in-prompt-icon {
+  font-size: 56px;
+  margin-bottom: var(--s-3);
+}
+.sign-in-prompt-title {
+  font-size: 16px;
+  font-weight: 800;
+  color: var(--text);
+  margin-bottom: var(--s-2);
+}
+.sign-in-prompt-desc {
+  font-size: 12px;
+  color: var(--text3);
+  margin-bottom: var(--s-4);
+  line-height: 1.6;
+}
+.sign-in-prompt-btn {
+  background: linear-gradient(135deg, var(--accent), var(--accent-2));
+  color: #0a0600;
+  padding: 12px 28px;
+  border-radius: 11px;
+  font-size: 14px;
+  font-weight: 800;
+  box-shadow: 0 4px 14px var(--accent-glow);
+}
+
 /* ── RESPONSIVE ── */
 @media (max-width: 380px) {
   .bank-balance { font-size: 30px; }
@@ -2066,7 +2533,7 @@ body::before {
   </div>
   <h1>تدّبير <span class="accent">المال</span></h1>
   <p class="landing-sub">مخططك المالي الذكي باللغة العربية — تتبع دخلك ومصاريفك، احسب زكاتك، وحقق أهدافك المالية بثقة.</p>
-  <button class="landing-cta" id="openAppBtn">ابدأ الآن ←</button>
+  <button class="landing-cta" id="openAppBtn" onclick="(function(){try{document.getElementById('landing').style.display='none';document.getElementById('appModal').classList.add('open');}catch(e){alert('خطأ في فتح التطبيق، أعد التحميل');}})();return false;">ابدأ الآن ←</button>
 
   <div class="landing-features">
     <div class="landing-feature">
@@ -2142,9 +2609,9 @@ body::before {
           <span class="tab-icon">📅</span>
           <span class="tab-label">السنة</span>
         </button>
-        <button class="tab-btn" data-tab="reports">
-          <span class="tab-icon">📈</span>
-          <span class="tab-label">تقارير</span>
+        <button class="tab-btn" data-tab="friends">
+          <span class="tab-icon">👥</span>
+          <span class="tab-label">أصدقاء</span>
         </button>
         <button class="tab-btn" data-tab="zakat">
           <span class="tab-icon">🕌</span>
@@ -2572,27 +3039,97 @@ body::before {
           </div>
         </div>
 
-        <!-- ═══ REPORTS TAB ═══ -->
-        <div class="tab-content" id="tab-reports" style="display:none">
-          <div class="card">
-            <div class="card-head">
-              <div class="card-title">📤 تصدير التقرير</div>
-              <div class="card-sub">اختر صيغة الملف</div>
-            </div>
-            <div class="export-row">
-              <button class="export-btn" data-export="csv">📊 CSV</button>
-              <button class="export-btn" data-export="txt">📄 نص</button>
-              <button class="export-btn" data-export="pdf">🖨 طباعة / PDF</button>
+        <!-- ═══ FRIENDS TAB ═══ -->
+        <div class="tab-content" id="tab-friends" style="display:none">
+          
+          <!-- Signed-out state -->
+          <div id="friendsSignedOut">
+            <div class="sign-in-prompt">
+              <div class="sign-in-prompt-icon">👥</div>
+              <div class="sign-in-prompt-title">سجّل دخول للتواصل مع أصدقائك</div>
+              <div class="sign-in-prompt-desc">
+                شاهد سلاسلهم (streaks)، تحدَّهم، وتحفّزوا معاً<br>
+                بياناتك المالية تبقى محفوظة في جهازك فقط 🔒
+              </div>
+              <button class="sign-in-prompt-btn" id="friendsSignInBtn" onclick="(function(){try{document.getElementById('authOverlay').classList.add('open');}catch(e){alert('خطأ في فتح التسجيل');}})();return false;">🔐 تسجيل الدخول / إنشاء حساب</button>
             </div>
           </div>
-          <div class="card">
-            <div class="card-head">
-              <div class="card-title">📋 كل بنود الشهر</div>
+          
+          <!-- Signed-in state -->
+          <div id="friendsSignedIn" style="display:none">
+            
+            <!-- My code card -->
+            <div class="friends-header">
+              <div style="display:flex;justify-content:space-between;align-items:flex-start">
+                <div>
+                  <div class="my-code-label">كود صداقتك</div>
+                  <div class="my-username" id="myUsername">@...</div>
+                </div>
+                <button class="export-btn" id="copyMyCodeBtn" style="min-width:auto;padding:6px 12px">📋 نسخ</button>
+              </div>
+              <div class="friends-stat-row">
+                <div class="friends-stat">
+                  <div class="friends-stat-num" id="myStreakNum">0</div>
+                  <div class="friends-stat-lbl">سلسلتك الحالية</div>
+                </div>
+                <div class="friends-stat">
+                  <div class="friends-stat-num" id="myFriendsCount">0</div>
+                  <div class="friends-stat-lbl">أصدقاء</div>
+                </div>
+                <div class="friends-stat">
+                  <div class="friends-stat-num" id="myRankVal">—</div>
+                  <div class="friends-stat-lbl">ترتيبك</div>
+                </div>
+              </div>
             </div>
-            <table class="rtable">
-              <thead><tr><th>البند</th><th>الفئة</th><th>النوع</th><th>المبلغ</th></tr></thead>
-              <tbody id="reportTable"></tbody>
-            </table>
+            
+            <!-- Add friend -->
+            <div class="card">
+              <div class="card-head">
+                <div class="card-title">➕ إضافة صديق</div>
+                <div class="card-sub">أدخل كود صداقة صديقك</div>
+              </div>
+              <div class="add-friend-row">
+                <input type="text" class="add-friend-input" id="addFriendInput" placeholder="@username" maxlength="30" autocomplete="off">
+                <button class="btn-primary" id="addFriendBtn">إرسال طلب</button>
+              </div>
+            </div>
+            
+            <!-- Pending requests (received) -->
+            <div id="friendReqIncoming" style="display:none">
+              <div class="friends-section-title">
+                🔔 طلبات صداقة جديدة
+                <span class="count" id="friendReqIncomingCount">0</span>
+              </div>
+              <div id="friendReqIncomingList"></div>
+            </div>
+            
+            <!-- Friends list -->
+            <div class="friends-section-title">
+              🏆 لوحة الصدارة
+              <span class="count" id="friendsListCount">0</span>
+            </div>
+            <div id="friendsList">
+              <div class="friends-empty">
+                <div class="friends-empty-icon">👥</div>
+                <div>ما عندك أصدقاء بعد</div>
+                <div style="font-size:11px;margin-top:4px">اطلب من صديقك كوده وأضفه!</div>
+              </div>
+            </div>
+            
+            <!-- Sent requests -->
+            <div id="friendReqOutgoing" style="display:none">
+              <div class="friends-section-title">
+                📤 طلبات أرسلتها
+                <span class="count" id="friendReqOutgoingCount">0</span>
+              </div>
+              <div id="friendReqOutgoingList"></div>
+            </div>
+            
+            <!-- Sign out -->
+            <div style="margin-top:24px">
+              <button class="export-btn" id="signOutBtn" style="width:100%;color:var(--danger);border-color:rgba(239,68,68,.3)">🚪 تسجيل الخروج</button>
+            </div>
           </div>
         </div>
 
@@ -2694,6 +3231,17 @@ body::before {
           </div>
           <div class="card">
             <div class="card-head">
+              <div class="card-title">📤 تصدير التقرير</div>
+              <div class="card-sub">اختر صيغة الملف</div>
+            </div>
+            <div class="export-row">
+              <button class="export-btn" data-export="csv">📊 CSV</button>
+              <button class="export-btn" data-export="txt">📄 نص</button>
+              <button class="export-btn" data-export="pdf">🖨 طباعة / PDF</button>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-head">
               <div class="card-title">💾 البيانات</div>
             </div>
             <div style="display:flex;flex-direction:column;gap:8px">
@@ -2770,7 +3318,90 @@ body::before {
 </div>
 
 <!-- Toast -->
+<!-- Auth Modal -->
+<div class="auth-overlay" id="authOverlay" role="dialog" aria-label="تسجيل الدخول">
+  <div class="auth-box">
+    <button class="auth-close" id="authCloseBtn" onclick="document.getElementById('authOverlay').classList.remove('open');return false;" aria-label="إغلاق">✕</button>
+    <div class="auth-head">
+      <div class="auth-icon">👤</div>
+      <div class="auth-title" id="authTitle">تسجيل الدخول</div>
+      <div class="auth-sub" id="authSub">أدخل بياناتك للمتابعة</div>
+    </div>
+    
+    <div class="auth-tabs">
+      <button class="auth-tab active" data-auth-mode="signin" onclick="window.__setAuthMode && window.__setAuthMode('signin');return false;">تسجيل دخول</button>
+      <button class="auth-tab" data-auth-mode="signup" onclick="window.__setAuthMode && window.__setAuthMode('signup');return false;">حساب جديد</button>
+    </div>
+    
+    <div class="auth-error" id="authError"></div>
+    
+    <form class="auth-form" id="authForm" onsubmit="window.__authSubmit && window.__authSubmit(event);return false;">
+      <input type="text" class="auth-input arabic" id="authName" placeholder="اسمك (مثلاً: سعيد)" maxlength="30" style="display:none">
+      <input type="text" class="auth-input" id="authUsername" placeholder="اسم المستخدم (بالإنجليزية)" maxlength="20" style="display:none" autocomplete="username">
+      <input type="email" class="auth-input" id="authEmail" placeholder="البريد الإلكتروني" autocomplete="email" required>
+      <input type="password" class="auth-input" id="authPass" placeholder="كلمة السر (٦ أحرف+)" autocomplete="current-password" minlength="6" required>
+      <button type="submit" class="auth-btn-primary" id="authSubmitBtn">🔐 تسجيل الدخول</button>
+    </form>
+    
+    <div class="auth-divider">أو</div>
+    
+    <button class="auth-google-btn" id="authGoogleBtn" onclick="window.__googleSignIn && window.__googleSignIn();return false;">
+      <span class="auth-google-icon">G</span>
+      المتابعة بحساب Google
+    </button>
+    
+    <div class="auth-footer">
+      <button id="authForgotBtn" type="button" onclick="window.__authForgot && window.__authForgot();return false;">نسيت كلمة السر؟</button>
+    </div>
+  </div>
+</div>
+
 <div class="toast-wrap" id="toastWrap" aria-live="polite"></div>
+
+<!-- Firebase SDK (loaded as module, exposes to global) -->
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-app.js";
+  import {
+    getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword,
+    signOut, onAuthStateChanged, GoogleAuthProvider, signInWithPopup,
+    sendPasswordResetEmail, updateProfile
+  } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-auth.js";
+  import {
+    getFirestore, doc, setDoc, getDoc, updateDoc, deleteDoc,
+    collection, query, where, getDocs, onSnapshot, serverTimestamp,
+    addDoc, writeBatch, orderBy, limit
+  } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-firestore.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyB2GzbIFGbvb6keWuBu5XsYVXy-qfeE6Og",
+    authDomain: "tadbeer-f76e4.firebaseapp.com",
+    projectId: "tadbeer-f76e4",
+    storageBucket: "tadbeer-f76e4.firebasestorage.app",
+    messagingSenderId: "721485864761",
+    appId: "1:721485864761:web:b45d21ec24b6fc090652e8"
+  };
+
+  const fbApp = initializeApp(firebaseConfig);
+  const auth = getAuth(fbApp);
+  const db = getFirestore(fbApp);
+
+  // Expose to global window for non-module scripts
+  window.FB = {
+    auth, db,
+    signIn: signInWithEmailAndPassword,
+    signUp: createUserWithEmailAndPassword,
+    signOut, onAuthStateChanged,
+    googleProvider: new GoogleAuthProvider(),
+    signInWithPopup,
+    sendPasswordResetEmail,
+    updateProfile,
+    doc, setDoc, getDoc, updateDoc, deleteDoc,
+    collection, query, where, getDocs, onSnapshot, serverTimestamp,
+    addDoc, writeBatch, orderBy, limit,
+    ready: true
+  };
+  window.dispatchEvent(new CustomEvent('fb-ready'));
+</script>
 
 <script>
 /* ═══════════════════════════════════════════════════
@@ -2778,6 +3409,47 @@ body::before {
    Organization: Utils → Logger → Store → Storage → DOM
 ═══════════════════════════════════════════════════ */
 'use strict';
+
+// ─── Mobile-friendly error viewer (enable by adding ?debug=1 to URL) ───
+(function() {
+  if (!new URLSearchParams(location.search).has('debug')) return;
+  const box = document.createElement('div');
+  box.style.cssText = 'position:fixed;top:env(safe-area-inset-top);left:0;right:0;z-index:99999;background:#000;color:#0f0;font-family:monospace;font-size:11px;padding:8px;max-height:40vh;overflow:auto;border-bottom:2px solid #0f0;white-space:pre-wrap;word-break:break-all';
+  box.id = '__errorBox';
+  const closeBtn = document.createElement('button');
+  closeBtn.textContent = '✕ إخفاء';
+  closeBtn.style.cssText = 'position:fixed;top:env(safe-area-inset-top);right:8px;z-index:100000;background:#f00;color:#fff;border:none;padding:4px 10px;border-radius:4px;font-size:11px';
+  closeBtn.onclick = () => box.style.display = 'none';
+  document.addEventListener('DOMContentLoaded', () => {
+    document.body.appendChild(box);
+    document.body.appendChild(closeBtn);
+  });
+  function log(type, args) {
+    if (!box) return;
+    const msg = Array.from(args).map(a => {
+      if (a instanceof Error) return a.message + '\n' + (a.stack || '');
+      if (typeof a === 'object') try { return JSON.stringify(a); } catch { return String(a); }
+      return String(a);
+    }).join(' ');
+    const line = document.createElement('div');
+    line.style.color = type === 'error' ? '#f44' : type === 'warn' ? '#fa0' : '#0f0';
+    line.textContent = '[' + type + '] ' + msg;
+    box.appendChild(line);
+    box.scrollTop = box.scrollHeight;
+  }
+  const origErr = console.error;
+  const origWarn = console.warn;
+  const origLog = console.log;
+  console.error = function() { log('error', arguments); origErr.apply(console, arguments); };
+  console.warn = function() { log('warn', arguments); origWarn.apply(console, arguments); };
+  console.log = function() { log('log', arguments); origLog.apply(console, arguments); };
+  window.addEventListener('error', (e) => {
+    log('error', [`${e.message} at ${e.filename}:${e.lineno}:${e.colno}`]);
+  });
+  window.addEventListener('unhandledrejection', (e) => {
+    log('error', ['UnhandledPromise:', e.reason]);
+  });
+})();
 
 const Tadbeer = (() => {
 
@@ -4664,7 +5336,7 @@ const Controllers = (() => {
 
   // ═══ TABS ═══
   function showTab(tab) {
-    const valid = ['monthly', 'yearly', 'reports', 'zakat', 'settings'];
+    const valid = ['monthly', 'yearly', 'friends', 'zakat', 'settings'];
     if (!valid.includes(tab)) tab = 'monthly';
     store.set('tab', tab);
     for (const t of valid) {
@@ -4674,10 +5346,10 @@ const Controllers = (() => {
     $$('.tab-btn').forEach(btn => {
       btn.classList.toggle('active', btn.dataset.tab === tab);
     });
-    $('#monthBar').style.display = (tab === 'monthly' || tab === 'reports') ? '' : 'none';
+    $('#monthBar').style.display = (tab === 'monthly') ? '' : 'none';
     R.scheduledAll();
-    if (tab === 'reports') renderReportTable();
     if (tab === 'zakat') R.nisab();
+    if (tab === 'friends' && typeof Social !== 'undefined') Social.renderFriendsTab();
   }
 
   function changeMonth(delta) {
@@ -5364,7 +6036,7 @@ const Controllers = (() => {
   function handleDeepLink() {
     const params = new URLSearchParams(location.search);
     const tab = params.get('tab');
-    if (tab && ['monthly', 'yearly', 'reports', 'zakat', 'settings'].includes(tab)) {
+    if (tab && ['monthly', 'yearly', 'friends', 'zakat', 'settings'].includes(tab)) {
       document.getElementById('landing').style.display = 'none';
       document.getElementById('appModal').classList.add('open');
       Controllers.showTab(tab);
@@ -5426,6 +6098,13 @@ const Controllers = (() => {
       checkUrgentOnLoad();
       Renderers.scheduledAll();
       registerSW();
+      // Initialize social features (Firebase)
+      try {
+        if (typeof Social !== 'undefined') {
+          Social.bindEvents();
+          Social.init();
+        }
+      } catch (se) { Logger.error('Social.init', se); }
       store.set('initialized', true);
 
       // Run tests if ?test=1
@@ -5443,6 +6122,656 @@ const Controllers = (() => {
   } else {
     init();
   }
+})();
+
+/* ═══════════════════════════════════════════════════
+   TADBEER — Tests (runs when ?test=1)
+═══════════════════════════════════════════════════ */
+
+/* ═══════════════════════════════════════════════════
+   TADBEER — Social (Firebase auth + friends)
+═══════════════════════════════════════════════════ */
+
+const Social = (() => {
+  const { U, DOM, $, $$, Logger } = Tadbeer;
+  const { store, Toast } = App;
+
+  let currentUser = null;      // Firebase auth user
+  let userProfile = null;      // Firestore user doc
+  let friendsCache = [];       // Friend profiles
+  let incomingReqs = [];       // Pending requests TO me
+  let outgoingReqs = [];       // Pending requests FROM me
+  let unsubFriends = null;
+  let unsubIncoming = null;
+  let unsubOutgoing = null;
+  let streakSyncTimer = null;
+
+  // ─── Initialize when Firebase is ready ───
+  function init() {
+    if (!window.FB) {
+      window.addEventListener('fb-ready', init, { once: true });
+      return;
+    }
+    const FB = window.FB;
+    FB.onAuthStateChanged(FB.auth, async (user) => {
+      currentUser = user;
+      if (user) {
+        await loadProfile();
+        subscribeToFriends();
+        subscribeToRequests();
+        renderFriendsTab();
+        syncStreak();
+      } else {
+        userProfile = null;
+        friendsCache = [];
+        incomingReqs = [];
+        outgoingReqs = [];
+        cleanupSubs();
+        renderFriendsTab();
+      }
+    });
+  }
+
+  function cleanupSubs() {
+    if (unsubFriends) { unsubFriends(); unsubFriends = null; }
+    if (unsubIncoming) { unsubIncoming(); unsubIncoming = null; }
+    if (unsubOutgoing) { unsubOutgoing(); unsubOutgoing = null; }
+  }
+
+  // ─── Load or create user profile ───
+  async function loadProfile() {
+    const FB = window.FB;
+    try {
+      const userRef = FB.doc(FB.db, 'users', currentUser.uid);
+      const snap = await FB.getDoc(userRef);
+      if (snap.exists()) {
+        userProfile = { id: snap.id, ...snap.data() };
+      } else {
+        // First-time user: create profile
+        const displayName = currentUser.displayName
+          || store.get('userName')
+          || currentUser.email?.split('@')[0]
+          || 'مستخدم';
+        const username = await generateUniqueUsername(displayName);
+        userProfile = {
+          id: currentUser.uid,
+          name: displayName,
+          username,
+          email: currentUser.email,
+          streak: 0,
+          maxStreak: 0,
+          points: store.get('pts') || 0,
+          createdAt: new Date().toISOString()
+        };
+        await FB.setDoc(userRef, userProfile);
+        // Reserve username
+        await FB.setDoc(FB.doc(FB.db, 'usernames', username), {
+          uid: currentUser.uid,
+          createdAt: new Date().toISOString()
+        });
+      }
+      // Sync username to local userName if empty
+      if (!store.get('userName') && userProfile.name) {
+        store.set('userName', userProfile.name);
+      }
+    } catch (e) {
+      Logger.error('Social.loadProfile', e);
+      Toast.show('فشل تحميل الحساب', 'danger');
+    }
+  }
+
+  async function generateUniqueUsername(baseName) {
+    const FB = window.FB;
+    // Clean: ASCII only, lowercase, no spaces
+    let base = (baseName || 'user').toLowerCase()
+      .replace(/[^\w]/g, '')
+      .replace(/[^\x00-\x7F]/g, '')  // Strip non-ASCII
+      .slice(0, 15);
+    if (!base) base = 'user';
+    // Try base + random suffix
+    for (let i = 0; i < 5; i++) {
+      const suffix = Math.floor(Math.random() * 9000 + 1000);
+      const candidate = `${base}${suffix}`;
+      const snap = await FB.getDoc(FB.doc(FB.db, 'usernames', candidate));
+      if (!snap.exists()) return candidate;
+    }
+    // Fallback
+    return `user${Date.now().toString(36).slice(-6)}`;
+  }
+
+  // ─── Subscribe to friendships ───
+  function subscribeToFriends() {
+    if (!currentUser) return;
+    const FB = window.FB;
+    cleanupSubs();
+    const q = FB.query(
+      FB.collection(FB.db, 'friendships'),
+      FB.where('users', 'array-contains', currentUser.uid)
+    );
+    unsubFriends = FB.onSnapshot(q, async (snap) => {
+      const friendIds = [];
+      snap.forEach(doc => {
+        const data = doc.data();
+        const friendId = data.users.find(u => u !== currentUser.uid);
+        if (friendId) friendIds.push({ friendId, friendshipId: doc.id });
+      });
+      // Fetch friend profiles
+      const profiles = await Promise.all(friendIds.map(async ({ friendId, friendshipId }) => {
+        try {
+          const s = await FB.getDoc(FB.doc(FB.db, 'users', friendId));
+          return s.exists() ? { id: s.id, friendshipId, ...s.data() } : null;
+        } catch { return null; }
+      }));
+      friendsCache = profiles.filter(Boolean);
+      renderFriendsTab();
+    }, (err) => Logger.error('Social.friends.subscribe', err));
+  }
+
+  // ─── Subscribe to friend requests ───
+  function subscribeToRequests() {
+    if (!currentUser) return;
+    const FB = window.FB;
+    // Incoming
+    const qIn = FB.query(
+      FB.collection(FB.db, 'friendRequests'),
+      FB.where('to', '==', currentUser.uid)
+    );
+    unsubIncoming = FB.onSnapshot(qIn, async (snap) => {
+      const items = [];
+      for (const d of snap.docs) {
+        const data = d.data();
+        try {
+          const userSnap = await FB.getDoc(FB.doc(FB.db, 'users', data.from));
+          if (userSnap.exists()) {
+            items.push({ requestId: d.id, ...userSnap.data(), id: userSnap.id });
+          }
+        } catch {}
+      }
+      incomingReqs = items;
+      renderFriendsTab();
+    }, (err) => Logger.error('Social.incoming.subscribe', err));
+
+    // Outgoing
+    const qOut = FB.query(
+      FB.collection(FB.db, 'friendRequests'),
+      FB.where('from', '==', currentUser.uid)
+    );
+    unsubOutgoing = FB.onSnapshot(qOut, async (snap) => {
+      const items = [];
+      for (const d of snap.docs) {
+        const data = d.data();
+        try {
+          const userSnap = await FB.getDoc(FB.doc(FB.db, 'users', data.to));
+          if (userSnap.exists()) {
+            items.push({ requestId: d.id, ...userSnap.data(), id: userSnap.id });
+          }
+        } catch {}
+      }
+      outgoingReqs = items;
+      renderFriendsTab();
+    }, (err) => Logger.error('Social.outgoing.subscribe', err));
+  }
+
+  // ─── Sync local streak to Firebase (debounced) ───
+  function syncStreak() {
+    if (!currentUser || !userProfile) return;
+    clearTimeout(streakSyncTimer);
+    streakSyncTimer = setTimeout(async () => {
+      try {
+        const FB = window.FB;
+        const streak = store.get('streak') || {};
+        const pts = store.get('pts') || 0;
+        const name = store.get('userName') || userProfile.name;
+        const update = {
+          streak: streak.current || 0,
+          maxStreak: Math.max(streak.max || 0, userProfile.maxStreak || 0),
+          points: pts,
+          name,
+          updatedAt: new Date().toISOString()
+        };
+        await FB.updateDoc(FB.doc(FB.db, 'users', currentUser.uid), update);
+        userProfile = { ...userProfile, ...update };
+      } catch (e) {
+        Logger.error('Social.syncStreak', e);
+      }
+    }, 2000);
+  }
+
+  // ─── Add friend by username ───
+  async function sendFriendRequest(username) {
+    if (!currentUser) { Toast.show('سجّل دخول أولاً', 'warn'); return false; }
+    username = (username || '').toLowerCase().replace(/^@/, '').trim();
+    if (!username) { Toast.show('أدخل اسم المستخدم', 'warn'); return false; }
+    if (username === userProfile?.username) { Toast.show('لا يمكنك إضافة نفسك 😅', 'warn'); return false; }
+    
+    const FB = window.FB;
+    try {
+      // Lookup username → uid
+      const usernameDoc = await FB.getDoc(FB.doc(FB.db, 'usernames', username));
+      if (!usernameDoc.exists()) {
+        Toast.show('المستخدم غير موجود', 'danger');
+        return false;
+      }
+      const targetUid = usernameDoc.data().uid;
+      
+      // Check already friends
+      const already = friendsCache.some(f => f.id === targetUid);
+      if (already) { Toast.show('صديقك بالفعل ✅', 'warn'); return false; }
+      
+      // Check pending (outgoing or incoming)
+      if (outgoingReqs.some(r => r.id === targetUid)) {
+        Toast.show('الطلب مُرسَل بالفعل', 'warn');
+        return false;
+      }
+      if (incomingReqs.some(r => r.id === targetUid)) {
+        // Auto-accept their pending request
+        await acceptFriendRequest(incomingReqs.find(r => r.id === targetUid).requestId, targetUid);
+        Toast.show('صرتما أصدقاء! 🎉', 'success');
+        return true;
+      }
+      
+      // Create request
+      await FB.addDoc(FB.collection(FB.db, 'friendRequests'), {
+        from: currentUser.uid,
+        to: targetUid,
+        createdAt: new Date().toISOString()
+      });
+      Toast.show('تم إرسال الطلب 📤', 'success');
+      return true;
+    } catch (e) {
+      Logger.error('Social.sendRequest', e);
+      Toast.show('فشل إرسال الطلب', 'danger');
+      return false;
+    }
+  }
+
+  // ─── Accept friend request ───
+  async function acceptFriendRequest(requestId, fromUid) {
+    if (!currentUser) return;
+    const FB = window.FB;
+    try {
+      // Create friendship (sorted user IDs as document ID for uniqueness)
+      const sortedIds = [currentUser.uid, fromUid].sort();
+      const friendshipId = sortedIds.join('_');
+      await FB.setDoc(FB.doc(FB.db, 'friendships', friendshipId), {
+        users: sortedIds,
+        createdAt: new Date().toISOString()
+      });
+      // Delete request
+      await FB.deleteDoc(FB.doc(FB.db, 'friendRequests', requestId));
+      Toast.show('تمت إضافة صديق جديد 🎉', 'success');
+    } catch (e) {
+      Logger.error('Social.acceptRequest', e);
+      Toast.show('فشل قبول الطلب', 'danger');
+    }
+  }
+
+  // ─── Reject / Cancel request ───
+  async function removeRequest(requestId) {
+    const FB = window.FB;
+    try {
+      await FB.deleteDoc(FB.doc(FB.db, 'friendRequests', requestId));
+    } catch (e) {
+      Logger.error('Social.removeRequest', e);
+    }
+  }
+
+  // ─── Remove friend ───
+  async function removeFriend(friendshipId) {
+    if (!confirm('هل تريد حذف هذا الصديق؟')) return;
+    const FB = window.FB;
+    try {
+      await FB.deleteDoc(FB.doc(FB.db, 'friendships', friendshipId));
+      Toast.show('تم الحذف', 'warn');
+    } catch (e) {
+      Logger.error('Social.removeFriend', e);
+      Toast.show('فشل الحذف', 'danger');
+    }
+  }
+
+  // ─── Sign out ───
+  async function signOut() {
+    if (!confirm('تسجيل الخروج؟')) return;
+    const FB = window.FB;
+    try {
+      await FB.signOut(FB.auth);
+      Toast.show('تم تسجيل الخروج 👋', 'success');
+    } catch (e) {
+      Logger.error('Social.signOut', e);
+    }
+  }
+
+  // ─── UI: Render Friends Tab ───
+  function renderFriendsTab() {
+    const signedIn = !!currentUser;
+    const outEl = $('#friendsSignedOut');
+    const inEl = $('#friendsSignedIn');
+    if (outEl) outEl.style.display = signedIn ? 'none' : '';
+    if (inEl) inEl.style.display = signedIn ? '' : 'none';
+    if (!signedIn) return;
+    
+    // My card
+    DOM.setText($('#myUsername'), '@' + (userProfile?.username || '...'));
+    DOM.setText($('#myStreakNum'), (store.get('streak') || {}).current || 0);
+    DOM.setText($('#myFriendsCount'), friendsCache.length);
+    
+    // Calculate my rank among friends
+    const allRanked = [
+      { id: currentUser.uid, streak: (store.get('streak') || {}).current || 0 },
+      ...friendsCache.map(f => ({ id: f.id, streak: f.streak || 0 }))
+    ].sort((a, b) => b.streak - a.streak);
+    const myRank = allRanked.findIndex(x => x.id === currentUser.uid) + 1;
+    DOM.setText($('#myRankVal'), myRank + '/' + allRanked.length);
+    
+    // Incoming requests
+    const incomingWrap = $('#friendReqIncoming');
+    const incomingList = $('#friendReqIncomingList');
+    if (incomingReqs.length) {
+      incomingWrap.style.display = '';
+      DOM.setText($('#friendReqIncomingCount'), incomingReqs.length);
+      incomingList.innerHTML = '';
+      for (const r of incomingReqs) {
+        incomingList.appendChild(DOM.h('div', { class: 'friend-req-card' },
+          DOM.h('div', { class: 'friend-avatar' }, (r.name || '?')[0].toUpperCase()),
+          DOM.h('div', { class: 'friend-body' },
+            DOM.h('div', { class: 'friend-name' }, r.name || 'مستخدم'),
+            DOM.h('div', { class: 'friend-username' }, '@' + r.username)
+          ),
+          DOM.h('div', { class: 'friend-req-actions' },
+            DOM.h('button', {
+              class: 'friend-req-btn accept',
+              dataset: { action: 'accept-req', reqId: r.requestId, fromId: r.id }
+            }, '✓ قبول'),
+            DOM.h('button', {
+              class: 'friend-req-btn reject',
+              dataset: { action: 'reject-req', reqId: r.requestId }
+            }, '✕')
+          )
+        ));
+      }
+    } else {
+      incomingWrap.style.display = 'none';
+    }
+    
+    // Friends list (leaderboard)
+    const list = $('#friendsList');
+    DOM.setText($('#friendsListCount'), friendsCache.length);
+    if (!friendsCache.length) {
+      list.innerHTML = '';
+      list.appendChild(DOM.h('div', { class: 'friends-empty' },
+        DOM.h('div', { class: 'friends-empty-icon' }, '👥'),
+        DOM.h('div', {}, 'ما عندك أصدقاء بعد'),
+        DOM.h('div', { style: { fontSize: '11px', marginTop: '4px' } }, 'اطلب من صديقك كوده وأضفه!')
+      ));
+    } else {
+      // Combine me + friends, sort by streak
+      const combined = [
+        { id: currentUser.uid, name: userProfile?.name + ' (أنت)', username: userProfile?.username, streak: (store.get('streak') || {}).current || 0, isMe: true },
+        ...friendsCache.map(f => ({ id: f.id, friendshipId: f.friendshipId, name: f.name || 'مستخدم', username: f.username, streak: f.streak || 0, isMe: false }))
+      ].sort((a, b) => b.streak - a.streak);
+      
+      list.innerHTML = '';
+      combined.forEach((u, idx) => {
+        const rank = idx + 1;
+        let rankCls = '';
+        let rankIcon = '#' + rank;
+        if (rank === 1) { rankCls = 'gold'; rankIcon = '🥇'; }
+        else if (rank === 2) { rankCls = 'silver'; rankIcon = '🥈'; }
+        else if (rank === 3) { rankCls = 'bronze'; rankIcon = '🥉'; }
+        
+        let avatarCls = '';
+        if (u.streak >= 90) avatarCls = 'obsidian';
+        else if (u.streak >= 60) avatarCls = 'gold';
+        else if (u.streak >= 30) avatarCls = 'bronze';
+        
+        const card = DOM.h('div', {
+          class: 'friend-card',
+          style: u.isMe ? { borderColor: 'var(--accent-bd)', background: 'var(--accent-dim)' } : null
+        },
+          DOM.h('div', { class: 'friend-rank ' + rankCls }, rankIcon),
+          DOM.h('div', { class: 'friend-avatar ' + avatarCls }, (u.name || '?')[0].toUpperCase()),
+          DOM.h('div', { class: 'friend-body' },
+            DOM.h('div', { class: 'friend-name' }, u.name),
+            DOM.h('div', { class: 'friend-username' }, '@' + (u.username || '...'))
+          ),
+          DOM.h('div', { class: 'friend-streak' },
+            DOM.h('div', { class: 'friend-streak-num' }, '🔥 ' + u.streak),
+            DOM.h('div', { class: 'friend-streak-lbl' }, 'يوم')
+          ),
+          !u.isMe && u.friendshipId ? DOM.h('button', {
+            class: 'friend-del-btn',
+            dataset: { action: 'del-friend', friendshipId: u.friendshipId }
+          }, '✕') : null
+        );
+        list.appendChild(card);
+      });
+    }
+    
+    // Outgoing requests
+    const outgoingWrap = $('#friendReqOutgoing');
+    const outgoingList = $('#friendReqOutgoingList');
+    if (outgoingReqs.length) {
+      outgoingWrap.style.display = '';
+      DOM.setText($('#friendReqOutgoingCount'), outgoingReqs.length);
+      outgoingList.innerHTML = '';
+      for (const r of outgoingReqs) {
+        outgoingList.appendChild(DOM.h('div', { class: 'friend-card' },
+          DOM.h('div', { class: 'friend-avatar' }, (r.name || '?')[0].toUpperCase()),
+          DOM.h('div', { class: 'friend-body' },
+            DOM.h('div', { class: 'friend-name' }, r.name || 'مستخدم'),
+            DOM.h('div', { class: 'friend-username' }, '@' + r.username + ' • في الانتظار...')
+          ),
+          DOM.h('button', {
+            class: 'friend-del-btn',
+            dataset: { action: 'cancel-req', reqId: r.requestId }
+          }, 'إلغاء')
+        ));
+      }
+    } else {
+      outgoingWrap.style.display = 'none';
+    }
+  }
+
+  // ─── UI: Auth Modal ───
+  let authMode = 'signin';  // signin | signup
+  
+  function openAuthModal(mode = 'signin') {
+    authMode = mode;
+    $('#authOverlay').classList.add('open');
+    updateAuthUI();
+  }
+  function closeAuthModal() {
+    $('#authOverlay').classList.remove('open');
+    $('#authError').classList.remove('show');
+  }
+  function updateAuthUI() {
+    const isSignup = authMode === 'signup';
+    $$('.auth-tab').forEach(t => t.classList.toggle('active', t.dataset.authMode === authMode));
+    DOM.setText($('#authTitle'), isSignup ? 'إنشاء حساب جديد' : 'تسجيل الدخول');
+    DOM.setText($('#authSub'), isSignup ? 'أنشئ حسابك للتواصل مع أصدقائك' : 'أدخل بياناتك للمتابعة');
+    $('#authName').style.display = isSignup ? '' : 'none';
+    $('#authUsername').style.display = isSignup ? '' : 'none';
+    $('#authSubmitBtn').textContent = isSignup ? '✨ إنشاء حساب' : '🔐 تسجيل الدخول';
+  }
+  function showAuthError(msg) {
+    const el = $('#authError');
+    el.textContent = msg;
+    el.classList.add('show');
+  }
+  
+  async function handleAuthSubmit(e) {
+    e.preventDefault();
+    const FB = window.FB;
+    const email = $('#authEmail').value.trim();
+    const pass = $('#authPass').value;
+    const btn = $('#authSubmitBtn');
+    btn.disabled = true;
+    $('#authError').classList.remove('show');
+    
+    try {
+      if (authMode === 'signup') {
+        const name = U.str($('#authName').value, 30);
+        let username = U.str($('#authUsername').value, 20).toLowerCase().replace(/[^\w]/g, '');
+        if (!name) throw { code: 'invalid-name' };
+        if (!username || username.length < 3) throw { code: 'invalid-username' };
+        
+        // Check username availability
+        const usernameDoc = await FB.getDoc(FB.doc(FB.db, 'usernames', username));
+        if (usernameDoc.exists()) throw { code: 'username-taken' };
+        
+        const cred = await FB.signUp(FB.auth, email, pass);
+        await FB.updateProfile(cred.user, { displayName: name });
+        // loadProfile() will be called by onAuthStateChanged, but we need to
+        // pre-create with custom username
+        const profile = {
+          id: cred.user.uid,
+          name, username,
+          email,
+          streak: 0,
+          maxStreak: 0,
+          points: store.get('pts') || 0,
+          createdAt: new Date().toISOString()
+        };
+        await FB.setDoc(FB.doc(FB.db, 'users', cred.user.uid), profile);
+        await FB.setDoc(FB.doc(FB.db, 'usernames', username), {
+          uid: cred.user.uid,
+          createdAt: new Date().toISOString()
+        });
+        store.set('userName', name);
+        Toast.show('تم إنشاء الحساب بنجاح 🎉', 'success');
+      } else {
+        await FB.signIn(FB.auth, email, pass);
+        Toast.show('أهلاً بعودتك 👋', 'success');
+      }
+      closeAuthModal();
+    } catch (err) {
+      Logger.error('Social.auth', err);
+      const msg = friendlyAuthError(err);
+      showAuthError(msg);
+    } finally {
+      btn.disabled = false;
+    }
+  }
+  
+  async function handleGoogleSignIn() {
+    const FB = window.FB;
+    try {
+      await FB.signInWithPopup(FB.auth, FB.googleProvider);
+      Toast.show('أهلاً بك 👋', 'success');
+      closeAuthModal();
+    } catch (err) {
+      Logger.error('Social.google', err);
+      if (err.code !== 'auth/popup-closed-by-user') {
+        showAuthError(friendlyAuthError(err));
+      }
+    }
+  }
+  
+  async function handleForgot() {
+    const email = $('#authEmail').value.trim();
+    if (!email) {
+      showAuthError('أدخل بريدك الإلكتروني أولاً');
+      return;
+    }
+    const FB = window.FB;
+    try {
+      await FB.sendPasswordResetEmail(FB.auth, email);
+      Toast.show('تحقق من بريدك لإعادة تعيين كلمة السر 📧', 'success');
+      closeAuthModal();
+    } catch (err) {
+      showAuthError(friendlyAuthError(err));
+    }
+  }
+  
+  function friendlyAuthError(err) {
+    const code = err?.code || '';
+    const map = {
+      'invalid-name': 'أدخل اسمك',
+      'invalid-username': 'اسم المستخدم قصير (٣ أحرف+)',
+      'username-taken': 'اسم المستخدم مستخدم بالفعل',
+      'auth/invalid-email': 'البريد الإلكتروني غير صحيح',
+      'auth/email-already-in-use': 'هذا البريد مسجل بالفعل',
+      'auth/weak-password': 'كلمة السر ضعيفة',
+      'auth/wrong-password': 'كلمة السر خاطئة',
+      'auth/user-not-found': 'حساب غير موجود',
+      'auth/invalid-credential': 'البيانات غير صحيحة',
+      'auth/too-many-requests': 'محاولات كثيرة — حاول لاحقاً',
+      'auth/network-request-failed': 'لا يوجد اتصال'
+    };
+    return map[code] || 'حدث خطأ — حاول مجدداً';
+  }
+
+  // ─── Bind UI events ───
+  function bindEvents() {
+    // Expose to window for inline onclick (iOS Safari fallback)
+    window.__setAuthMode = function(mode) {
+      authMode = mode;
+      updateAuthUI();
+    };
+    window.__authSubmit = function(e) { handleAuthSubmit(e); };
+    window.__googleSignIn = function() { handleGoogleSignIn(); };
+    window.__authForgot = function() { handleForgot(); };
+    
+    // Open auth from "sign in" prompt
+    $('#friendsSignInBtn')?.addEventListener('click', () => openAuthModal('signin'));
+    
+    // Auth modal
+    $('#authCloseBtn')?.addEventListener('click', closeAuthModal);
+    $('#authOverlay')?.addEventListener('click', (e) => {
+      if (e.target.id === 'authOverlay') closeAuthModal();
+    });
+    $$('.auth-tab').forEach(t => {
+      t.addEventListener('click', () => { authMode = t.dataset.authMode; updateAuthUI(); });
+    });
+    $('#authForm')?.addEventListener('submit', handleAuthSubmit);
+    $('#authGoogleBtn')?.addEventListener('click', handleGoogleSignIn);
+    $('#authForgotBtn')?.addEventListener('click', handleForgot);
+    
+    // Add friend
+    $('#addFriendBtn')?.addEventListener('click', async () => {
+      const input = $('#addFriendInput');
+      const ok = await sendFriendRequest(input.value);
+      if (ok) input.value = '';
+    });
+    $('#addFriendInput')?.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') { e.preventDefault(); $('#addFriendBtn').click(); }
+    });
+    
+    // Copy my code
+    $('#copyMyCodeBtn')?.addEventListener('click', async () => {
+      const code = '@' + (userProfile?.username || '');
+      try {
+        await navigator.clipboard.writeText(code);
+        Toast.show('تم نسخ الكود 📋', 'success');
+      } catch {
+        Toast.show('الكود: ' + code, 'warn');
+      }
+    });
+    
+    // Sign out
+    $('#signOutBtn')?.addEventListener('click', signOut);
+    
+    // Friend actions (delegated)
+    DOM.delegate(document, 'click', '[data-action="accept-req"]', (e, btn) => {
+      acceptFriendRequest(btn.dataset.reqId, btn.dataset.fromId);
+    });
+    DOM.delegate(document, 'click', '[data-action="reject-req"]', (e, btn) => {
+      removeRequest(btn.dataset.reqId);
+    });
+    DOM.delegate(document, 'click', '[data-action="cancel-req"]', (e, btn) => {
+      removeRequest(btn.dataset.reqId);
+    });
+    DOM.delegate(document, 'click', '[data-action="del-friend"]', (e, btn) => {
+      removeFriend(btn.dataset.friendshipId);
+    });
+    
+    // Sync streak on change
+    store.subscribe('streak', syncStreak);
+    store.subscribe('pts', syncStreak);
+    store.subscribe('userName', syncStreak);
+  }
+
+  return { init, bindEvents, openAuthModal, renderFriendsTab, getCurrentUser: function() { return currentUser; }, getUserProfile: function() { return userProfile; } };
 })();
 
 /* ═══════════════════════════════════════════════════
