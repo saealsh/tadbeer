@@ -14800,22 +14800,126 @@ const ChatNotifications = (() => {
     // 2. Sound
     playMessageSound();
 
-    // 3. Toast
+    // 3. Browser Native Notification (works even if tab is hidden!)
+    try {
+      if ('Notification' in window && Notification.permission === 'granted' && document.hidden) {
+        const notif = new Notification(`💬 ${peerName || peerUsername || 'رسالة جديدة'}`, {
+          body: text || 'رسالة جديدة',
+          icon: photoData || '/og-image.png',
+          tag: `chat-${peerUid}`,
+          renotify: true,
+          silent: false,
+          dir: 'rtl',
+          lang: 'ar'
+        });
+        notif.onclick = () => {
+          window.focus();
+          try {
+            if (window.Controllers?.showTab) window.Controllers.showTab('social');
+            const friend = social?._state?.friends?.find(f => f.uid === peerUid)
+              || { uid: peerUid, displayName: peerName, username: peerUsername };
+            if (social?.openChat) social.openChat(friend);
+          } catch {}
+          notif.close();
+        };
+        setTimeout(() => { try { notif.close(); } catch {} }, 10000);
+      }
+    } catch {}
+
+    // 4. Persistent Message Bar (stays until opened or 30s)
+    showPersistentBar({ peerName, peerUsername, text, photoData, peerUid });
+
+    // 5. Toast (quick slide-in at top)
     showChatToast({
       peerName, peerUsername, text, photoData,
       onOpen: () => {
         try {
-          // Switch to social tab
-          if (window.Controllers?.showTab) {
-            window.Controllers.showTab('social');
-          }
-          // Open chat
+          if (window.Controllers?.showTab) window.Controllers.showTab('social');
           const friend = social?._state?.friends?.find(f => f.uid === peerUid)
             || { uid: peerUid, displayName: peerName, username: peerUsername };
           if (social?.openChat) social.openChat(friend);
+          hidePersistentBar();
         } catch (e) { console.warn('Open chat error:', e.message); }
       }
     });
+  }
+
+  // ═══ PERSISTENT MESSAGE BAR (at bottom, stays until read) ═══
+  function showPersistentBar({ peerName, peerUsername, text, photoData, peerUid }) {
+    if (!state.settings.toast) return;
+
+    const existing = document.getElementById('chatPersistBar');
+    if (existing) existing.remove();
+
+    const bar = document.createElement('div');
+    bar.id = 'chatPersistBar';
+    bar.className = 'chat-persist-bar';
+    bar.dataset.peerUid = peerUid;
+
+    const displayName = peerName || '@' + (peerUsername || '');
+    const initial = (displayName || '?')[0].toUpperCase();
+
+    bar.innerHTML = `
+      <div class="chat-persist-avatar">
+        ${photoData ? `<img src="${photoData}" alt="">` : initial}
+        <span class="chat-persist-dot"></span>
+      </div>
+      <div class="chat-persist-body">
+        <div class="chat-persist-name">💬 ${escapeHtml(displayName)} <span class="chat-persist-label">رسالة جديدة</span></div>
+        <div class="chat-persist-text">${escapeHtml(text || 'رسالة جديدة')}</div>
+      </div>
+      <button class="chat-persist-action">فتح</button>
+      <button class="chat-persist-close" aria-label="إغلاق">✕</button>
+    `;
+
+    document.body.appendChild(bar);
+    requestAnimationFrame(() => bar.classList.add('show'));
+
+    bar.querySelector('.chat-persist-action').addEventListener('click', (e) => {
+      e.stopPropagation();
+      const social = window.Social;
+      try {
+        if (window.Controllers?.showTab) window.Controllers.showTab('social');
+        const friend = social?._state?.friends?.find(f => f.uid === peerUid)
+          || { uid: peerUid, displayName: peerName, username: peerUsername };
+        if (social?.openChat) social.openChat(friend);
+      } catch {}
+      hidePersistentBar();
+    });
+
+    bar.querySelector('.chat-persist-close').addEventListener('click', (e) => {
+      e.stopPropagation();
+      hidePersistentBar();
+    });
+
+    bar.querySelector('.chat-persist-body').addEventListener('click', () => {
+      const social = window.Social;
+      try {
+        if (window.Controllers?.showTab) window.Controllers.showTab('social');
+        const friend = social?._state?.friends?.find(f => f.uid === peerUid)
+          || { uid: peerUid, displayName: peerName, username: peerUsername };
+        if (social?.openChat) social.openChat(friend);
+      } catch {}
+      hidePersistentBar();
+    });
+
+    setTimeout(hidePersistentBar, 30000);
+  }
+
+  function hidePersistentBar() {
+    const bar = document.getElementById('chatPersistBar');
+    if (!bar) return;
+    bar.classList.remove('show');
+    setTimeout(() => { try { bar.remove(); } catch {} }, 300);
+  }
+
+  // ═══ REQUEST BROWSER NOTIFICATION PERMISSION ═══
+  function requestBrowserPermission() {
+    try {
+      if ('Notification' in window && Notification.permission === 'default') {
+        Notification.requestPermission();
+      }
+    } catch {}
   }
 
   // ═══ SETTINGS ═══
