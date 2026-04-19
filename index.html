@@ -4956,6 +4956,31 @@ body::before {
   background:rgba(239,68,68,0.2);
 }
 
+/* Login button (highlighted for guests) */
+.sidebar-login{
+  margin-top:8px;
+  background:linear-gradient(135deg, var(--accent-dim), rgba(1,221,140,0.05));
+  border:1px solid var(--accent-bd);
+  color:var(--accent-2);
+  font-weight:800;
+}
+.sidebar-login .sidebar-icon{
+  background:linear-gradient(135deg, var(--accent), var(--accent-2));
+  color:#0a0600;
+  box-shadow:0 4px 12px var(--accent-glow);
+}
+.sidebar-login:hover{
+  background:linear-gradient(135deg, var(--accent-dim), rgba(1,221,140,0.1));
+  border-color:var(--accent);
+  transform:translateX(-4px);
+}
+.sidebar-login .sidebar-label{
+  color:var(--accent-2);
+}
+.sidebar-login .sidebar-arrow{
+  color:var(--accent);
+}
+
 /* Primary item (الرئيسية) */
 .sidebar-item-primary{
   background:linear-gradient(135deg, var(--accent-dim), rgba(1,221,140,0.03));
@@ -5445,13 +5470,322 @@ body::before {
   transform:translateY(-2px);
   box-shadow:0 12px 32px var(--accent-glow);
 }
-.confetti{
+/* ═══════════════════════════════════════════════════════
+   PWA INSTALL BANNER + iOS INSTRUCTIONS
+   ═══════════════════════════════════════════════════════ */
+
+.pwa-install-banner{
   position:fixed;
-  top:-20px;
-  width:12px;
-  height:12px;
+  bottom:calc(16px + env(safe-area-inset-bottom, 0));
+  left:50%;
+  transform:translate(-50%, 200%);
+  width:calc(100% - 24px);
+  max-width:420px;
+  background:linear-gradient(145deg, var(--bg2), var(--bg3));
+  border:1.5px solid var(--accent);
+  border-radius:16px;
+  padding:14px;
+  display:flex;
+  align-items:center;
+  gap:12px;
+  box-shadow:0 12px 40px rgba(0,0,0,0.6), 0 0 30px var(--accent-glow);
+  z-index:250000;
+  transition:transform 0.5s cubic-bezier(.34,1.56,.64,1);
+}
+
+.pwa-install-banner.show{
+  transform:translate(-50%, 0);
+}
+
+.pwa-install-icon{
+  width:44px;
+  height:44px;
+  border-radius:12px;
+  background:linear-gradient(135deg, var(--accent), var(--accent-2));
+  color:#0a0600;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  flex-shrink:0;
+  box-shadow:0 4px 12px var(--accent-glow);
+  animation:pwaIconBounce 2s ease-in-out infinite;
+}
+
+@keyframes pwaIconBounce{
+  0%, 100%{ transform:translateY(0); }
+  50%{ transform:translateY(-3px); }
+}
+
+.pwa-install-text{
+  flex:1;
+  min-width:0;
+}
+
+.pwa-install-title{
+  font-size:13px;
+  font-weight:800;
+  color:var(--text);
+  margin-bottom:2px;
+  background:linear-gradient(135deg, var(--text), var(--accent-2));
+  -webkit-background-clip:text;
+  background-clip:text;
+  -webkit-text-fill-color:transparent;
+}
+
+.pwa-install-desc{
+  font-size:10px;
+  color:var(--text3);
+  line-height:1.3;
+}
+
+.pwa-install-btn{
+  background:linear-gradient(135deg, var(--accent), var(--accent-2));
+  color:#0a0600;
+  border:none;
+  border-radius:10px;
+  padding:8px 18px;
+  font-size:13px;
+  font-weight:800;
+  cursor:pointer;
+  font-family:inherit;
+  box-shadow:0 4px 12px var(--accent-glow);
+  flex-shrink:0;
+  transition:all var(--t-fast);
+}
+
+.pwa-install-btn:hover{
+  transform:translateY(-1px);
+  box-shadow:0 6px 18px var(--accent-glow);
+}
+
+.pwa-install-btn:active{
+  transform:scale(0.95);
+}
+
+.pwa-install-dismiss{
+  width:28px;
+  height:28px;
+  border-radius:50%;
+  background:var(--bg4);
+  border:none;
+  color:var(--text2);
+  font-size:11px;
+  cursor:pointer;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  flex-shrink:0;
+  transition:all var(--t-fast);
+}
+
+.pwa-install-dismiss:hover{
+  background:var(--danger);
+  color:#fff;
+}
+
+/* ═══ iOS Install Modal ═══ */
+.pwa-ios-modal{
+  position:fixed;
+  inset:0;
+  z-index:300000;
+  display:flex !important;
+  align-items:center;
+  justify-content:center;
+  opacity:0;
   pointer-events:none;
-  z-index:400001;
+  transition:opacity 0.3s;
+}
+
+.pwa-ios-modal.show{
+  opacity:1;
+  pointer-events:all;
+}
+
+.pwa-ios-backdrop{
+  position:absolute;
+  inset:0;
+  background:rgba(0,0,0,0.85);
+  backdrop-filter:blur(10px);
+  -webkit-backdrop-filter:blur(10px);
+}
+
+.pwa-ios-card{
+  position:relative;
+  background:linear-gradient(145deg, var(--bg2), var(--bg3));
+  border:2px solid var(--accent-bd);
+  border-radius:24px;
+  padding:28px 24px 24px;
+  max-width:360px;
+  width:90%;
+  text-align:center;
+  box-shadow:0 0 80px var(--accent-glow);
+  transform:scale(0.8);
+  transition:transform 0.4s cubic-bezier(.34,1.56,.64,1);
+  max-height:90vh;
+  overflow-y:auto;
+}
+
+.pwa-ios-modal.show .pwa-ios-card{
+  transform:scale(1);
+}
+
+.pwa-ios-close{
+  position:absolute;
+  top:12px;
+  left:12px;
+  width:32px;
+  height:32px;
+  border-radius:50%;
+  background:var(--bg4);
+  border:1px solid var(--border);
+  color:var(--text2);
+  font-size:13px;
+  cursor:pointer;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  transition:all var(--t-fast);
+}
+
+.pwa-ios-close:hover{
+  background:var(--danger);
+  color:#fff;
+}
+
+.pwa-ios-icon{
+  font-size:52px;
+  margin-bottom:12px;
+  animation:pwaIosFloat 3s ease-in-out infinite;
+  filter:drop-shadow(0 4px 16px var(--accent-glow));
+}
+
+@keyframes pwaIosFloat{
+  0%, 100%{ transform:translateY(0) rotate(0deg); }
+  50%{ transform:translateY(-6px) rotate(-3deg); }
+}
+
+.pwa-ios-title{
+  font-size:19px;
+  font-weight:800;
+  color:var(--text);
+  margin-bottom:6px;
+  background:linear-gradient(135deg, var(--accent), var(--accent-2));
+  -webkit-background-clip:text;
+  background-clip:text;
+  -webkit-text-fill-color:transparent;
+}
+
+.pwa-ios-subtitle{
+  font-size:12px;
+  color:var(--text2);
+  margin-bottom:18px;
+}
+
+.pwa-ios-steps{
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+  margin-bottom:18px;
+  text-align:right;
+}
+
+.pwa-ios-step{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  background:var(--bg4);
+  border:1px solid var(--border);
+  border-radius:12px;
+  padding:10px 12px;
+  text-align:right;
+}
+
+.pwa-ios-step-num{
+  width:28px;
+  height:28px;
+  border-radius:50%;
+  background:linear-gradient(135deg, var(--accent), var(--accent-2));
+  color:#0a0600;
+  font-size:13px;
+  font-weight:900;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  flex-shrink:0;
+  box-shadow:0 3px 10px var(--accent-glow);
+}
+
+.pwa-ios-step-text{
+  flex:1;
+  font-size:12px;
+  color:var(--text);
+  line-height:1.6;
+  text-align:right;
+}
+
+.pwa-ios-benefit{
+  background:linear-gradient(135deg, var(--accent-dim), rgba(1,221,140,0.05));
+  border:1px solid var(--accent-bd);
+  border-radius:12px;
+  padding:12px;
+  font-size:11px;
+  color:var(--text);
+  line-height:1.8;
+  margin-bottom:16px;
+  text-align:right;
+}
+
+.pwa-ios-got-it{
+  width:100%;
+  background:linear-gradient(135deg, var(--accent), var(--accent-2));
+  color:#0a0600;
+  border:none;
+  border-radius:12px;
+  padding:12px;
+  font-size:14px;
+  font-weight:800;
+  cursor:pointer;
+  font-family:inherit;
+  box-shadow:0 6px 20px var(--accent-glow);
+  transition:all var(--t-fast);
+}
+
+.pwa-ios-got-it:hover{
+  transform:translateY(-2px);
+  box-shadow:0 8px 24px var(--accent-glow);
+}
+
+.pwa-ios-got-it:active{
+  transform:scale(0.98);
+}
+
+/* Mobile tight fit */
+@media (max-width:400px){
+  .pwa-install-banner{
+    padding:12px 10px;
+    gap:10px;
+  }
+  .pwa-install-icon{
+    width:40px;
+    height:40px;
+  }
+  .pwa-install-title{
+    font-size:12px;
+  }
+  .pwa-install-desc{
+    font-size:9px;
+  }
+  .pwa-install-btn{
+    padding:7px 14px;
+    font-size:12px;
+  }
+}
+
+/* Hide completely when already installed */
+@media all and (display-mode: standalone){
+  .pwa-install-banner{
+    display:none !important;
+  }
 }
 
 /* ═══════════════════════════════════════════════════════
@@ -5497,11 +5831,11 @@ body::before {
 .chats-page-header{
   background:linear-gradient(180deg, var(--bg2), rgba(var(--bg2), 0.8));
   border-bottom:1px solid var(--border);
-  padding:14px 16px;
-  padding-top:calc(14px + env(safe-area-inset-top, 0));
+  padding:10px 14px;
+  padding-top:calc(10px + env(safe-area-inset-top, 0));
   display:flex;
   align-items:center;
-  gap:14px;
+  gap:10px;
   flex-shrink:0;
   backdrop-filter:blur(20px);
   -webkit-backdrop-filter:blur(20px);
@@ -5522,9 +5856,9 @@ body::before {
 
 .chats-page-back,
 .chats-page-newchat{
-  width:42px;
-  height:42px;
-  border-radius:12px;
+  width:36px;
+  height:36px;
+  border-radius:10px;
   background:var(--bg3);
   border:1px solid var(--border2);
   color:var(--text);
@@ -5540,24 +5874,23 @@ body::before {
   background:var(--accent-dim);
   color:var(--accent-2);
   border-color:var(--accent);
-  transform:translateX(2px);
 }
 
 .chats-page-newchat{
   background:linear-gradient(135deg, var(--accent), var(--accent-2));
   color:#0a0600;
   border-color:transparent;
-  box-shadow:0 4px 16px var(--accent-glow);
+  box-shadow:0 3px 10px var(--accent-glow);
 }
 
 .chats-page-newchat:hover{
-  transform:translateY(-2px) rotate(90deg);
-  box-shadow:0 8px 24px var(--accent-glow);
+  transform:rotate(90deg);
+  box-shadow:0 5px 16px var(--accent-glow);
 }
 
 .chats-page-back:active,
 .chats-page-newchat:active{
-  transform:scale(0.95);
+  transform:scale(0.92);
 }
 
 .chats-page-title-wrap{
@@ -5567,25 +5900,27 @@ body::before {
 }
 
 .chats-page-title{
-  font-size:18px;
+  font-size:15px;
   font-weight:800;
   color:var(--text);
   background:linear-gradient(135deg, var(--text), var(--accent-2));
   -webkit-background-clip:text;
   background-clip:text;
   -webkit-text-fill-color:transparent;
-  letter-spacing:-0.3px;
+  letter-spacing:-0.2px;
+  line-height:1.2;
 }
 
 .chats-page-subtitle{
-  font-size:11px;
+  font-size:10px;
   color:var(--text3);
   margin-top:2px;
+  line-height:1;
 }
 
 /* ═══ Controls (Search + Filters) ═══ */
 .chats-page-controls{
-  padding:14px 16px 8px;
+  padding:10px 12px 6px;
   flex-shrink:0;
   position:relative;
   z-index:1;
@@ -5595,24 +5930,25 @@ body::before {
   position:relative;
   display:flex;
   align-items:center;
-  gap:10px;
+  gap:8px;
   background:linear-gradient(145deg, var(--bg3), var(--bg2));
-  border:1.5px solid var(--border);
-  border-radius:14px;
-  padding:11px 14px;
-  margin-bottom:12px;
+  border:1px solid var(--border);
+  border-radius:11px;
+  padding:8px 12px;
+  margin-bottom:8px;
   transition:all var(--t-med);
 }
 
 .chats-page-search:focus-within{
   border-color:var(--accent);
-  box-shadow:0 0 24px var(--accent-glow);
-  transform:translateY(-1px);
+  box-shadow:0 0 16px var(--accent-glow);
 }
 
 .chats-page-search-icon{
   color:var(--text3);
   flex-shrink:0;
+  width:15px;
+  height:15px;
 }
 
 .chats-page-search:focus-within .chats-page-search-icon{
@@ -5625,9 +5961,9 @@ body::before {
   border:none;
   outline:none;
   color:var(--text);
-  font-size:14px;
+  font-size:13px;
   font-family:inherit;
-  padding:2px 0;
+  padding:1px 0;
 }
 
 .chats-page-search-input::placeholder{
@@ -5638,10 +5974,10 @@ body::before {
   background:var(--bg4);
   border:none;
   color:var(--text2);
-  width:24px;
-  height:24px;
+  width:20px;
+  height:20px;
   border-radius:50%;
-  font-size:11px;
+  font-size:10px;
   cursor:pointer;
   display:flex;
   align-items:center;
@@ -5653,13 +5989,12 @@ body::before {
 .chats-page-search-clear:hover{
   background:var(--danger);
   color:#fff;
-  transform:scale(1.1);
 }
 
 /* Filters */
 .chats-page-filters{
   display:flex;
-  gap:6px;
+  gap:5px;
   overflow-x:auto;
   scrollbar-width:none;
   -webkit-overflow-scrolling:touch;
@@ -5673,12 +6008,12 @@ body::before {
 .chats-page-filter{
   display:flex;
   align-items:center;
-  gap:6px;
+  gap:4px;
   background:linear-gradient(145deg, var(--bg3), var(--bg2));
   border:1px solid var(--border);
-  border-radius:22px;
-  padding:8px 14px;
-  font-size:12px;
+  border-radius:16px;
+  padding:6px 11px;
+  font-size:11px;
   font-weight:700;
   color:var(--text2);
   white-space:nowrap;
@@ -5691,26 +6026,25 @@ body::before {
 .chats-page-filter:hover{
   border-color:var(--accent-bd);
   color:var(--text);
-  transform:translateY(-1px);
 }
 
 .chats-page-filter.active{
   background:linear-gradient(135deg, var(--accent), var(--accent-2));
   color:#0a0600;
   border-color:transparent;
-  box-shadow:0 4px 16px var(--accent-glow);
-  transform:translateY(-1px);
+  box-shadow:0 3px 10px var(--accent-glow);
 }
 
 .chats-page-filter-count{
   background:rgba(0,0,0,0.2);
-  padding:2px 8px;
-  border-radius:10px;
-  font-size:10px;
+  padding:1px 6px;
+  border-radius:8px;
+  font-size:9px;
   font-weight:800;
   direction:ltr;
-  min-width:22px;
+  min-width:18px;
   text-align:center;
+  line-height:1.4;
 }
 
 .chats-page-filter:not(.active) .chats-page-filter-count{
@@ -5724,7 +6058,7 @@ body::before {
   overflow-y:auto;
   overflow-x:hidden;
   -webkit-overflow-scrolling:touch;
-  padding:0 12px 16px;
+  padding:0 10px 12px;
 }
 
 .chats-page-body::-webkit-scrollbar{
@@ -5736,10 +6070,36 @@ body::before {
   border-radius:4px;
 }
 
-/* Conversation cards within the page use same styling as .conv-card */
+/* Conversation cards within the page - compact mobile style */
 .chats-page-body .conv-card{
-  margin-bottom:8px;
+  margin-bottom:6px;
+  padding:10px 12px !important;
+  gap:10px !important;
   animation:cardSlideIn 0.4s var(--ease) backwards;
+}
+
+.chats-page-body .conv-card .conv-avatar{
+  width:42px !important;
+  height:42px !important;
+  font-size:16px !important;
+}
+
+.chats-page-body .conv-card .conv-name{
+  font-size:13px !important;
+}
+
+.chats-page-body .conv-card .conv-last-text{
+  font-size:11px !important;
+}
+
+.chats-page-body .conv-card .conv-time{
+  font-size:10px !important;
+}
+
+.chats-page-body .conv-card .conv-badge{
+  min-width:18px;
+  height:18px;
+  font-size:9px;
 }
 
 .chats-page-body .conv-card:nth-child(1){ animation-delay:0.05s; }
@@ -5833,18 +6193,20 @@ body::before {
   display:flex;
   align-items:center;
   justify-content:center;
-  gap:6px;
-  padding:10px 16px;
-  padding-bottom:calc(10px + env(safe-area-inset-bottom, 0));
+  gap:5px;
+  padding:8px 14px;
+  padding-bottom:calc(8px + env(safe-area-inset-bottom, 0));
   background:linear-gradient(180deg, transparent, var(--bg2));
   border-top:1px solid var(--border);
-  font-size:11px;
+  font-size:10px;
   color:var(--text3);
   flex-shrink:0;
 }
 
 .chats-page-privacy svg{
   color:var(--accent);
+  width:11px;
+  height:11px;
 }
 
 /* ═══ RESPONSIVE ═══ */
@@ -9670,18 +10032,18 @@ html {
     <div class="chats-page" id="chatsPage" aria-hidden="true">
       <!-- Header -->
       <header class="chats-page-header">
-        <button class="chats-page-back" id="chatsPageBack" aria-label="رجوع">
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M9 18l6-6-6-6"/>
+        <button class="chats-page-newchat" id="chatsPageNewChat" aria-label="محادثة جديدة" title="اضف صديق جديد">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 5v14M5 12h14"/>
           </svg>
         </button>
         <div class="chats-page-title-wrap">
           <div class="chats-page-title">💬 المحادثات</div>
-          <div class="chats-page-subtitle" id="chatsPageSubtitle">جميع رسائلك الخاصة</div>
+          <div class="chats-page-subtitle" id="chatsPageSubtitle">جميع رسائلك</div>
         </div>
-        <button class="chats-page-newchat" id="chatsPageNewChat" aria-label="محادثة جديدة" title="اضف صديق جديد">
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M12 5v14M5 12h14"/>
+        <button class="chats-page-back" id="chatsPageBack" aria-label="رجوع">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M15 18l-6-6 6-6"/>
           </svg>
         </button>
       </header>
@@ -9875,6 +10237,10 @@ html {
             <span class="sidebar-chevron">▼</span>
           </button>
           <div class="sidebar-submenu" data-submenu="info">
+            <button class="sidebar-subitem" data-action="install-app">
+              <span class="sidebar-sub-icon">📲</span>
+              <span>ثبّت التطبيق</span>
+            </button>
             <button class="sidebar-subitem" data-action="share">
               <span class="sidebar-sub-icon">📤</span>
               <span>شارك التطبيق</span>
@@ -9890,6 +10256,13 @@ html {
         <button class="sidebar-item sidebar-logout" data-action="logout" id="sidebarLogout" style="display:none">
           <span class="sidebar-icon">🚪</span>
           <span class="sidebar-label">تسجيل الخروج</span>
+          <span class="sidebar-arrow">›</span>
+        </button>
+
+        <!-- Login (shows when not logged in) -->
+        <button class="sidebar-item sidebar-login" data-action="login" id="sidebarLogin">
+          <span class="sidebar-icon">🔐</span>
+          <span class="sidebar-label">تسجيل الدخول</span>
           <span class="sidebar-arrow">›</span>
         </button>
       </nav>
@@ -9913,6 +10286,63 @@ html {
         <div class="page-modal-spacer"></div>
       </div>
       <div class="page-modal-body" id="pageModalBody"></div>
+    </div>
+
+    <!-- ═══════ PWA INSTALL BANNER ═══════ -->
+    <div class="pwa-install-banner" id="pwaInstallBanner" style="display:none" aria-hidden="true">
+      <div class="pwa-install-icon">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="5" y="2" width="14" height="20" rx="2" ry="2"/>
+          <line x1="12" y1="18" x2="12.01" y2="18"/>
+        </svg>
+      </div>
+      <div class="pwa-install-text">
+        <div class="pwa-install-title">ثبّت تـدّبير على جوالك!</div>
+        <div class="pwa-install-desc">دخول أسرع + إشعارات + يعمل زي التطبيق</div>
+      </div>
+      <button class="pwa-install-btn" id="pwaInstallBtn">ثبّت</button>
+      <button class="pwa-install-dismiss" id="pwaInstallDismiss" aria-label="إغلاق">✕</button>
+    </div>
+
+    <!-- ═══════ PWA INSTALL INSTRUCTIONS MODAL (iOS) ═══════ -->
+    <div class="pwa-ios-modal" id="pwaIosModal" style="display:none" aria-hidden="true">
+      <div class="pwa-ios-backdrop" id="pwaIosBackdrop"></div>
+      <div class="pwa-ios-card">
+        <button class="pwa-ios-close" id="pwaIosClose" aria-label="إغلاق">✕</button>
+        <div class="pwa-ios-icon">📱</div>
+        <div class="pwa-ios-title">ثبّت التطبيق على iPhone</div>
+        <div class="pwa-ios-subtitle">اتّبع الخطوات التالية بالترتيب:</div>
+        <div class="pwa-ios-steps">
+          <div class="pwa-ios-step">
+            <div class="pwa-ios-step-num">1</div>
+            <div class="pwa-ios-step-text">اضغط على زر المشاركة 
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#01dd8c" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="display:inline;vertical-align:middle;margin:0 4px">
+                <path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/>
+                <polyline points="16 6 12 2 8 6"/>
+                <line x1="12" y1="2" x2="12" y2="15"/>
+              </svg>
+              في الأسفل
+            </div>
+          </div>
+          <div class="pwa-ios-step">
+            <div class="pwa-ios-step-num">2</div>
+            <div class="pwa-ios-step-text">اختر "إضافة إلى الشاشة الرئيسية" 
+              <span style="color:var(--accent);font-weight:800">➕</span>
+            </div>
+          </div>
+          <div class="pwa-ios-step">
+            <div class="pwa-ios-step-num">3</div>
+            <div class="pwa-ios-step-text">اضغط "إضافة" في الأعلى ✅</div>
+          </div>
+        </div>
+        <div class="pwa-ios-benefit">
+          ✨ ستحصل على أيقونة في الشاشة الرئيسية<br>
+          ✨ دخول سريع بضغطة واحدة<br>
+          ✨ إشعارات فورية<br>
+          ✨ يعمل زي التطبيق تماماً
+        </div>
+        <button class="pwa-ios-got-it" id="pwaIosGotIt">فهمت ✓</button>
+      </div>
     </div>
 
     <!-- Main Nav (4 tabs - New redesigned structure) -->
@@ -18896,6 +19326,13 @@ const Sidebar = (() => {
           shareApp();
           break;
 
+        // ═══ Install App (PWA) ═══
+        case 'install-app':
+          if (window.PWAInstall?.forceShow) {
+            window.PWAInstall.forceShow();
+          }
+          break;
+
         // ═══ Support ═══
         case 'support':
           openSupport();
@@ -18907,6 +19344,19 @@ const Sidebar = (() => {
             if (window.FB && window.FB.auth) {
               window.FB.signOut(window.FB.auth);
               window.Toast?.show('تم تسجيل الخروج', 'ok');
+            }
+          }
+          break;
+
+        // ═══ Login (for guests) ═══
+        case 'login':
+          // Open auth overlay
+          const authOverlay = document.getElementById('authOverlay');
+          if (authOverlay) {
+            authOverlay.classList.add('open');
+            // Make sure we're in signin mode
+            if (window.__setAuthMode) {
+              window.__setAuthMode('signin');
             }
           }
           break;
@@ -19165,9 +19615,10 @@ const Sidebar = (() => {
     const userName = document.getElementById('sidebarUserName');
     const userHandle = document.getElementById('sidebarUserHandle');
     const logoutBtn = document.getElementById('sidebarLogout');
+    const loginBtn = document.getElementById('sidebarLogin');
 
     if (profile && user) {
-      // Logged in
+      // ═══ Logged in ═══
       if (userName) userName.textContent = profile.displayName || 'مستخدم';
       if (userHandle) userHandle.textContent = '@' + (profile.username || 'user');
       
@@ -19184,13 +19635,18 @@ const Sidebar = (() => {
         }
       }
       
+      // Show logout, hide login
       if (logoutBtn) logoutBtn.style.display = 'flex';
+      if (loginBtn) loginBtn.style.display = 'none';
     } else {
-      // Not logged in
+      // ═══ Not logged in (Guest) ═══
       if (userName) userName.textContent = 'زائر';
       if (userHandle) userHandle.textContent = 'سجّل الدخول للبدء';
       if (avatar) avatar.innerHTML = '<span>؟</span>';
+      
+      // Hide logout, show login
       if (logoutBtn) logoutBtn.style.display = 'none';
+      if (loginBtn) loginBtn.style.display = 'flex';
     }
 
     // Update stats
@@ -20582,41 +21038,89 @@ const BiometricAuth = (() => {
   async function handleSignIn() {
     const btn = document.getElementById('authBiometricBtn');
     if (btn) btn.classList.add('loading');
+    const iconEl = document.getElementById('biometricIcon');
+    const textEl = document.getElementById('biometricText');
+    const origIcon = iconEl?.textContent;
+    const origText = textEl?.textContent;
+    if (iconEl) iconEl.textContent = '⏳';
+    if (textEl) textEl.textContent = 'جارٍ التحقق...';
 
     const result = await authenticate();
 
     if (btn) btn.classList.remove('loading');
+    if (iconEl && origIcon) iconEl.textContent = origIcon;
+    if (textEl && origText) textEl.textContent = origText;
 
-    if (result.success) {
-      // Fetch saved password from secure storage
-      const savedAuth = localStorage.getItem('tdbeer_biometric_auth_token');
-      
-      if (savedAuth) {
-        try {
-          const authData = JSON.parse(savedAuth);
-          // Auto-fill credentials and sign in
-          const emailInput = document.getElementById('authEmail');
-          const passInput = document.getElementById('authPass');
-          
-          if (emailInput) emailInput.value = authData.email;
-          if (passInput) passInput.value = authData.password;
-          
-          window.Toast?.show('✅ تم التحقق - جارٍ تسجيل الدخول...', 'ok');
-          
-          // Trigger auth submit
-          setTimeout(() => {
-            if (window.__authSubmit) {
-              window.__authSubmit({ preventDefault: () => {} });
-            }
-          }, 300);
-        } catch (e) {
-          window.Toast?.show('❌ خطأ في التحقق، سجّل دخول يدوياً', 'warn');
-        }
-      } else {
-        window.Toast?.show('⚠️ سجّل دخول بالإيميل أولاً لربط البصمة', 'warn');
-      }
-    } else {
+    if (!result.success) {
       window.Toast?.show('❌ ' + result.error, 'danger');
+      return;
+    }
+
+    // Biometric verified - now sign in directly
+    const savedAuth = localStorage.getItem('tdbeer_biometric_auth_token');
+    
+    if (!savedAuth) {
+      window.Toast?.show('⚠️ سجّل دخول بالإيميل أولاً لربط البصمة', 'warn');
+      return;
+    }
+
+    try {
+      const authData = JSON.parse(savedAuth);
+      
+      // Verify Firebase is ready
+      if (!window.FB || !window.FB.auth || !window.FB.signIn) {
+        window.Toast?.show('⏳ انتظر ثانية ثم حاول مرة ثانية', 'warn');
+        return;
+      }
+
+      window.Toast?.show('✅ تم التحقق - جارٍ تسجيل الدخول...', 'ok');
+      
+      if (iconEl) iconEl.textContent = '⏳';
+      if (textEl) textEl.textContent = 'جارٍ تسجيل الدخول...';
+      if (btn) btn.classList.add('loading');
+
+      // Sign in directly with Firebase (bypass the form)
+      try {
+        await window.FB.signIn(window.FB.auth, authData.email, authData.password);
+        
+        // Close auth overlay
+        const authOverlay = document.getElementById('authOverlay');
+        if (authOverlay) authOverlay.classList.remove('open');
+        
+        window.Toast?.show('🎉 مرحباً بعودتك!', 'ok');
+        
+        // Close any open modals
+        document.body.style.overflow = '';
+      } catch (err) {
+        console.error('[Biometric] Firebase signin error:', err);
+        
+        let errorMsg = 'فشل تسجيل الدخول';
+        if (err.code === 'auth/wrong-password' || err.code === 'auth/invalid-credential') {
+          errorMsg = '⚠️ كلمة السر تغيّرت. سجّل دخول يدوياً لإعادة تفعيل البصمة';
+          // Clear old biometric data
+          localStorage.removeItem('tdbeer_biometric_auth_token');
+          BiometricAuth.remove();
+          // Reset button
+          initLoginButton();
+        } else if (err.code === 'auth/user-not-found') {
+          errorMsg = '❌ الحساب غير موجود';
+          localStorage.removeItem('tdbeer_biometric_auth_token');
+          BiometricAuth.remove();
+        } else if (err.code === 'auth/too-many-requests') {
+          errorMsg = '⚠️ محاولات كثيرة - حاول بعد قليل';
+        } else if (err.code === 'auth/network-request-failed') {
+          errorMsg = '📶 مشكلة في الاتصال';
+        }
+        
+        window.Toast?.show(errorMsg, 'danger');
+      }
+    } catch (e) {
+      console.error('[Biometric] Parse error:', e);
+      window.Toast?.show('❌ خطأ في البيانات المحفوظة', 'danger');
+    } finally {
+      if (btn) btn.classList.remove('loading');
+      if (iconEl && origIcon) iconEl.textContent = origIcon;
+      if (textEl && origText) textEl.textContent = origText;
     }
   }
 
@@ -20644,6 +21148,181 @@ const BiometricAuth = (() => {
 })();
 
 window.BiometricAuth = BiometricAuth;
+
+// ═══════════════════════════════════════════════════════
+// PWA INSTALL CONTROLLER
+// ═══════════════════════════════════════════════════════
+const PWAInstall = (() => {
+  let deferredPrompt = null;
+  let banner, btn, dismiss, iosModal, iosBackdrop, iosClose, iosGotIt;
+
+  // Check if iOS
+  function isIOS() {
+    return /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+  }
+
+  // Check if already installed (standalone mode)
+  function isStandalone() {
+    return window.matchMedia('(display-mode: standalone)').matches 
+        || window.navigator.standalone === true;
+  }
+
+  // Check if dismissed recently (within 7 days)
+  function isDismissedRecently() {
+    const dismissed = localStorage.getItem('pwa_install_dismissed');
+    if (!dismissed) return false;
+    const days = (Date.now() - parseInt(dismissed)) / (1000 * 60 * 60 * 24);
+    return days < 7;
+  }
+
+  function init() {
+    banner = document.getElementById('pwaInstallBanner');
+    btn = document.getElementById('pwaInstallBtn');
+    dismiss = document.getElementById('pwaInstallDismiss');
+    iosModal = document.getElementById('pwaIosModal');
+    iosBackdrop = document.getElementById('pwaIosBackdrop');
+    iosClose = document.getElementById('pwaIosClose');
+    iosGotIt = document.getElementById('pwaIosGotIt');
+
+    if (!banner) return;
+
+    // Don't show if already installed
+    if (isStandalone()) {
+      banner.style.display = 'none';
+      return;
+    }
+
+    // Don't show if dismissed recently
+    if (isDismissedRecently()) {
+      banner.style.display = 'none';
+      return;
+    }
+
+    // iOS - Show banner with iOS instructions
+    if (isIOS()) {
+      setTimeout(() => showBanner(), 5000);
+    }
+
+    // Listen for beforeinstallprompt (Chrome, Edge, Android)
+    window.addEventListener('beforeinstallprompt', (e) => {
+      e.preventDefault();
+      deferredPrompt = e;
+      setTimeout(() => showBanner(), 3000);
+    });
+
+    // Listen for appinstalled
+    window.addEventListener('appinstalled', () => {
+      hideBanner();
+      deferredPrompt = null;
+      if (window.Toast?.show) {
+        window.Toast.show('🎉 تم تثبيت التطبيق بنجاح!', 'ok');
+      }
+    });
+
+    // Button handlers
+    if (btn) btn.addEventListener('click', handleInstall);
+    if (dismiss) dismiss.addEventListener('click', handleDismiss);
+    if (iosClose) iosClose.addEventListener('click', hideIosModal);
+    if (iosBackdrop) iosBackdrop.addEventListener('click', hideIosModal);
+    if (iosGotIt) iosGotIt.addEventListener('click', hideIosModal);
+  }
+
+  function showBanner() {
+    if (!banner || isStandalone() || isDismissedRecently()) return;
+    banner.style.display = 'flex';
+    requestAnimationFrame(() => banner.classList.add('show'));
+  }
+
+  function hideBanner() {
+    if (!banner) return;
+    banner.classList.remove('show');
+    setTimeout(() => {
+      banner.style.display = 'none';
+    }, 500);
+  }
+
+  async function handleInstall() {
+    // iOS - Show instructions modal
+    if (isIOS()) {
+      showIosModal();
+      return;
+    }
+
+    // Android/Chrome - Use native prompt
+    if (deferredPrompt) {
+      deferredPrompt.prompt();
+      const choiceResult = await deferredPrompt.userChoice;
+      
+      if (choiceResult.outcome === 'accepted') {
+        if (window.Toast?.show) {
+          window.Toast.show('⏳ جارٍ التثبيت...', 'ok');
+        }
+      }
+      
+      deferredPrompt = null;
+      hideBanner();
+    } else {
+      // Fallback - show instructions
+      if (window.Toast?.show) {
+        window.Toast.show('ℹ️ استخدم قائمة المتصفح لتثبيت التطبيق', 'warn');
+      }
+    }
+  }
+
+  function handleDismiss() {
+    localStorage.setItem('pwa_install_dismissed', Date.now().toString());
+    hideBanner();
+  }
+
+  function showIosModal() {
+    if (!iosModal) return;
+    iosModal.style.display = 'flex';
+    requestAnimationFrame(() => iosModal.classList.add('show'));
+  }
+
+  function hideIosModal() {
+    if (!iosModal) return;
+    iosModal.classList.remove('show');
+    setTimeout(() => {
+      iosModal.style.display = 'none';
+    }, 300);
+    hideBanner();
+    // Mark as shown
+    localStorage.setItem('pwa_install_dismissed', Date.now().toString());
+  }
+
+  // Manual trigger (can be called from anywhere)
+  function forceShow() {
+    localStorage.removeItem('pwa_install_dismissed');
+    if (isIOS()) {
+      showIosModal();
+    } else if (deferredPrompt) {
+      handleInstall();
+    } else {
+      if (window.Toast?.show) {
+        window.Toast.show('ℹ️ التطبيق مثبّت أو غير قابل للتثبيت في متصفحك', 'warn');
+      }
+    }
+  }
+
+  // Initialize
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init);
+  } else {
+    init();
+  }
+
+  return {
+    init,
+    showBanner,
+    hideBanner,
+    forceShow,
+    isStandalone,
+    isIOS
+  };
+})();
+
+window.PWAInstall = PWAInstall;
 
 // ═══ Save password temporarily after successful login for biometric future use ═══
 // Hook into auth success
