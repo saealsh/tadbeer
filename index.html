@@ -5286,6 +5286,439 @@ body::before {
   z-index:400001;
 }
 
+/* ═══════════════════════════════════════════════════════
+   DEDICATED CHATS PAGE v1.0 - Full-screen isolation
+   Completely separate from main app content
+   ═══════════════════════════════════════════════════════ */
+
+.chats-page{
+  position:fixed;
+  top:0;
+  left:50%;
+  transform:translate(-50%, 100%);
+  width:100%;
+  max-width:var(--container);
+  height:100vh;
+  height:100dvh;
+  background:linear-gradient(180deg, var(--bg2), var(--bg) 30%);
+  z-index:150000;
+  display:flex;
+  flex-direction:column;
+  transition:transform var(--t-slow) cubic-bezier(.33,1,.68,1);
+  box-shadow:0 -20px 80px rgba(0,0,0,0.6);
+  overflow:hidden;
+}
+
+.chats-page.open{
+  transform:translate(-50%, 0);
+}
+
+.chats-page::before{
+  content:'';
+  position:absolute;
+  top:0;
+  left:0;
+  right:0;
+  height:200px;
+  background:radial-gradient(ellipse 80% 100% at 50% 0%, var(--accent-dim) 0%, transparent 70%);
+  pointer-events:none;
+  opacity:0.5;
+}
+
+/* ═══ Header ═══ */
+.chats-page-header{
+  background:linear-gradient(180deg, var(--bg2), rgba(var(--bg2), 0.8));
+  border-bottom:1px solid var(--border);
+  padding:14px 16px;
+  padding-top:calc(14px + env(safe-area-inset-top, 0));
+  display:flex;
+  align-items:center;
+  gap:14px;
+  flex-shrink:0;
+  backdrop-filter:blur(20px);
+  -webkit-backdrop-filter:blur(20px);
+  position:relative;
+  z-index:2;
+}
+
+.chats-page-header::after{
+  content:'';
+  position:absolute;
+  bottom:-1px;
+  left:0;
+  right:0;
+  height:1px;
+  background:linear-gradient(90deg, transparent, var(--accent-bd), transparent);
+  opacity:0.5;
+}
+
+.chats-page-back,
+.chats-page-newchat{
+  width:42px;
+  height:42px;
+  border-radius:12px;
+  background:var(--bg3);
+  border:1px solid var(--border2);
+  color:var(--text);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  cursor:pointer;
+  transition:all var(--t-fast);
+  flex-shrink:0;
+}
+
+.chats-page-back:hover{
+  background:var(--accent-dim);
+  color:var(--accent-2);
+  border-color:var(--accent);
+  transform:translateX(2px);
+}
+
+.chats-page-newchat{
+  background:linear-gradient(135deg, var(--accent), var(--accent-2));
+  color:#0a0600;
+  border-color:transparent;
+  box-shadow:0 4px 16px var(--accent-glow);
+}
+
+.chats-page-newchat:hover{
+  transform:translateY(-2px) rotate(90deg);
+  box-shadow:0 8px 24px var(--accent-glow);
+}
+
+.chats-page-back:active,
+.chats-page-newchat:active{
+  transform:scale(0.95);
+}
+
+.chats-page-title-wrap{
+  flex:1;
+  min-width:0;
+  text-align:center;
+}
+
+.chats-page-title{
+  font-size:18px;
+  font-weight:800;
+  color:var(--text);
+  background:linear-gradient(135deg, var(--text), var(--accent-2));
+  -webkit-background-clip:text;
+  background-clip:text;
+  -webkit-text-fill-color:transparent;
+  letter-spacing:-0.3px;
+}
+
+.chats-page-subtitle{
+  font-size:11px;
+  color:var(--text3);
+  margin-top:2px;
+}
+
+/* ═══ Controls (Search + Filters) ═══ */
+.chats-page-controls{
+  padding:14px 16px 8px;
+  flex-shrink:0;
+  position:relative;
+  z-index:1;
+}
+
+.chats-page-search{
+  position:relative;
+  display:flex;
+  align-items:center;
+  gap:10px;
+  background:linear-gradient(145deg, var(--bg3), var(--bg2));
+  border:1.5px solid var(--border);
+  border-radius:14px;
+  padding:11px 14px;
+  margin-bottom:12px;
+  transition:all var(--t-med);
+}
+
+.chats-page-search:focus-within{
+  border-color:var(--accent);
+  box-shadow:0 0 24px var(--accent-glow);
+  transform:translateY(-1px);
+}
+
+.chats-page-search-icon{
+  color:var(--text3);
+  flex-shrink:0;
+}
+
+.chats-page-search:focus-within .chats-page-search-icon{
+  color:var(--accent);
+}
+
+.chats-page-search-input{
+  flex:1;
+  background:transparent;
+  border:none;
+  outline:none;
+  color:var(--text);
+  font-size:14px;
+  font-family:inherit;
+  padding:2px 0;
+}
+
+.chats-page-search-input::placeholder{
+  color:var(--text3);
+}
+
+.chats-page-search-clear{
+  background:var(--bg4);
+  border:none;
+  color:var(--text2);
+  width:24px;
+  height:24px;
+  border-radius:50%;
+  font-size:11px;
+  cursor:pointer;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  flex-shrink:0;
+  transition:all var(--t-fast);
+}
+
+.chats-page-search-clear:hover{
+  background:var(--danger);
+  color:#fff;
+  transform:scale(1.1);
+}
+
+/* Filters */
+.chats-page-filters{
+  display:flex;
+  gap:6px;
+  overflow-x:auto;
+  scrollbar-width:none;
+  -webkit-overflow-scrolling:touch;
+  padding:2px 0;
+}
+
+.chats-page-filters::-webkit-scrollbar{
+  display:none;
+}
+
+.chats-page-filter{
+  display:flex;
+  align-items:center;
+  gap:6px;
+  background:linear-gradient(145deg, var(--bg3), var(--bg2));
+  border:1px solid var(--border);
+  border-radius:22px;
+  padding:8px 14px;
+  font-size:12px;
+  font-weight:700;
+  color:var(--text2);
+  white-space:nowrap;
+  transition:all var(--t-med);
+  cursor:pointer;
+  flex-shrink:0;
+  font-family:inherit;
+}
+
+.chats-page-filter:hover{
+  border-color:var(--accent-bd);
+  color:var(--text);
+  transform:translateY(-1px);
+}
+
+.chats-page-filter.active{
+  background:linear-gradient(135deg, var(--accent), var(--accent-2));
+  color:#0a0600;
+  border-color:transparent;
+  box-shadow:0 4px 16px var(--accent-glow);
+  transform:translateY(-1px);
+}
+
+.chats-page-filter-count{
+  background:rgba(0,0,0,0.2);
+  padding:2px 8px;
+  border-radius:10px;
+  font-size:10px;
+  font-weight:800;
+  direction:ltr;
+  min-width:22px;
+  text-align:center;
+}
+
+.chats-page-filter:not(.active) .chats-page-filter-count{
+  background:var(--bg4);
+  color:var(--accent-2);
+}
+
+/* ═══ Body ═══ */
+.chats-page-body{
+  flex:1;
+  overflow-y:auto;
+  overflow-x:hidden;
+  -webkit-overflow-scrolling:touch;
+  padding:0 12px 16px;
+}
+
+.chats-page-body::-webkit-scrollbar{
+  width:4px;
+}
+
+.chats-page-body::-webkit-scrollbar-thumb{
+  background:var(--border2);
+  border-radius:4px;
+}
+
+/* Conversation cards within the page use same styling as .conv-card */
+.chats-page-body .conv-card{
+  margin-bottom:8px;
+  animation:cardSlideIn 0.4s var(--ease) backwards;
+}
+
+.chats-page-body .conv-card:nth-child(1){ animation-delay:0.05s; }
+.chats-page-body .conv-card:nth-child(2){ animation-delay:0.08s; }
+.chats-page-body .conv-card:nth-child(3){ animation-delay:0.11s; }
+.chats-page-body .conv-card:nth-child(4){ animation-delay:0.14s; }
+.chats-page-body .conv-card:nth-child(5){ animation-delay:0.17s; }
+.chats-page-body .conv-card:nth-child(6){ animation-delay:0.20s; }
+
+@keyframes cardSlideIn{
+  from{
+    opacity:0;
+    transform:translateY(15px);
+  }
+  to{
+    opacity:1;
+    transform:translateY(0);
+  }
+}
+
+/* ═══ Empty State ═══ */
+.chats-page-empty{
+  flex:1;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  text-align:center;
+  padding:40px 24px;
+  gap:16px;
+}
+
+.chats-page-empty-icon{
+  font-size:72px;
+  opacity:0.6;
+  animation:emptyFloat 3s ease-in-out infinite;
+  filter:drop-shadow(0 8px 24px var(--accent-glow));
+}
+
+@keyframes emptyFloat{
+  0%, 100%{ transform:translateY(0) rotate(0deg); }
+  50%{ transform:translateY(-10px) rotate(-5deg); }
+}
+
+.chats-page-empty-title{
+  font-size:20px;
+  font-weight:800;
+  color:var(--text);
+  background:linear-gradient(135deg, var(--text), var(--accent-2));
+  -webkit-background-clip:text;
+  background-clip:text;
+  -webkit-text-fill-color:transparent;
+}
+
+.chats-page-empty-desc{
+  font-size:13px;
+  color:var(--text2);
+  max-width:280px;
+  line-height:1.7;
+}
+
+.chats-page-empty-btn{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  background:linear-gradient(135deg, var(--accent), var(--accent-2));
+  color:#0a0600;
+  border:none;
+  border-radius:14px;
+  padding:14px 28px;
+  font-size:14px;
+  font-weight:800;
+  cursor:pointer;
+  font-family:inherit;
+  box-shadow:0 8px 24px var(--accent-glow);
+  transition:all var(--t-fast);
+  margin-top:12px;
+}
+
+.chats-page-empty-btn:hover{
+  transform:translateY(-2px);
+  box-shadow:0 12px 32px var(--accent-glow);
+}
+
+.chats-page-empty-btn:active{
+  transform:translateY(0) scale(0.97);
+}
+
+/* ═══ Privacy Footer ═══ */
+.chats-page-privacy{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:6px;
+  padding:10px 16px;
+  padding-bottom:calc(10px + env(safe-area-inset-bottom, 0));
+  background:linear-gradient(180deg, transparent, var(--bg2));
+  border-top:1px solid var(--border);
+  font-size:11px;
+  color:var(--text3);
+  flex-shrink:0;
+}
+
+.chats-page-privacy svg{
+  color:var(--accent);
+}
+
+/* ═══ RESPONSIVE ═══ */
+@media (max-width:480px){
+  .chats-page-header{
+    padding:12px 12px;
+    gap:10px;
+  }
+  .chats-page-back,
+  .chats-page-newchat{
+    width:38px;
+    height:38px;
+  }
+  .chats-page-title{
+    font-size:16px;
+  }
+  .chats-page-subtitle{
+    font-size:10px;
+  }
+  .chats-page-controls{
+    padding:12px 12px 6px;
+  }
+  .chats-page-filter{
+    padding:7px 12px;
+    font-size:11px;
+  }
+}
+
+@media (min-width:768px){
+  .chats-page{
+    border-radius:20px 20px 0 0;
+    max-height:calc(100vh - 20px);
+    max-height:calc(100dvh - 20px);
+  }
+  .chats-page-title{
+    font-size:22px;
+  }
+  .chats-page-subtitle{
+    font-size:13px;
+  }
+}
+
 /* Footer */
 .sidebar-footer{
   padding:14px 18px;
@@ -9064,6 +9497,86 @@ html {
         <button class="icon-btn" id="bellBtn" aria-label="تنبيهات">🔔<span class="icon-dot" id="bellDot"></span></button>
       </div>
     </header>
+
+    <!-- ═══════ DEDICATED CHATS PAGE (Full-screen) ═══════ -->
+    <div class="chats-page" id="chatsPage" aria-hidden="true">
+      <!-- Header -->
+      <header class="chats-page-header">
+        <button class="chats-page-back" id="chatsPageBack" aria-label="رجوع">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M9 18l6-6-6-6"/>
+          </svg>
+        </button>
+        <div class="chats-page-title-wrap">
+          <div class="chats-page-title">💬 المحادثات</div>
+          <div class="chats-page-subtitle" id="chatsPageSubtitle">جميع رسائلك الخاصة</div>
+        </div>
+        <button class="chats-page-newchat" id="chatsPageNewChat" aria-label="محادثة جديدة" title="اضف صديق جديد">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 5v14M5 12h14"/>
+          </svg>
+        </button>
+      </header>
+
+      <!-- Search + Filters -->
+      <div class="chats-page-controls">
+        <div class="chats-page-search">
+          <svg class="chats-page-search-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+            <circle cx="11" cy="11" r="8"/>
+            <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+          </svg>
+          <input type="text" class="chats-page-search-input" id="chatsPageSearchInput" placeholder="ابحث في المحادثات...">
+          <button class="chats-page-search-clear" id="chatsPageSearchClear" style="display:none" aria-label="مسح">✕</button>
+        </div>
+        <div class="chats-page-filters" id="chatsPageFilters">
+          <button class="chats-page-filter active" data-filter="all">
+            <span>💬</span>
+            <span>الكل</span>
+            <span class="chats-page-filter-count" id="filterCountAll">0</span>
+          </button>
+          <button class="chats-page-filter" data-filter="unread">
+            <span>🔴</span>
+            <span>غير مقروء</span>
+            <span class="chats-page-filter-count" id="filterCountUnread">0</span>
+          </button>
+          <button class="chats-page-filter" data-filter="pinned">
+            <span>📌</span>
+            <span>مثبتة</span>
+            <span class="chats-page-filter-count" id="filterCountPinned">0</span>
+          </button>
+          <button class="chats-page-filter" data-filter="archived">
+            <span>📦</span>
+            <span>أرشيف</span>
+            <span class="chats-page-filter-count" id="filterCountArchived">0</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Conversations List -->
+      <div class="chats-page-body" id="chatsPageBody">
+        <!-- Conversations will be rendered here -->
+      </div>
+
+      <!-- Empty State -->
+      <div class="chats-page-empty" id="chatsPageEmpty" style="display:none">
+        <div class="chats-page-empty-icon">💬</div>
+        <div class="chats-page-empty-title">ابدأ أول محادثة!</div>
+        <div class="chats-page-empty-desc">أضف أصدقاءك واستمتع بتبادل الرسائل المشفرة</div>
+        <button class="chats-page-empty-btn" id="chatsPageEmptyBtn">
+          <span>👥</span>
+          <span>أضف أصدقاء</span>
+        </button>
+      </div>
+
+      <!-- Privacy Footer -->
+      <div class="chats-page-privacy">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+          <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+        </svg>
+        <span>محادثاتك خاصة ومحمية 🔒</span>
+      </div>
+    </div>
 
     <!-- ═══════ SIDEBAR DRAWER (Slide-in Menu) ═══════ -->
     <div class="sidebar-backdrop" id="sidebarBackdrop"></div>
@@ -18171,18 +18684,19 @@ const Sidebar = (() => {
           }
           break;
 
-        // ═══ Social: Direct to chats ═══
+        // ═══ Social: Direct to dedicated chats page ═══
         case 'social-chats':
-          navigateToTab('social');
-          setTimeout(() => {
-            const chatsTab = document.querySelector('.friends-sub-tab[data-fsub="chats"]');
-            if (chatsTab) chatsTab.click();
-            
-            const convsList = document.getElementById('convsList');
-            if (convsList) {
-              convsList.scrollIntoView({ behavior: 'smooth', block: 'start' });
-            }
-          }, 250);
+          // Open dedicated chats page (full-screen isolated)
+          if (window.ChatsPage?.open) {
+            window.ChatsPage.open();
+          } else {
+            // Fallback
+            navigateToTab('social');
+            setTimeout(() => {
+              const chatsTab = document.querySelector('.friends-sub-tab[data-fsub="chats"]');
+              if (chatsTab) chatsTab.click();
+            }, 250);
+          }
           break;
 
         // ═══ Social: Friends list ═══
@@ -19064,6 +19578,546 @@ const BirthdaySystem = (() => {
 })();
 
 window.BirthdaySystem = BirthdaySystem;
+
+// ═══════════════════════════════════════════════════════
+// DEDICATED CHATS PAGE CONTROLLER
+// ═══════════════════════════════════════════════════════
+const ChatsPage = (() => {
+  let page, body, emptyState, backBtn, newChatBtn;
+  let searchInput, searchClear, subtitle;
+  let filterBtns;
+  let isOpen = false;
+  let currentFilter = 'all';
+  let currentSearch = '';
+
+  function init() {
+    page = document.getElementById('chatsPage');
+    body = document.getElementById('chatsPageBody');
+    emptyState = document.getElementById('chatsPageEmpty');
+    backBtn = document.getElementById('chatsPageBack');
+    newChatBtn = document.getElementById('chatsPageNewChat');
+    searchInput = document.getElementById('chatsPageSearchInput');
+    searchClear = document.getElementById('chatsPageSearchClear');
+    subtitle = document.getElementById('chatsPageSubtitle');
+    filterBtns = document.querySelectorAll('.chats-page-filter');
+
+    if (!page) return;
+
+    // Back button
+    if (backBtn) backBtn.addEventListener('click', close);
+
+    // New chat button
+    if (newChatBtn) {
+      newChatBtn.addEventListener('click', () => {
+        close();
+        setTimeout(() => {
+          if (window.Controllers?.showTab) {
+            window.Controllers.showTab('social');
+            setTimeout(() => {
+              const friendsTab = document.querySelector('.friends-sub-tab[data-fsub="list"]');
+              if (friendsTab) friendsTab.click();
+            }, 200);
+          }
+        }, 300);
+      });
+    }
+
+    // Empty state button
+    const emptyBtn = document.getElementById('chatsPageEmptyBtn');
+    if (emptyBtn) {
+      emptyBtn.addEventListener('click', () => {
+        if (newChatBtn) newChatBtn.click();
+      });
+    }
+
+    // Search
+    if (searchInput) {
+      searchInput.addEventListener('input', (e) => {
+        currentSearch = e.target.value.trim().toLowerCase();
+        if (searchClear) searchClear.style.display = currentSearch ? 'flex' : 'none';
+        render();
+      });
+    }
+
+    if (searchClear) {
+      searchClear.addEventListener('click', () => {
+        currentSearch = '';
+        searchInput.value = '';
+        searchClear.style.display = 'none';
+        searchInput.focus();
+        render();
+      });
+    }
+
+    // Filters
+    filterBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        currentFilter = btn.dataset.filter;
+        filterBtns.forEach(b => b.classList.toggle('active', b === btn));
+        render();
+      });
+    });
+
+    // Escape key
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && isOpen) close();
+    });
+
+    // Listen to conversation changes
+    setInterval(() => {
+      if (isOpen) render();
+    }, 3000);
+  }
+
+  function open() {
+    if (!page) return;
+    
+    page.classList.add('open');
+    page.setAttribute('aria-hidden', 'false');
+    document.body.style.overflow = 'hidden';
+    isOpen = true;
+
+    // Reset state
+    currentSearch = '';
+    currentFilter = 'all';
+    if (searchInput) searchInput.value = '';
+    if (searchClear) searchClear.style.display = 'none';
+    filterBtns.forEach(b => b.classList.toggle('active', b.dataset.filter === 'all'));
+
+    // Render
+    render();
+
+    // Focus search on desktop
+    if (window.matchMedia('(hover: hover)').matches && searchInput) {
+      setTimeout(() => searchInput.focus(), 400);
+    }
+
+    try { if (navigator.vibrate) navigator.vibrate(10); } catch {}
+  }
+
+  function close() {
+    if (!page) return;
+    page.classList.remove('open');
+    page.setAttribute('aria-hidden', 'true');
+    document.body.style.overflow = '';
+    isOpen = false;
+  }
+
+  function toggle() {
+    if (isOpen) close();
+    else open();
+  }
+
+  // ═══ Smart formatters ═══
+  function formatSmartTime(ts) {
+    if (!ts) return '';
+    try {
+      const d = ts.seconds ? new Date(ts.seconds * 1000) : new Date(ts);
+      const now = new Date();
+      const diff = now - d;
+      const diffMin = Math.floor(diff / 60000);
+      const diffHour = Math.floor(diff / 3600000);
+      const diffDay = Math.floor(diff / 86400000);
+      
+      if (diffMin < 1) return 'الآن';
+      if (diffMin < 60) return `${diffMin} د`;
+      if (diffHour < 24 && d.toDateString() === now.toDateString()) {
+        return d.toLocaleTimeString('ar-SA', { hour: '2-digit', minute: '2-digit', hour12: true });
+      }
+      const yesterday = new Date(now);
+      yesterday.setDate(yesterday.getDate() - 1);
+      if (d.toDateString() === yesterday.toDateString()) return 'أمس';
+      if (diffDay < 7) {
+        const days = ['أحد','إثنين','ثلاثاء','أربعاء','خميس','جمعة','سبت'];
+        return days[d.getDay()];
+      }
+      return d.toLocaleDateString('ar-SA', { day: 'numeric', month: 'numeric' });
+    } catch { return ''; }
+  }
+
+  function getMessagePreview(conv, myUid) {
+    const msg = conv.lastMessage || '';
+    const isMine = conv.lastMessageFrom === myUid;
+    const prefix = isMine ? 'أنت: ' : '';
+    
+    if (msg.match(/https?:\/\//i)) return prefix + '🔗 رابط';
+    if (msg.match(/\.(jpg|jpeg|png|gif|webp)/i)) return prefix + '🖼️ صورة';
+    if (msg.match(/\.(mp4|mov|avi)/i)) return prefix + '🎥 فيديو';
+    if (msg.match(/\.(mp3|wav|ogg)/i)) return prefix + '🎵 صوت';
+    if (msg.match(/\.pdf/i)) return prefix + '📄 PDF';
+    
+    return prefix + (msg || 'رسالة');
+  }
+
+  function escapeHTML(s) {
+    return String(s || '').replace(/[&<>"']/g, m => 
+      ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[m]);
+  }
+
+  // ═══ Main render function ═══
+  function render() {
+    if (!body) return;
+
+    const social = window.Social?._state;
+    if (!social) {
+      body.innerHTML = '';
+      showEmpty('يجب تسجيل الدخول أولاً', 'سجّل دخولك لعرض محادثاتك', '🔐');
+      return;
+    }
+
+    const myUid = social.user?.uid;
+    const conversations = social.conversations || [];
+    const friends = social.friends || [];
+
+    // Load preferences
+    const prefs = JSON.parse(localStorage.getItem('convPrefs') || '{}');
+    const pinnedUids = prefs.pinned || [];
+    const mutedUids = prefs.muted || [];
+    const archivedUids = prefs.archived || [];
+
+    // Update counts
+    updateFilterCounts(conversations, pinnedUids, archivedUids);
+
+    // Apply filter
+    let filtered = [...conversations];
+    
+    if (currentFilter === 'unread') {
+      filtered = filtered.filter(c => (c.unread || 0) > 0 && !archivedUids.includes(c.peerUid));
+    } else if (currentFilter === 'pinned') {
+      filtered = filtered.filter(c => pinnedUids.includes(c.peerUid) && !archivedUids.includes(c.peerUid));
+    } else if (currentFilter === 'archived') {
+      filtered = filtered.filter(c => archivedUids.includes(c.peerUid));
+    } else {
+      filtered = filtered.filter(c => !archivedUids.includes(c.peerUid));
+    }
+
+    // Apply search
+    if (currentSearch) {
+      filtered = filtered.filter(c => {
+        const name = (c.peerName || '').toLowerCase();
+        const username = (c.peerUsername || '').toLowerCase();
+        const msg = (c.lastMessage || '').toLowerCase();
+        return name.includes(currentSearch) || username.includes(currentSearch) || msg.includes(currentSearch);
+      });
+    }
+
+    // Sort: pinned first, then by time
+    filtered.sort((a, b) => {
+      const aPinned = pinnedUids.includes(a.peerUid);
+      const bPinned = pinnedUids.includes(b.peerUid);
+      if (aPinned && !bPinned) return -1;
+      if (!aPinned && bPinned) return 1;
+      const aTime = a.lastMessageAt?.seconds || 0;
+      const bTime = b.lastMessageAt?.seconds || 0;
+      return bTime - aTime;
+    });
+
+    // Update subtitle
+    if (subtitle) {
+      const total = conversations.length;
+      const totalUnread = conversations.reduce((s, c) => s + (c.unread || 0), 0);
+      if (currentSearch) {
+        subtitle.textContent = `${filtered.length} نتيجة للبحث`;
+      } else if (currentFilter === 'unread') {
+        subtitle.textContent = totalUnread > 0 ? `${totalUnread} رسالة جديدة` : 'لا رسائل جديدة';
+      } else if (currentFilter === 'pinned') {
+        subtitle.textContent = `${pinnedUids.length} محادثة مثبتة`;
+      } else if (currentFilter === 'archived') {
+        subtitle.textContent = `${archivedUids.length} في الأرشيف`;
+      } else {
+        subtitle.textContent = total > 0 ? `${total} محادثة` : 'جميع رسائلك الخاصة';
+      }
+    }
+
+    // Render
+    body.innerHTML = '';
+    
+    if (!filtered.length) {
+      const emptyMessages = {
+        all: { icon: '💬', title: 'لا محادثات بعد', desc: 'ابدأ التواصل مع أصدقائك' },
+        unread: { icon: '✅', title: 'كل شي مقروء!', desc: 'لا يوجد رسائل جديدة' },
+        pinned: { icon: '📌', title: 'لا محادثات مثبتة', desc: 'اضغط مطولاً على أي محادثة لتثبيتها' },
+        archived: { icon: '📦', title: 'الأرشيف فارغ', desc: 'المحادثات المؤرشفة ستظهر هنا' }
+      };
+      const empty = currentSearch 
+        ? { icon: '🔍', title: 'لا نتائج', desc: `لم نجد محادثات تطابق "${currentSearch}"` }
+        : emptyMessages[currentFilter] || emptyMessages.all;
+      
+      showEmpty(empty.title, empty.desc, empty.icon);
+      return;
+    }
+
+    hideEmpty();
+
+    // Render each conversation
+    filtered.forEach(conv => {
+      const card = createConversationCard(conv, myUid, friends, pinnedUids, mutedUids);
+      body.appendChild(card);
+    });
+  }
+
+  function createConversationCard(conv, myUid, friends, pinnedUids, mutedUids) {
+    const isPinned = pinnedUids.includes(conv.peerUid);
+    const isMuted = mutedUids.includes(conv.peerUid);
+    const hasUnread = (conv.unread || 0) > 0;
+    const isMine = conv.lastMessageFrom === myUid;
+    const initial = (conv.peerName || conv.peerUsername || '?')[0].toUpperCase();
+    
+    const friend = friends.find(f => f.uid === conv.peerUid);
+    const photoData = friend?.photoData || null;
+
+    const card = document.createElement('div');
+    card.className = 'conv-card' + 
+                     (hasUnread ? ' unread' : '') + 
+                     (isPinned ? ' pinned' : '') +
+                     (isMuted ? ' muted' : '');
+    card.dataset.peerUid = conv.peerUid;
+
+    const displayName = escapeHTML(conv.peerName || '@' + (conv.peerUsername || ''));
+    const preview = escapeHTML(getMessagePreview(conv, myUid));
+    const time = formatSmartTime(conv.lastMessageAt);
+
+    card.innerHTML = `
+      <div class="conv-avatar ${photoData ? 'has-img' : ''}">
+        ${photoData ? `<img src="${photoData}" alt="">` : initial}
+      </div>
+      <div class="conv-body">
+        <div class="conv-top-row">
+          <div class="conv-name-wrap">
+            ${isPinned ? '<span class="conv-pin-icon">📌</span>' : ''}
+            <div class="conv-name">${displayName}</div>
+          </div>
+          <div class="conv-time">${time}</div>
+        </div>
+        <div class="conv-bottom-row">
+          <div class="conv-last">
+            ${isMine ? `<span class="conv-read-icon ${(conv.unread || 0) === 0 ? 'seen' : ''}">${(conv.unread || 0) === 0 ? '✓✓' : '✓'}</span>` : ''}
+            <span class="conv-last-text">${preview}</span>
+          </div>
+          <div class="conv-indicators">
+            ${isMuted ? '<span class="conv-muted-icon" title="مكتومة">🔕</span>' : ''}
+            ${hasUnread ? `<div class="conv-badge ${isMuted ? 'muted' : ''}">${conv.unread > 99 ? '99+' : conv.unread}</div>` : ''}
+          </div>
+        </div>
+      </div>
+      <button class="conv-menu-btn" aria-label="خيارات">⋮</button>
+    `;
+
+    // Click to open chat
+    card.addEventListener('click', (e) => {
+      if (e.target.closest('.conv-menu-btn')) return;
+      
+      const social = window.Social;
+      if (!social) return;
+      
+      const friendObj = friends.find(f => f.uid === conv.peerUid) || {
+        uid: conv.peerUid, displayName: conv.peerName, username: conv.peerUsername
+      };
+      
+      if (social.openChat) {
+        social.openChat(friendObj);
+      }
+    });
+
+    // Menu button
+    const menuBtn = card.querySelector('.conv-menu-btn');
+    if (menuBtn) {
+      menuBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        showActionsMenu(conv);
+      });
+    }
+
+    // Long press for mobile
+    let pressTimer = null;
+    card.addEventListener('touchstart', () => {
+      pressTimer = setTimeout(() => {
+        try { if (navigator.vibrate) navigator.vibrate(50); } catch {}
+        showActionsMenu(conv);
+      }, 500);
+    });
+    card.addEventListener('touchend', () => clearTimeout(pressTimer));
+    card.addEventListener('touchmove', () => clearTimeout(pressTimer));
+
+    return card;
+  }
+
+  function showActionsMenu(conv) {
+    // Remove existing
+    const existing = document.getElementById('convActionsMenu');
+    if (existing) existing.remove();
+    const existingBackdrop = document.querySelector('.conv-menu-backdrop');
+    if (existingBackdrop) existingBackdrop.remove();
+
+    const prefs = JSON.parse(localStorage.getItem('convPrefs') || '{}');
+    const isPinned = (prefs.pinned || []).includes(conv.peerUid);
+    const isMuted = (prefs.muted || []).includes(conv.peerUid);
+    const isArchived = (prefs.archived || []).includes(conv.peerUid);
+
+    const backdrop = document.createElement('div');
+    backdrop.className = 'conv-menu-backdrop';
+    document.body.appendChild(backdrop);
+
+    const menu = document.createElement('div');
+    menu.id = 'convActionsMenu';
+    menu.className = 'conv-actions-menu';
+
+    const closeMenu = () => {
+      backdrop.classList.remove('show');
+      menu.classList.remove('show');
+      setTimeout(() => {
+        try { backdrop.remove(); menu.remove(); } catch {}
+      }, 300);
+    };
+
+    backdrop.addEventListener('click', closeMenu);
+
+    menu.innerHTML = `
+      <div class="conv-menu-header">
+        <div class="conv-menu-name">${escapeHTML(conv.peerName || conv.peerUsername || '')}</div>
+        <div class="conv-menu-sub">اختر إجراء</div>
+      </div>
+    `;
+
+    const actions = [
+      {
+        icon: isPinned ? '📍' : '📌',
+        label: isPinned ? 'إلغاء التثبيت' : 'تثبيت للأعلى',
+        color: 'var(--accent)',
+        action: () => togglePref('pinned', conv.peerUid, isPinned ? 'تم إلغاء التثبيت' : 'تم التثبيت')
+      },
+      {
+        icon: isMuted ? '🔔' : '🔕',
+        label: isMuted ? 'تفعيل الإشعارات' : 'كتم الإشعارات',
+        color: 'var(--warn)',
+        action: () => togglePref('muted', conv.peerUid, isMuted ? 'تم تفعيل الإشعارات' : 'تم الكتم')
+      },
+      {
+        icon: isArchived ? '📤' : '📦',
+        label: isArchived ? 'إخراج من الأرشيف' : 'أرشفة',
+        color: 'var(--text2)',
+        action: () => togglePref('archived', conv.peerUid, isArchived ? 'تم الإخراج' : 'تم الأرشفة')
+      }
+    ];
+
+    if ((conv.unread || 0) > 0) {
+      actions.splice(1, 0, {
+        icon: '✓',
+        label: 'تعليم كمقروءة',
+        color: 'var(--green-2)',
+        action: async () => {
+          try {
+            const ref = window.FB.doc(window.FB.db, 'users', window.Social._state.user.uid, 'conversations', conv.peerUid);
+            await window.FB.updateDoc(ref, { unread: 0 });
+            window.Toast?.show('✓ تم التعليم كمقروء', 'ok');
+          } catch {}
+        }
+      });
+    }
+
+    actions.push({
+      icon: '🗑️',
+      label: 'حذف المحادثة',
+      color: 'var(--danger)',
+      action: async () => {
+        if (!confirm(`حذف المحادثة مع ${conv.peerName}؟`)) return;
+        try {
+          const ref = window.FB.doc(window.FB.db, 'users', window.Social._state.user.uid, 'conversations', conv.peerUid);
+          await window.FB.deleteDoc(ref);
+          window.Toast?.show('🗑️ تم الحذف', 'ok');
+        } catch {}
+      }
+    });
+
+    actions.forEach(a => {
+      const btn = document.createElement('button');
+      btn.className = 'conv-menu-action';
+      btn.innerHTML = `
+        <span class="conv-menu-icon" style="color:${a.color}">${a.icon}</span>
+        <span class="conv-menu-label">${a.label}</span>
+      `;
+      btn.onclick = () => {
+        closeMenu();
+        a.action();
+        setTimeout(render, 100);
+      };
+      menu.appendChild(btn);
+    });
+
+    document.body.appendChild(menu);
+    requestAnimationFrame(() => {
+      backdrop.classList.add('show');
+      menu.classList.add('show');
+    });
+  }
+
+  function togglePref(key, uid, successMsg) {
+    const prefs = JSON.parse(localStorage.getItem('convPrefs') || '{}');
+    prefs[key] = prefs[key] || [];
+    const idx = prefs[key].indexOf(uid);
+    if (idx >= 0) {
+      prefs[key].splice(idx, 1);
+      if (key === 'pinned') prefs[key].length && prefs[key].length >= 5;
+    } else {
+      if (key === 'pinned' && prefs[key].length >= 5) {
+        window.Toast?.show('⚠️ الحد الأقصى 5 محادثات مثبتة', 'warn');
+        return;
+      }
+      prefs[key].push(uid);
+    }
+    localStorage.setItem('convPrefs', JSON.stringify(prefs));
+    window.Toast?.show('✅ ' + successMsg, 'ok');
+  }
+
+  function updateFilterCounts(conversations, pinnedUids, archivedUids) {
+    const all = document.getElementById('filterCountAll');
+    const unread = document.getElementById('filterCountUnread');
+    const pinned = document.getElementById('filterCountPinned');
+    const archived = document.getElementById('filterCountArchived');
+
+    const allCount = conversations.filter(c => !archivedUids.includes(c.peerUid)).length;
+    const unreadCount = conversations.reduce((s, c) => s + (c.unread || 0), 0);
+    const pinnedCount = pinnedUids.length;
+    const archivedCount = archivedUids.length;
+
+    if (all) all.textContent = allCount > 99 ? '99+' : allCount;
+    if (unread) unread.textContent = unreadCount > 99 ? '99+' : unreadCount;
+    if (pinned) pinned.textContent = pinnedCount;
+    if (archived) archived.textContent = archivedCount;
+  }
+
+  function showEmpty(title, desc, icon) {
+    if (!emptyState) return;
+    const iconEl = emptyState.querySelector('.chats-page-empty-icon');
+    const titleEl = emptyState.querySelector('.chats-page-empty-title');
+    const descEl = emptyState.querySelector('.chats-page-empty-desc');
+    
+    if (iconEl) iconEl.textContent = icon;
+    if (titleEl) titleEl.textContent = title;
+    if (descEl) descEl.textContent = desc;
+    
+    emptyState.style.display = 'flex';
+    body.style.display = 'none';
+  }
+
+  function hideEmpty() {
+    if (emptyState) emptyState.style.display = 'none';
+    if (body) body.style.display = '';
+  }
+
+  // Initialize
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init);
+  } else {
+    init();
+  }
+
+  return { open, close, toggle, render };
+})();
+
+window.ChatsPage = ChatsPage;
+
+// Override social-chats action to use dedicated page
 
 // Initialize when DOM ready
 if (document.readyState === 'loading') {
