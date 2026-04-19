@@ -108,6 +108,47 @@
 <meta name="msapplication-TileColor" content="#01dd8c">
 <meta name="msapplication-config" content="none">
 
+<!-- ═══ ENHANCED SEO TAGS ═══ -->
+<meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large">
+<meta name="googlebot" content="index, follow">
+<meta name="revisit-after" content="7 days">
+<meta name="rating" content="general">
+<meta name="distribution" content="global">
+<link rel="canonical" href="https://tdbeerksa.com/">
+
+<!-- ═══ STRUCTURED DATA (Schema.org JSON-LD) ═══ -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "تـدّبير",
+  "alternateName": "Tdbeer",
+  "url": "https://tdbeerksa.com",
+  "description": "تطبيق مخطط مالي ذكي باللغة العربية لإدارة الميزانية وحساب الزكاة",
+  "applicationCategory": "FinanceApplication",
+  "operatingSystem": "Web, iOS, Android",
+  "offers": {
+    "@type": "Offer",
+    "price": "0",
+    "priceCurrency": "SAR"
+  },
+  "author": {
+    "@type": "Person",
+    "name": "Saeed Abdullah"
+  },
+  "inLanguage": "ar-SA",
+  "audience": {
+    "@type": "Audience",
+    "geographicArea": "Saudi Arabia"
+  }
+}
+</script>
+
+<!-- ═══ PERFORMANCE: Resource Hints ═══ -->
+<link rel="dns-prefetch" href="//www.googletagmanager.com">
+<link rel="dns-prefetch" href="//firestore.googleapis.com">
+<link rel="dns-prefetch" href="//fonts.gstatic.com">
+
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -18134,50 +18175,32 @@ const Sidebar = (() => {
         case 'social-chats':
           navigateToTab('social');
           setTimeout(() => {
-            // Look for chats sub-tab if exists
-            const chatsTab = document.querySelector('.friends-sub-tab[data-sub="chats"]')
-              || document.querySelector('[data-social-tab="chats"]');
+            const chatsTab = document.querySelector('.friends-sub-tab[data-fsub="chats"]');
             if (chatsTab) chatsTab.click();
             
-            // Scroll to conversations list
             const convsList = document.getElementById('convsList');
             if (convsList) {
               convsList.scrollIntoView({ behavior: 'smooth', block: 'start' });
             }
-          }, 200);
+          }, 250);
           break;
 
         // ═══ Social: Friends list ═══
         case 'social-friends':
           navigateToTab('social');
           setTimeout(() => {
-            const friendsTab = document.querySelector('.friends-sub-tab[data-sub="friends"]')
-              || document.querySelector('[data-social-tab="friends"]');
+            const friendsTab = document.querySelector('.friends-sub-tab[data-fsub="list"]');
             if (friendsTab) friendsTab.click();
-            
-            const friendsList = document.getElementById('friendsList');
-            if (friendsList) {
-              friendsList.scrollIntoView({ behavior: 'smooth', block: 'start' });
-            }
-          }, 200);
+          }, 250);
           break;
 
         // ═══ Social: Friend requests ═══
         case 'social-requests':
           navigateToTab('social');
           setTimeout(() => {
-            const reqTab = document.querySelector('.friends-sub-tab[data-sub="requests"]')
-              || document.querySelector('[data-social-tab="requests"]');
+            const reqTab = document.querySelector('.friends-sub-tab[data-fsub="requests"]');
             if (reqTab) reqTab.click();
-            
-            // Find and scroll to requests card
-            const reqCard = document.getElementById('friendReqIncomingList')
-              || Array.from(document.querySelectorAll('.card-title'))
-                  .find(el => el.textContent.includes('طلبات'))?.closest('.card');
-            if (reqCard) {
-              reqCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
-            }
-          }, 200);
+          }, 250);
           break;
 
         // ═══ Share App ═══
