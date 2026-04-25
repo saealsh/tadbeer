@@ -4333,10 +4333,6 @@ body::before {
 }
 
 /* Enhanced Conversation Card */
-.conv-card{
-  position:relative;
-  overflow:hidden;
-}
 .conv-card.pinned{
   border-color:var(--accent-bd);
   background:linear-gradient(145deg,rgba(1,221,140,0.06),var(--bg2));
@@ -7350,16 +7346,12 @@ html {
 @media (max-width:380px){.msg{max-width:85%;font-size:13px}.friends-sub-tab{font-size:10px;padding:8px 2px}.profile-big-avatar{width:80px;height:80px;font-size:32px}.profile-name{font-size:18px}}
 /* ═══ END CHAT + PROFILE v2.2 ═══ */
 
-/* v2.2 SOCIAL */
-/* ─── CHAT SYSTEM v2.1 ─── */
-.chat-overlay{position:fixed;inset:0;z-index:100000;background:rgba(0,0,0,.6);opacity:0;pointer-events:none;transition:opacity var(--t-med)}
+/* ─── إضافات v2.2 (moved here to avoid duplication) ─── */
 .chat-peer-avatar{width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,var(--accent),var(--accent-2));display:flex;align-items:center;justify-content:center;font-size:17px;font-weight:800;color:#0a0600;flex-shrink:0}
 .chat-peer-info{flex:1;min-width:0}
 .chat-messages{flex:1;overflow-y:auto;overflow-x:hidden;padding:var(--s-4) var(--s-3);display:flex;flex-direction:column;gap:var(--s-2);background:var(--bg);-webkit-overflow-scrolling:touch;overscroll-behavior:contain;position:relative;touch-action:pan-y}
 .msg-check{font-size:10px;line-height:1}
 .chat-send:disabled{background:var(--bg4);color:var(--text3);box-shadow:none;cursor:not-allowed;opacity:.6}
-/* ─── CONVERSATIONS LIST ─── */
-.conv-card{display:flex;align-items:center;gap:12px;padding:12px 14px;background:linear-gradient(145deg, var(--bg3), var(--bg2));border:1px solid var(--border);border-radius:16px;margin-bottom:8px;transition:all var(--t-med);cursor:pointer;position:relative;overflow:hidden;animation:convCardIn .4s var(--ease) both}
 .conv-name{font-size:14px;font-weight:700;color:var(--text);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;flex:1;min-width:0}
 .conv-badge{background:var(--accent);color:#0a0600;font-size:10px;font-weight:800;min-width:20px;height:20px;border-radius:10px;padding:0 6px;display:flex;align-items:center;justify-content:center;flex-shrink:0;direction:ltr}
 /* ─── FRIENDS SUB TABS ─── */
@@ -7368,23 +7360,13 @@ html {
 .friends-sub-tab.active{background:var(--accent-dim);color:var(--accent-2);box-shadow:inset 0 0 0 1px var(--accent-bd)}
 .friends-sub-tab .sub-count{background:var(--bg4);color:var(--text2);font-size:9px;padding:1px 6px;border-radius:10px;min-width:18px;direction:ltr}
 .friends-sub-tab.active .sub-count{background:var(--accent);color:#0a0600}
-/* ─── USER SEARCH ─── */
-.user-search-row{display:flex;gap:6px;margin-bottom:var(--s-3)}
 .user-search-input{flex:1;background:var(--bg4);border:1.5px solid var(--border);border-radius:12px;padding:11px 14px;color:var(--text);font-size:14px;transition:border-color var(--t-fast);-webkit-appearance:none}
 .search-avatar{width:38px;height:38px;border-radius:50%;background:var(--bg5);display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:800;color:var(--accent-2);flex-shrink:0}
 .search-name{flex:1;min-width:0}
 .search-add-btn{padding:7px 14px;border-radius:9px;background:var(--accent-dim);border:1px solid var(--accent-bd);color:var(--accent-2);font-size:12px;font-weight:700;transition:all var(--t-fast);flex-shrink:0}
-/* ─── FRIEND CARD ACTIONS ─── */
-.friend-card-actions{display:flex;gap:6px;align-items:center}
-/* ─── CONTEXT MENU ─── */
-.friend-menu-overlay{position:fixed;inset:0;z-index:100003;display:none}
 .friend-menu-popup{position:absolute;background:var(--bg2);border:1px solid var(--border2);border-radius:14px;box-shadow:var(--shadow-3);padding:6px;min-width:190px;z-index:100004;animation:menuIn .15s var(--ease)}
 .friend-menu-item{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:9px;font-size:13px;font-weight:600;color:var(--text);cursor:pointer;transition:background var(--t-fast);width:100%;text-align:right;background:transparent;border:none}
-/* ─── BLOCKED USERS ─── */
-.blocked-card{display:flex;align-items:center;gap:var(--s-3);padding:var(--s-3);background:var(--bg3);border:1px dashed var(--border2);border-radius:var(--r-md);margin-bottom:6px;opacity:.8}
 @media (max-width:380px){.msg{max-width:85%;font-size:13px}.friends-sub-tab{font-size:10px;padding:8px 2px}}
-/* ─── USER PROFILE MODAL v2.2 ─── */
-.profile-overlay{position:fixed;inset:0;z-index:100002;background:rgba(0,0,0,.75);opacity:0;pointer-events:none;transition:opacity var(--t-med);display:flex;align-items:center;justify-content:center;padding:var(--s-4);padding-top:calc(var(--s-4) + env(safe-area-inset-top,0px));padding-bottom:calc(var(--s-4) + env(safe-area-inset-bottom,0px))}
 .profile-modal{background:var(--bg2);border:1px solid var(--accent-bd);border-radius:24px;width:100%;max-width:420px;max-height:90vh;max-height:90dvh;overflow-y:auto;transform:scale(.92) translateY(20px);transition:transform var(--t-slow) var(--ease);box-shadow:0 24px 64px rgba(0,0,0,.6);-webkit-overflow-scrolling:touch;overscroll-behavior:contain}
 .profile-tier-badge{position:absolute;bottom:-4px;right:50%;transform:translateX(50%);background:var(--bg2);border:1.5px solid var(--accent);color:var(--accent-2);font-size:10px;font-weight:800;padding:3px 10px;border-radius:20px;letter-spacing:.5px;text-transform:uppercase;white-space:nowrap}
 .profile-stat-box{background:var(--bg3);border:1px solid var(--border);border-radius:var(--r-md);padding:var(--s-3) var(--s-2);text-align:center;transition:border-color var(--t-fast)}
@@ -7402,7 +7384,6 @@ html {
   .profile-big-avatar{width:80px;height:80px;font-size:32px}
   .profile-name{font-size:18px}
   .profile-stat-num{font-size:17px}
-}
 /* ═══ AI BOT CARD ═══ */
 .bot-card{
   position:relative;
@@ -9762,7 +9743,90 @@ html {
 @keyframes chartIn {
   from { opacity: 0; transform: scale(.95); }
   to { opacity: 1; transform: scale(1); }
-}</style>
+}
+/* ═══ SKELETON LOADERS ═══ */
+@keyframes shimmer {
+  0%   { background-position: -200% 0; }
+  100% { background-position:  200% 0; }
+}
+.skeleton {
+  background: linear-gradient(90deg,
+    var(--bg3) 25%,
+    var(--bg4) 50%,
+    var(--bg3) 75%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.5s ease-in-out infinite;
+  border-radius: 8px;
+}
+.skeleton-card {
+  background: linear-gradient(145deg, var(--bg3), var(--bg2));
+  border: 1px solid var(--border);
+  border-radius: var(--r-md);
+  padding: var(--s-4);
+  margin-bottom: var(--s-3);
+  overflow: hidden;
+}
+.skeleton-line {
+  height: 14px;
+  margin-bottom: 10px;
+  border-radius: 6px;
+}
+.skeleton-line.short  { width: 40%; }
+.skeleton-line.medium { width: 65%; }
+.skeleton-line.full   { width: 100%; }
+.skeleton-circle {
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+.skeleton-stat {
+  background: linear-gradient(145deg, var(--bg3), var(--bg2));
+  border: 1px solid var(--border);
+  border-radius: var(--r-md);
+  padding: var(--s-3);
+  text-align: center;
+}
+.skeleton-bank {
+  background: linear-gradient(145deg, #0d0d0d, #1a1400);
+  border: 1px solid var(--accent-bd);
+  border-radius: 22px;
+  padding: var(--s-5);
+  margin-bottom: var(--s-3);
+  overflow: hidden;
+}
+/* إخفاء الـ skeleton بعد التحميل */
+.app-loaded .skeleton,
+.app-loaded .skeleton-card,
+.app-loaded .skeleton-bank {
+  display: none !important;
+}
+
+
+/* ═══ OFFLINE BANNER ═══ */
+.offline-banner {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 999999;
+  background: linear-gradient(135deg, #1a0a00, #2d1500);
+  border-bottom: 2px solid var(--warn);
+  padding: 10px 16px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--warn);
+  transform: translateY(-100%);
+  transition: transform 0.3s var(--ease);
+  backdrop-filter: blur(10px);
+}
+.offline-banner.show {
+  transform: translateY(0);
+}
+.offline-banner-icon { font-size: 18px; }
+.offline-banner-text { flex: 1; }
+.offline-banner-sub { font-size: 11px; font-weight: 400; color: var(--text3); }
+</style>
 </head>
 <body>
 <svg xmlns="http://www.w3.org/2000/svg" style="display:none" aria-hidden="true">
@@ -10395,6 +10459,31 @@ html {
 
         <!-- ═══ HOME TAB (new) ═══ -->
         <div class="tab-content" id="tab-home">
+          <!-- Skeleton Loaders (تختفي بعد التحميل) -->
+          <div class="skeleton-bank skeleton">
+            <div style="display:flex;justify-content:space-between;margin-bottom:16px">
+              <div class="skeleton-line" style="width:120px;height:20px"></div>
+              <div class="skeleton-line" style="width:60px;height:20px"></div>
+            </div>
+            <div class="skeleton-line" style="width:180px;height:48px;margin-bottom:20px"></div>
+            <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px">
+              <div class="skeleton-line" style="height:56px;border-radius:12px"></div>
+              <div class="skeleton-line" style="height:56px;border-radius:12px"></div>
+              <div class="skeleton-line" style="height:56px;border-radius:12px"></div>
+            </div>
+          </div>
+          <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:16px">
+            <div class="skeleton-stat skeleton" style="height:90px"></div>
+            <div class="skeleton-stat skeleton" style="height:90px"></div>
+            <div class="skeleton-stat skeleton" style="height:90px"></div>
+          </div>
+          <div class="skeleton-card">
+            <div class="skeleton skeleton-line full"></div>
+            <div class="skeleton skeleton-line medium"></div>
+            <div class="skeleton skeleton-line short"></div>
+          </div>
+          <!-- نهاية Skeleton -->
+
           <div class="home-welcome">
             <div class="home-welcome-greeting" id="homeGreeting">يا هلا بك 👋</div>
             <div class="home-welcome-sub" id="homeGreetingSub">مساعدك المالي الذكي جاهز</div>
@@ -11408,6 +11497,16 @@ html {
   <div class="friend-menu-popup" id="friendMenuPopup"></div>
 </div>
 
+
+
+<!-- Offline Banner -->
+<div class="offline-banner" id="offlineBanner" aria-live="polite" role="status">
+  <span class="offline-banner-icon">📴</span>
+  <div>
+    <div class="offline-banner-text">لا يوجد اتصال بالإنترنت</div>
+    <div class="offline-banner-sub">البيانات المحلية متاحة • سيتم المزامنة عند الاتصال</div>
+  </div>
+</div>
 
 <div class="toast-wrap" id="toastWrap" aria-live="polite"></div>
 
@@ -12883,7 +12982,28 @@ th{background:#f8f8f8}</style>
 <p>الدخل: <b style="color:#10b981">${Fmt.c(t.income)}</b> | المصاريف: <b style="color:#ef4444">${Fmt.c(t.expense)}</b> | التوفير: <b style="color:#a07828">${Fmt.c(t.save)}</b></p>
 <table><thead><tr><th>البند</th><th>الفئة</th><th>النوع</th><th>المبلغ</th></tr></thead><tbody>
 ${items.map(r => `<tr><td>${U.esc(r.name)}</td><td>${U.esc(r.cat)}</td><td>${r.type}</td><td style="color:${r.color};font-weight:700">${Fmt.c(r.amt)}</td></tr>`).join('')}
-</tbody></table></body></html>`);
+</tbody></table>
+// ═══ OFFLINE BANNER CONTROLLER ═══
+(function() {
+  const banner = document.getElementById('offlineBanner');
+  if (!banner) return;
+  
+  function updateBanner() {
+    if (!navigator.onLine) {
+      banner.classList.add('show');
+    } else {
+      banner.classList.remove('show');
+    }
+  }
+  
+  // تحقق فوري
+  updateBanner();
+  
+  window.addEventListener('online', updateBanner);
+  window.addEventListener('offline', updateBanner);
+})();
+
+</body></html>`);
       win.document.close();
       setTimeout(() => win.print(), 500);
       Toast.show('جاري فتح الطباعة 🖨️', 'warn');
@@ -15151,11 +15271,18 @@ const Social = (() => {
         streak: s.current, maxStreak: s.max,
         lastUpdate: window.FB.serverTimestamp()
       });
-      for (const friend of state.friends) {
+      // Batch write بدل loop (يوفر N-1 request)
+      if (state.friends.length > 0) {
         try {
-          const fRef = window.FB.doc(window.FB.db, 'users', friend.uid, 'friends', state.user.uid);
-          await window.FB.updateDoc(fRef, { streak: s.current, maxStreak: s.max });
-        } catch (e) {}
+          const batch = window.FB.writeBatch();
+          for (const friend of state.friends) {
+            const fRef = window.FB.doc(window.FB.db, 'users', friend.uid, 'friends', state.user.uid);
+            batch.update(fRef, { streak: s.current, maxStreak: s.max });
+          }
+          await batch.commit();
+        } catch (e) {
+          Logger.warn('Social.syncStreak.batch', e.message);
+        }
       }
     } catch (e) { Logger.error('Social.syncStreak', e); }
   }, 1500);
@@ -21637,12 +21764,38 @@ window.Sidebar = Sidebar;
   }
 
   function registerSW() {
-    // Unregister any legacy service workers (iOS occasionally caches old versions)
-    if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.getRegistrations().then(regs => {
-        for (const r of regs) r.unregister();
-      }).catch(() => {});
-    }
+    if (!('serviceWorker' in navigator)) return;
+    
+    // سجّل الـ Service Worker الجديد
+    navigator.serviceWorker.register('./sw.js', { scope: './' })
+      .then((reg) => {
+        console.log('[SW] مسجّل بنجاح، scope:', reg.scope);
+        
+        // تحقق من تحديثات
+        reg.addEventListener('updatefound', () => {
+          const newWorker = reg.installing;
+          newWorker?.addEventListener('statechange', () => {
+            if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
+              // نسخة جديدة متاحة
+              if (window.Toast?.show) {
+                window.Toast.show('🔄 تحديث متاح — أعد تحميل الصفحة', 'warn', 6000);
+              }
+            }
+          });
+        });
+      })
+      .catch((err) => {
+        // فشل التسجيل (تطوير محلي أو iOS قديمة) — لا مشكلة
+        console.warn('[SW] فشل التسجيل:', err.message);
+      });
+    
+    // أبلّغ الـ SW لما يعود الاتصال
+    window.addEventListener('online', () => {
+      if (window.Toast?.show) window.Toast.show('✅ عاد الاتصال', 'success');
+    });
+    window.addEventListener('offline', () => {
+      if (window.Toast?.show) window.Toast.show('📴 لا اتصال — وضع أوفلاين', 'warn', 5000);
+    });
   }
 
   function maybeAlertBudget() {
@@ -21674,6 +21827,11 @@ window.Sidebar = Sidebar;
       registerSW();
       maybeAlertBudget();
       store.set('initialized', true);
+      
+      // أخفِ الـ skeleton loaders بعد التحميل
+      setTimeout(() => {
+        document.body.classList.add('app-loaded');
+      }, 800);
 
       // Social init (waits for fb-ready event internally)
       try {
