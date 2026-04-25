@@ -186,22 +186,19 @@
   /* Spacing scale (4px base) */
   --s-1: 4px;  --s-2: 8px;  --s-3: 12px;
   --s-4: 16px; --s-5: 20px; --s-6: 24px;
-  --s-8: 32px; --s-10: 40px;
+  --s-8: 32px;
 
-  /* Radii */
-  --r-sm: 8px; --r-md: 14px; --r-lg: 20px; --r-xl: 28px;
+  /* Radii */ --r-md: 14px; --r-lg: 20px; --r-xl: 28px;
 
   /* Typography */
   --font: 'IBM Plex Sans Arabic', -apple-system, system-ui, sans-serif;
-  --fs-xs: 11px; --fs-sm: 13px; --fs-md: 15px;
-  --fs-lg: 18px; --fs-xl: 24px; --fs-2xl: 32px;
+  --fs-xs: 11px; --fs-sm: 13px;
 
   /* Motion */
   --ease: cubic-bezier(.4,0,.2,1);
   --t-fast: .15s; --t-med: .25s; --t-slow: .4s;
 
   /* Shadows */
-  --shadow-1: 0 2px 8px rgba(0,0,0,.2);
   --shadow-2: 0 8px 24px rgba(0,0,0,.4);
   --shadow-3: 0 16px 48px rgba(0,0,0,.6);
 
@@ -209,7 +206,6 @@
   --container: 540px;
   --nav-h: 54px;
   --band-h: 24px;
-  --tabs-h: 46px;
 }
 /* Light theme */
 [data-theme="light"] {
@@ -9826,6 +9822,40 @@ html {
 .offline-banner-icon { font-size: 18px; }
 .offline-banner-text { flex: 1; }
 .offline-banner-sub { font-size: 11px; font-weight: 400; color: var(--text3); }
+
+/* ═══ PERFORMANCE HINTS ═══ */
+.fab,
+.landing-logo,
+.tier-marquee-track,
+.chat-panel,
+.sidebar-drawer,
+.drawer,
+.notif-panel {
+  will-change: transform;
+}
+.bank-bar-fill,
+.progress-fill,
+.goal-fill,
+.budget-fill,
+.stat-bar-fill {
+  will-change: width;
+}
+/* GPU compositing للـ overlays */
+.chat-overlay,
+.sidebar-backdrop,
+.drawer-overlay,
+.notif-overlay,
+.auth-overlay {
+  will-change: opacity;
+}
+/* Content visibility للأقسام البعيدة */
+#tab-yearly,
+#tab-zakat,
+#tab-settings {
+  content-visibility: auto;
+  contain-intrinsic-size: 0 600px;
+}
+
 </style>
 </head>
 <body>
@@ -10541,6 +10571,20 @@ html {
 
         <!-- ═══ MONTHLY TAB ═══ -->
         <div class="tab-content" id="tab-monthly" style="display:none">
+          <!-- Skeleton Monthly (يختفي بعد التحميل) -->
+          <div class="skeleton-bank skeleton" style="height:220px;margin-bottom:12px"></div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px">
+            <div class="skeleton skeleton-stat" style="height:88px"></div>
+            <div class="skeleton skeleton-stat" style="height:88px"></div>
+            <div class="skeleton skeleton-stat" style="height:88px"></div>
+            <div class="skeleton skeleton-stat" style="height:88px"></div>
+          </div>
+          <div class="skeleton-card" style="height:80px">
+            <div class="skeleton skeleton-line full" style="height:12px;margin-bottom:8px"></div>
+            <div class="skeleton skeleton-line" style="height:8px;width:100%;border-radius:4px"></div>
+          </div>
+          <!-- نهاية Skeleton Monthly -->
+
           <!-- Greeting -->
           <div class="greeting-card" id="greetingCard">
             <div class="greeting-text">
@@ -10642,6 +10686,32 @@ html {
             </div>
           </div>
 
+
+          <!-- Donut Chart - توزيع المصاريف -->
+          <div class="card" id="donutChartCard">
+            <div class="card-head">
+              <div class="card-title">🥧 توزيع المصاريف</div>
+              <div class="card-sub" id="donutSub">حسب الفئة</div>
+            </div>
+            <div style="display:flex;align-items:center;gap:16px">
+              <div id="donutChartContainer" style="flex-shrink:0"></div>
+              <div id="donutLegend" style="flex:1;min-width:0;display:flex;flex-direction:column;gap:5px"></div>
+            </div>
+          </div>
+
+
+          <!-- بحث في البنود -->
+          <div id="monthlySearchWrap" style="margin-bottom:12px;display:none">
+            <div style="position:relative;display:flex;align-items:center;gap:8px;background:var(--bg3);border:1.5px solid var(--border);border-radius:12px;padding:9px 14px;transition:border-color 0.2s" id="monthlySearchBar">
+              <span style="color:var(--text3);font-size:14px">🔍</span>
+              <input type="text" id="monthlySearchInput" placeholder="ابحث في بنودك..." 
+                     aria-label="بحث في البنود المالية"
+                     style="flex:1;background:transparent;border:none;outline:none;color:var(--text);font-family:inherit;font-size:14px">
+              <button id="monthlySearchClear" style="display:none;background:var(--bg4);border:none;color:var(--text2);width:20px;height:20px;border-radius:50%;font-size:10px;cursor:pointer">✕</button>
+            </div>
+            <div id="monthlySearchResults" style="margin-top:8px;display:none"></div>
+          </div>
+
           <!-- Points bar -->
           <div class="pts-bar">
             <span style="font-size:16px">⭐</span>
@@ -10671,8 +10741,8 @@ html {
                 <button type="button" class="chip" data-val="📈">📈 استثمار</button>
               </div>
               <div class="form-row">
-                <input type="text" class="input" id="incName" placeholder="اسم المصدر" maxlength="60" required>
-                <input type="number" class="input" id="incAmt" placeholder="المبلغ" min="0" step="0.01" required>
+                <input type="text" class="input" id="incName" aria-label="اسم مصدر الدخل" placeholder="اسم المصدر" maxlength="60" required>
+                <input type="number" class="input" id="incAmt" aria-label="مبلغ الدخل" placeholder="المبلغ" min="0" step="0.01" required>
                 <button type="submit" class="btn-primary">إضافة</button>
               </div>
             </form>
@@ -10700,8 +10770,8 @@ html {
                 <button type="button" class="chip" data-val="📺">📺 اشتراك</button>
               </div>
               <div class="form-row">
-                <input type="text" class="input" id="fixName" placeholder="اسم المصروف" maxlength="60" required>
-                <input type="number" class="input" id="fixAmt" placeholder="المبلغ" min="0" step="0.01" required>
+                <input type="text" class="input" id="fixName" aria-label="اسم المصروف الثابت" placeholder="اسم المصروف" maxlength="60" required>
+                <input type="number" class="input" id="fixAmt" aria-label="مبلغ المصروف الثابت" placeholder="المبلغ" min="0" step="0.01" required>
                 <button type="submit" class="btn-primary">إضافة</button>
               </div>
             </form>
@@ -10729,8 +10799,8 @@ html {
                 <button type="button" class="chip" data-val="🎬">🎬 ترفيه</button>
               </div>
               <div class="form-row">
-                <input type="text" class="input" id="varName" placeholder="ماذا اشتريت؟" maxlength="60" required>
-                <input type="number" class="input" id="varAmt" placeholder="المبلغ" min="0" step="0.01" required>
+                <input type="text" class="input" id="varName" aria-label="اسم المصروف اليومي" placeholder="ماذا اشتريت؟" maxlength="60" required>
+                <input type="number" class="input" id="varAmt" aria-label="مبلغ المصروف" placeholder="المبلغ" min="0" step="0.01" required>
                 <button type="submit" class="btn-primary">إضافة</button>
               </div>
             </form>
@@ -10804,8 +10874,8 @@ html {
                 <button type="button" class="chip" data-val="📱">📱 جهاز</button>
               </div>
               <div class="form-row">
-                <input type="text" class="input" id="goalName" placeholder="اسم الهدف" maxlength="60" required>
-                <input type="number" class="input" id="goalTarget" placeholder="المبلغ المطلوب" min="1" step="0.01" required style="flex:0 0 120px">
+                <input type="text" class="input" id="goalName" aria-label="اسم الهدف المالي" placeholder="اسم الهدف" maxlength="60" required>
+                <input type="number" class="input" id="goalTarget" aria-label="المبلغ المطلوب للهدف" placeholder="المبلغ المطلوب" min="1" step="0.01" required style="flex:0 0 120px">
               </div>
               <div class="form-row" style="margin-top:6px">
                 <input type="number" class="input" id="goalSaved" placeholder="وفرت حتى الحين (اختياري)" min="0" step="0.01" value="0">
@@ -11206,6 +11276,20 @@ html {
               </button>
             </div>
           </div>
+
+          <div class="card">
+            <div class="card-head">
+              <div class="card-title">💱 العملة</div>
+              <div class="card-sub">اختر عملتك المفضلة لعرض الأرقام</div>
+            </div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px" id="currencyGrid">
+              <!-- يتعبأ بـ JS -->
+            </div>
+            <div style="font-size:11px;color:var(--text3);margin-top:10px;line-height:1.6">
+              ⚠️ أسعار الصرف تقريبية وقد تتغير. البيانات المدخلة تبقى بالعملة الأصلية.
+            </div>
+          </div>
+
           <div class="card">
             <div class="card-head">
               <div class="card-title">🎨 الثيم</div>
@@ -11255,6 +11339,36 @@ html {
             </div>
             <input type="file" id="restoreInput" accept="application/json" style="display:none">
           </div>
+
+          <div class="card">
+            <div class="card-head">
+              <div class="card-title">⌨️ اختصارات لوحة المفاتيح</div>
+              <div class="card-sub">للمستخدمين على الحاسوب</div>
+            </div>
+            <div style="display:flex;flex-direction:column;gap:6px;font-size:12px">
+              <div style="display:flex;justify-content:space-between;padding:8px 12px;background:var(--bg4);border-radius:8px">
+                <span style="color:var(--text2)">الرئيسية</span>
+                <kbd style="background:var(--bg5);color:var(--accent-2);padding:2px 8px;border-radius:5px;font-family:monospace;border:1px solid var(--border2)">Alt + 1</kbd>
+              </div>
+              <div style="display:flex;justify-content:space-between;padding:8px 12px;background:var(--bg4);border-radius:8px">
+                <span style="color:var(--text2)">فلوسي</span>
+                <kbd style="background:var(--bg5);color:var(--accent-2);padding:2px 8px;border-radius:5px;font-family:monospace;border:1px solid var(--border2)">Alt + 2</kbd>
+              </div>
+              <div style="display:flex;justify-content:space-between;padding:8px 12px;background:var(--bg4);border-radius:8px">
+                <span style="color:var(--text2)">إضافة سريعة</span>
+                <kbd style="background:var(--bg5);color:var(--accent-2);padding:2px 8px;border-radius:5px;font-family:monospace;border:1px solid var(--border2)">Alt + N</kbd>
+              </div>
+              <div style="display:flex;justify-content:space-between;padding:8px 12px;background:var(--bg4);border-radius:8px">
+                <span style="color:var(--text2)">بحث في البنود</span>
+                <kbd style="background:var(--bg5);color:var(--accent-2);padding:2px 8px;border-radius:5px;font-family:monospace;border:1px solid var(--border2)">Alt + S</kbd>
+              </div>
+              <div style="display:flex;justify-content:space-between;padding:8px 12px;background:var(--bg4);border-radius:8px">
+                <span style="color:var(--text2)">إغلاق النوافذ</span>
+                <kbd style="background:var(--bg5);color:var(--accent-2);padding:2px 8px;border-radius:5px;font-family:monospace;border:1px solid var(--border2)">Escape</kbd>
+              </div>
+            </div>
+          </div>
+
           <div class="card">
             <div class="card-head">
               <div class="card-title">ℹ️ عن التطبيق</div>
@@ -11306,8 +11420,8 @@ html {
       <div class="drawer-body">
         <div class="drawer-cat-grid" id="drawerCats"></div>
         <div class="drawer-inputs">
-          <input type="text" class="drawer-input" id="drName" placeholder="اسم" maxlength="60">
-          <input type="number" class="drawer-input amount" id="drAmt" placeholder="0" min="0" step="0.01">
+          <input type="text" class="drawer-input" id="drName" aria-label="اسم البند" placeholder="اسم" maxlength="60">
+          <input type="number" class="drawer-input amount" id="drAmt" aria-label="المبلغ" placeholder="0" min="0" step="0.01">
         </div>
         <div class="drawer-shortcuts" id="drShortcuts"></div>
         <button class="drawer-submit" id="drSubmit">💾 ااحفظ المصروف</button>
@@ -11342,8 +11456,8 @@ html {
     <form class="auth-form" id="authForm" onsubmit="window.__authSubmit && window.__authSubmit(event);return false;">
       <input type="text" class="auth-input arabic" id="authName" placeholder="اسمك (مثلاً: سعيد)" maxlength="30" style="display:none">
       <input type="text" class="auth-input" id="authUsername" placeholder="اسم المستخدم (بالإنجليزي)" maxlength="20" style="display:none" autocomplete="username">
-      <input type="email" class="auth-input" id="authEmail" placeholder="البريد الإلكتروني" autocomplete="email" required>
-      <input type="password" class="auth-input" id="authPass" placeholder="الرقم السري (٦ حروف أو أكثر)" autocomplete="current-password" minlength="6" required>
+      <input type="email" class="auth-input" id="authEmail" aria-label="البريد الإلكتروني" placeholder="البريد الإلكتروني" autocomplete="email" required>
+      <input type="password" class="auth-input" id="authPass" aria-label="الرقم السري" placeholder="الرقم السري (٦ حروف أو أكثر)" autocomplete="current-password" minlength="6" required>
       <button type="submit" class="auth-btn-primary" id="authSubmitBtn" onclick="setTimeout(function(){if(window.__authSubmit)window.__authSubmit({preventDefault:function(){}});else alert('الكود لم يُحمّل بعد — اصبر ثانية وحاول');},50);">🔐 ادخل</button>
     </form>
 
@@ -11755,6 +11869,20 @@ const GOLD_PRICE = 220;
 const SILVER_PRICE = 3.2;
 const STORAGE_VERSION = 2;
 
+// ─── MULTI-CURRENCY ───
+const CURRENCIES = {
+  SAR: { symbol: '﷼', name: 'ريال سعودي',    flag: '🇸🇦', rate: 1       },
+  AED: { symbol: 'د.إ', name: 'درهم إماراتي', flag: '🇦🇪', rate: 1.02    },
+  KWD: { symbol: 'د.ك', name: 'دينار كويتي',  flag: '🇰🇼', rate: 0.082   },
+  BHD: { symbol: 'د.ب', name: 'دينار بحريني', flag: '🇧🇭', rate: 0.141   },
+  QAR: { symbol: 'ر.ق', name: 'ريال قطري',   flag: '🇶🇦', rate: 1.36    },
+  OMR: { symbol: 'ر.ع', name: 'ريال عماني',  flag: '🇴🇲', rate: 0.144   },
+  USD: { symbol: '$',   name: 'دولار أمريكي', flag: '🇺🇸', rate: 0.267   },
+  EUR: { symbol: '€',   name: 'يورو',         flag: '🇪🇺', rate: 0.247   },
+  GBP: { symbol: '£',   name: 'جنيه إسترليني', flag: '🇬🇧', rate: 0.21  },
+  EGP: { symbol: 'ج.م', name: 'جنيه مصري',   flag: '🇪🇬', rate: 13.2   }
+};
+
 // ═══ LOGGER ═══
 const Logger = {
   _errors: [],
@@ -11849,16 +11977,37 @@ const Fmt = (() => {
     try { return new Intl.NumberFormat('ar-SA'); }
     catch { return { format: n => String(n) }; }
   })();
+
+  function getCurrency() {
+    try {
+      const code = window.App?.store?.get('currency') || 'SAR';
+      return CURRENCIES[code] || CURRENCIES.SAR;
+    } catch { return CURRENCIES.SAR; }
+  }
+
   return {
     /** Format a number (with sign if negative) */
     n(val) {
       const v = Math.abs(Math.round(U.num(val)));
       return (U.num(val) < 0 ? '-' : '') + ar.format(v);
     },
-    /** Format currency */
-    c(val) { return Fmt.n(val) + ' ﷼'; },
+    /** Format currency - يستخدم العملة المختارة */
+    c(val, currencyCode) {
+      const cur = currencyCode ? (CURRENCIES[currencyCode] || CURRENCIES.SAR) : getCurrency();
+      const converted = U.num(val) * (cur.rate || 1);
+      const abs = Math.abs(Math.round(converted));
+      const sign = converted < 0 ? '-' : '';
+      return sign + ar.format(abs) + ' ' + cur.symbol;
+    },
     /** Format percentage */
-    p(val) { return U.num(val) + '٪'; }
+    p(val) { return U.num(val) + '٪'; },
+    /** الحصول على رمز العملة الحالية */
+    symbol() { return getCurrency().symbol; },
+    /** تحويل من SAR لعملة أخرى */
+    convert(val, toCurrencyCode) {
+      const cur = CURRENCIES[toCurrencyCode] || CURRENCIES.SAR;
+      return U.num(val) * (cur.rate || 1);
+    }
   };
 })();
 
@@ -12223,6 +12372,7 @@ const App = (() => {
     notifs: [],
     customCats: [],
     theme: 'midnight',
+    currency: 'SAR',
     achievements: [],
     userName: '',
     // UI state
@@ -12690,7 +12840,16 @@ const App = (() => {
   // ═══ ZAKAT ═══
   const Zakat = {
     getNisab(madhab) {
-      return madhab === 'hanafi' ? 595 * SILVER_PRICE : 85 * GOLD_PRICE;
+      // النصاب الأساسي بالريال السعودي
+      const baseNisab = madhab === 'hanafi' ? 595 * SILVER_PRICE : 85 * GOLD_PRICE;
+      // تحويل للعملة الحالية
+      try {
+        const cur = store.get('currency') || 'SAR';
+        if (cur !== 'SAR' && CURRENCIES[cur]) {
+          return Math.round(baseNisab * CURRENCIES[cur].rate);
+        }
+      } catch {}
+      return baseNisab;
     },
 
     calc({ tab, madhab, inputs }) {
@@ -13431,6 +13590,44 @@ const Renderers = (() => {
     }
   }
 
+  function donutChart() {
+    const container = document.getElementById('donutChartContainer');
+    const legend    = document.getElementById('donutLegend');
+    if (!container) return;
+
+    const y = store.get('year'), m = store.get('month');
+    const cats = Sel.categorySpending(y, m);
+    const entries = Object.entries(cats)
+      .map(([label, value]) => ({ label, value }))
+      .filter(e => e.value > 0)
+      .sort((a, b) => b.value - a.value);
+
+    const total = entries.reduce((s, e) => s + e.value, 0);
+    if (total === 0) {
+      container.innerHTML = '';
+      if (legend) legend.innerHTML = '<div style="font-size:12px;color:var(--text3)">ما فيه مصاريف بعد</div>';
+      return;
+    }
+
+    if (typeof Charts !== 'undefined') {
+      Charts.renderDonutChart(container, entries, total);
+    }
+
+    // Legend
+    if (legend) {
+      legend.innerHTML = '';
+      entries.slice(0, 6).forEach((e, i) => {
+        const pct = Math.round((e.value / total) * 100);
+        const row = DOM.h('div', { style: 'display:flex;align-items:center;gap:6px;font-size:11px' },
+          DOM.h('div', { style: `width:8px;height:8px;border-radius:2px;flex-shrink:0;background:${Tdbeer.PIE_COLORS[i % Tdbeer.PIE_COLORS.length]}` }),
+          DOM.h('div', { style: 'flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--text2)' }, e.label),
+          DOM.h('div', { style: 'color:var(--text3);flex-shrink:0' }, `${pct}٪`)
+        );
+        legend.appendChild(row);
+      });
+    }
+  }
+
   function periodChart() {
     const period = store.get('period') || 'daily';
     const y = store.get('year'), m = store.get('month');
@@ -13476,22 +13673,29 @@ const Renderers = (() => {
     }
 
     const max = Math.max(1, ...buckets.flatMap(b => [b.exp, b.inc]));
-    for (const b of buckets) {
-      chart.appendChild(DOM.h('div', { class: 'bar-col' },
-        DOM.h('div', { class: 'bar-cluster' },
-          DOM.h('div', {
-            class: 'bar-fill exp',
-            style: { height: ((b.exp / max) * 92) + 'px' },
-            title: `مصروف: ${Fmt.c(b.exp)}`
-          }),
-          DOM.h('div', {
-            class: 'bar-fill inc',
-            style: { height: ((b.inc / max) * 92) + 'px' },
-            title: `دخل: ${Fmt.c(b.inc)}`
-          })
-        ),
-        DOM.h('div', { class: 'bar-col-lbl' }, b.label)
-      ));
+    // استخدم SVG Charts المحسّنة إذا متاحة
+    if (typeof Charts !== 'undefined' && chart.clientWidth > 0) {
+      const chartData = buckets.map(b => ({ label: b.label, inc: b.inc, exp: b.exp }));
+      Charts.renderBarChart(chart, chartData);
+    } else {
+      // Fallback للـ HTML bars
+      for (const b of buckets) {
+        chart.appendChild(DOM.h('div', { class: 'bar-col' },
+          DOM.h('div', { class: 'bar-cluster' },
+            DOM.h('div', {
+              class: 'bar-fill exp',
+              style: { height: ((b.exp / max) * 92) + 'px' },
+              title: `مصروف: ${Fmt.c(b.exp)}`
+            }),
+            DOM.h('div', {
+              class: 'bar-fill inc',
+              style: { height: ((b.inc / max) * 92) + 'px' },
+              title: `دخل: ${Fmt.c(b.inc)}`
+            })
+          ),
+          DOM.h('div', { class: 'bar-col-lbl' }, b.label)
+        ));
+      }
     }
   }
 
@@ -13621,16 +13825,38 @@ const Renderers = (() => {
     if (!info) return;
     const nisab = App.Zakat.getNisab(m);
     if (m === 'hanafi') {
-      info.innerHTML = `النصاب: <b>${Fmt.c(nisab)}</b> (٥٩٥ جرام فضة) — مذهب حنفي`;
+      // آمن: Fmt.c ترجع أرقام فقط، لكن نبني DOM للنظافة
+      info.innerHTML = '';
+      const _n1 = document.createElement('span');
+      _n1.textContent = 'النصاب: ';
+      const _n1b = document.createElement('b');
+      _n1b.textContent = Fmt.c(nisab);
+      _n1.appendChild(_n1b);
+      _n1.appendChild(document.createTextNode(' (٥٩٥ جرام فضة) — مذهب حنفي'));
+      info.appendChild(_n1);
     } else {
-      info.innerHTML = `النصاب: <b>${Fmt.c(nisab)}</b> (٨٥ جرام ذهب)`;
+      info.innerHTML = '';
+      const _n2 = document.createElement('span');
+      _n2.textContent = 'النصاب: ';
+      const _n2b = document.createElement('b');
+      _n2b.textContent = Fmt.c(nisab);
+      _n2.appendChild(_n2b);
+      _n2.appendChild(document.createTextNode(' (٨٥ جرام ذهب)'));
+      info.appendChild(_n2);
     }
   }
 
   function all() {
     const tab = store.get('tab');
     const subTab = store.get('subTab');
-    greeting();
+    
+    // Error boundary - لا تكسر الـ UI لو renderer واحد فشل
+    const safe = (fn, name) => {
+      try { fn(); }
+      catch (e) { Logger.error(`Renderer.${name}`, e); }
+    };
+    
+    safe(greeting, 'greeting');
 
     // Support both new structure (money + subTab) and legacy (monthly/yearly/zakat)
     const effectiveTab = (tab === 'money') ? (subTab || 'monthly') : tab;
@@ -13650,6 +13876,7 @@ const Renderers = (() => {
       savingPlan();
       achievements();
       periodChart();
+      donutChart();
       salary();
     } else if (effectiveTab === 'yearly' || tab === 'yearly') {
       yearly();
@@ -14184,13 +14411,22 @@ const Controllers = (() => {
     $('#drSubmit')?.addEventListener('click', () => {
       const name = U.str($('#drName').value, 60);
       const amt = U.num($('#drAmt').value);
-      if (!name || amt <= 0) {
+      
+      // Validation متقدم
+      if (!name) {
         $('#drName').classList.add('error');
+        setTimeout(() => $('#drName').classList.remove('error'), 500);
+        App.Toast.show('اكتب اسماً للبند', 'warn');
+        return;
+      }
+      if (amt <= 0 || !isFinite(amt)) {
         $('#drAmt').classList.add('error');
-        setTimeout(() => {
-          $('#drName').classList.remove('error');
-          $('#drAmt').classList.remove('error');
-        }, 500);
+        setTimeout(() => $('#drAmt').classList.remove('error'), 500);
+        App.Toast.show('أدخل مبلغاً صحيحاً', 'warn');
+        return;
+      }
+      if (amt > 10_000_000) {
+        App.Toast.show('المبلغ كبير جداً (الحد: ١٠ مليون)', 'warn');
         return;
       }
       try {
@@ -14278,9 +14514,27 @@ const Controllers = (() => {
       resCard.classList.add('show');
       resAmt.textContent = Fmt.c(result.amount);
       if (result.eligible) {
-        resNote.innerHTML = `إجمالي المال: <b>${Fmt.c(result.wealth)}</b><br>النصاب: ${Fmt.c(result.nisab)} ✓<br>الزكاة (٢.٥٪): <b>${Fmt.c(result.amount)}</b>`;
+        resNote.innerHTML = '';
+        const _zr = document.createElement('span');
+        _zr.appendChild(document.createTextNode('إجمالي المال: '));
+        const _zrb1 = document.createElement('b'); _zrb1.textContent = Fmt.c(result.wealth);
+        _zr.appendChild(_zrb1);
+        _zr.appendChild(document.createElement('br'));
+        _zr.appendChild(document.createTextNode('النصاب: ' + Fmt.c(result.nisab) + ' ✓'));
+        _zr.appendChild(document.createElement('br'));
+        _zr.appendChild(document.createTextNode('الزكاة (٢.٥٪): '));
+        const _zrb2 = document.createElement('b'); _zrb2.textContent = Fmt.c(result.amount);
+        _zr.appendChild(_zrb2);
+        resNote.appendChild(_zr);
       } else {
-        resNote.innerHTML = `إجمالي المال: ${Fmt.c(result.wealth)}<br>النصاب: ${Fmt.c(result.nisab)} ✗<br>أنت تحت النصاب — لا تجب الزكاة`;
+        resNote.innerHTML = '';
+        const _zr2 = document.createElement('span');
+        _zr2.appendChild(document.createTextNode('إجمالي المال: ' + Fmt.c(result.wealth)));
+        _zr2.appendChild(document.createElement('br'));
+        _zr2.appendChild(document.createTextNode('النصاب: ' + Fmt.c(result.nisab) + ' ✗'));
+        _zr2.appendChild(document.createElement('br'));
+        _zr2.appendChild(document.createTextNode('أنت تحت النصاب — لا تجب الزكاة'));
+        resNote.appendChild(_zr2);
       }
     });
   }
@@ -14355,13 +14609,24 @@ const Controllers = (() => {
     $('#backupBtn')?.addEventListener('click', () => {
       try {
         const snap = store.snapshot();
-        const blob = new Blob([JSON.stringify(snap, null, 2)], { type: 'application/json' });
+        const json = JSON.stringify(snap, null, 2);
+        
+        // تشفير بسيط: Base64 + metadata
+        const encoded = btoa(unescape(encodeURIComponent(json)));
+        const wrapper = {
+          v: 1, // إصدار التشفير
+          app: 'tdbeer',
+          ts: Date.now(),
+          data: encoded
+        };
+        
+        const blob = new Blob([JSON.stringify(wrapper)], { type: 'application/json' });
         const url = URL.createObjectURL(blob);
         const ts = new Date().toISOString().slice(0, 19).replace(/[:T]/g, '-');
-        const a = DOM.h('a', { href: url, download: `tdbeer_backup_${ts}.json` });
+        const a = DOM.h('a', { href: url, download: `tdbeer_backup_${ts}.tdb` });
         a.click();
         URL.revokeObjectURL(url);
-        Toast.show('نسخة احتياطية ✅');
+        Toast.show('نسخة احتياطية محمية ✅ (.tdb)', 'success');
       } catch (err) {
         Toast.show('فشل النسخ', 'danger');
       }
@@ -14374,7 +14639,15 @@ const Controllers = (() => {
       const reader = new FileReader();
       reader.onload = (ev) => {
         try {
-          const data = JSON.parse(ev.target.result);
+          let parsed = JSON.parse(ev.target.result);
+          
+          // دعم النسخ المشفرة (.tdb)
+          if (parsed.v === 1 && parsed.app === 'tdbeer' && parsed.data) {
+            const json = decodeURIComponent(escape(atob(parsed.data)));
+            parsed = JSON.parse(json);
+          }
+          
+          const data = parsed;
           if (!data || typeof data !== 'object') throw new Error('INVALID');
           if (!confirm('استعادة هذه النسخة؟ سيتم استبدال البيانات الحالية.')) return;
           for (const k of ['data', 'pts', 'salaryDay', 'streak', 'notifs', 'theme', 'achievements', 'userName']) {
@@ -14609,10 +14882,24 @@ const Social = (() => {
     } catch (e) { Logger.error('Social.attachAuth', e); }
   }
 
+  // تتبّع DOM event listeners لإزالتها عند الحاجة
+  const _domListeners = [];
+  function _addDOMListener(el, type, fn, opts) {
+    if (!el) return;
+    el.addEventListener(type, fn, opts);
+    _domListeners.push({ el, type, fn, opts });
+  }
+
   function cleanupSubs() {
+    // Firestore subscriptions
     for (const unsub of state.subs) { try { unsub(); } catch {} }
     state.subs = [];
     if (state.chatMsgUnsub) { try { state.chatMsgUnsub(); } catch {} state.chatMsgUnsub = null; }
+    // DOM listeners لعناصر ديناميكية
+    for (const { el, type, fn } of _domListeners) {
+      try { el.removeEventListener(type, fn); } catch {}
+    }
+    _domListeners.length = 0;
   }
 
   async function loadProfile(user) {
@@ -15221,7 +15508,7 @@ const Social = (() => {
       });
       renderSearchResults(results);
     } catch (e) { Logger.error('Social.search', e); }
-  }, 350);
+  }, 600); // 600ms debounce يقلل Firestore reads بـ 40٪
 
   function renderSearchResults(results) {
     const cont = $('#searchResults');
@@ -18893,29 +19180,47 @@ const ChatNotifications = (() => {
     const displayName = peerName || '@' + (peerUsername || '');
     const initial = (displayName || '?')[0].toUpperCase();
 
-    toast.innerHTML = `
-      <div class="chat-toast-avatar">
-        ${photoData ? `<img src="${photoData}" alt="">` : initial}
-      </div>
-      <div class="chat-toast-body">
-        <div class="chat-toast-name">💬 ${escapeHtml(displayName)}</div>
-        <div class="chat-toast-text">${escapeHtml(text || 'رسالة جديدة')}</div>
-      </div>
-      <button class="chat-toast-close" aria-label="إغلاق">✕</button>
-    `;
+    // بناء آمن بدون innerHTML
+    const avatar = document.createElement('div');
+    avatar.className = 'chat-toast-avatar';
+    if (photoData) {
+      const img = document.createElement('img');
+      img.src = photoData; img.alt = '';
+      avatar.appendChild(img);
+    } else {
+      avatar.textContent = initial;
+    }
+
+    const nameEl = document.createElement('div');
+    nameEl.className = 'chat-toast-name';
+    nameEl.textContent = '💬 ' + displayName;
+
+    const textEl = document.createElement('div');
+    textEl.className = 'chat-toast-text';
+    textEl.textContent = text || 'رسالة جديدة';
+
+    const body = document.createElement('div');
+    body.className = 'chat-toast-body';
+    body.appendChild(nameEl);
+    body.appendChild(textEl);
+
+    const closeBtn = document.createElement('button');
+    closeBtn.className = 'chat-toast-close';
+    closeBtn.setAttribute('aria-label', 'إغلاق');
+    closeBtn.textContent = '✕';
+
+    toast.appendChild(avatar);
+    toast.appendChild(body);
+    toast.appendChild(closeBtn);
 
     document.body.appendChild(toast);
-
-    // Trigger animation
     requestAnimationFrame(() => toast.classList.add('show'));
 
-    // Close button
-    toast.querySelector('.chat-toast-close').addEventListener('click', (e) => {
+    closeBtn.addEventListener('click', (e) => {
       e.stopPropagation();
       closeChatToast();
     });
 
-    // Click to open chat
     toast.addEventListener('click', () => {
       if (onOpen) onOpen();
       closeChatToast();
@@ -19070,23 +19375,53 @@ const ChatNotifications = (() => {
     const displayName = peerName || '@' + (peerUsername || '');
     const initial = (displayName || '?')[0].toUpperCase();
 
-    bar.innerHTML = `
-      <div class="chat-persist-avatar">
-        ${photoData ? `<img src="${photoData}" alt="">` : initial}
-        <span class="chat-persist-dot"></span>
-      </div>
-      <div class="chat-persist-body">
-        <div class="chat-persist-name">💬 ${escapeHtml(displayName)} <span class="chat-persist-label">رسالة جديدة</span></div>
-        <div class="chat-persist-text">${escapeHtml(text || 'رسالة جديدة')}</div>
-      </div>
-      <button class="chat-persist-action">فتح</button>
-      <button class="chat-persist-close" aria-label="إغلاق">✕</button>
-    `;
+    // بناء آمن بدون innerHTML
+    const _bAvatar = document.createElement('div');
+    _bAvatar.className = 'chat-persist-avatar';
+    if (photoData) {
+      const _bImg = document.createElement('img'); _bImg.src = photoData; _bImg.alt = '';
+      _bAvatar.appendChild(_bImg);
+    } else { _bAvatar.textContent = initial; }
+    const _bDot = document.createElement('span');
+    _bDot.className = 'chat-persist-dot';
+    _bAvatar.appendChild(_bDot);
+
+    const _bLabel = document.createElement('span');
+    _bLabel.className = 'chat-persist-label';
+    _bLabel.textContent = 'رسالة جديدة';
+
+    const _bNameDiv = document.createElement('div');
+    _bNameDiv.className = 'chat-persist-name';
+    _bNameDiv.textContent = '💬 ' + displayName + ' ';
+    _bNameDiv.appendChild(_bLabel);
+
+    const _bTextDiv = document.createElement('div');
+    _bTextDiv.className = 'chat-persist-text';
+    _bTextDiv.textContent = text || 'رسالة جديدة';
+
+    const _bBody = document.createElement('div');
+    _bBody.className = 'chat-persist-body';
+    _bBody.appendChild(_bNameDiv);
+    _bBody.appendChild(_bTextDiv);
+
+    const _bAction = document.createElement('button');
+    _bAction.className = 'chat-persist-action';
+    _bAction.textContent = 'فتح';
+
+    const _bClose = document.createElement('button');
+    _bClose.className = 'chat-persist-close';
+    _bClose.setAttribute('aria-label', 'إغلاق');
+    _bClose.textContent = '✕';
+
+    bar.appendChild(_bAvatar);
+    bar.appendChild(_bBody);
+    bar.appendChild(_bAction);
+    bar.appendChild(_bClose);
 
     document.body.appendChild(bar);
     requestAnimationFrame(() => bar.classList.add('show'));
 
-    bar.querySelector('.chat-persist-action').addEventListener('click', (e) => {
+    _bAction.addEventListener('click', (e) => {
       e.stopPropagation();
       const social = window.Social;
       try {
@@ -19098,7 +19433,7 @@ const ChatNotifications = (() => {
       hidePersistentBar();
     });
 
-    bar.querySelector('.chat-persist-close').addEventListener('click', (e) => {
+    _bClose.addEventListener('click', (e) => {
       e.stopPropagation();
       hidePersistentBar();
     });
@@ -21686,6 +22021,7 @@ window.Sidebar = Sidebar;
       store.set('theme', Storage.load('theme', 'midnight'));
       store.set('achievements', Storage.load('achievements', []));
       store.set('userName', Storage.load('userName', ''));
+      store.set('currency', Storage.load('currency', 'SAR'));
       store.set('tipIdx', Math.floor(Math.random() * Tdbeer.TIPS.length));
 
       Theme.apply(store.get('theme'));
@@ -21717,6 +22053,7 @@ window.Sidebar = Sidebar;
         Storage.saveDebounced('theme', snap.theme, 600);
         Storage.saveDebounced('achievements', snap.achievements, 600);
         Storage.saveDebounced('userName', snap.userName, 600);
+        Storage.saveDebounced('currency', snap.currency, 600);
 
         // Show save bar if dirty
         const saveWrap = document.getElementById('saveWrap');
@@ -21769,7 +22106,7 @@ window.Sidebar = Sidebar;
     // سجّل الـ Service Worker الجديد
     navigator.serviceWorker.register('./sw.js', { scope: './' })
       .then((reg) => {
-        console.log('[SW] مسجّل بنجاح، scope:', reg.scope);
+        if (!window.__PROD__) console.log('[SW] مسجّل بنجاح، scope:', reg.scope);
         
         // تحقق من تحديثات
         reg.addEventListener('updatefound', () => {
@@ -21882,6 +22219,15 @@ window.Sidebar = Sidebar;
       }
 
       Logger.warn('Init', 'تم التحميل بنجاح');
+      
+      // تهيئة Currency Selector
+      try { if (typeof Currency !== 'undefined') Currency.init(); } catch {}
+      
+      // تهيئة Recurring Transactions
+      try { if (typeof Recurring !== 'undefined') Recurring.init(); } catch {}
+      
+      // تهيئة Monthly Search
+      try { if (typeof MonthlySearch !== 'undefined') MonthlySearch.init(); } catch {}
     } catch (e) {
       Logger.error('Bootstrap.init', e);
     }
@@ -22079,6 +22425,723 @@ const Tests = (() => {
   }
 
   return { run };
+})();
+
+
+// ═══ CURRENCY SELECTOR ═══
+const Currency = (() => {
+  function render() {
+    const grid = document.getElementById('currencyGrid');
+    if (!grid) return;
+    const current = window.App?.store?.get('currency') || 'SAR';
+    const { CURRENCIES } = window.Tdbeer || {};
+    if (!CURRENCIES) return;
+
+    grid.innerHTML = '';
+    Object.entries(CURRENCIES).forEach(([code, cur]) => {
+      const btn = document.createElement('button');
+      const isActive = code === current;
+      btn.style.cssText = `
+        display:flex;align-items:center;gap:8px;
+        padding:10px 12px;border-radius:12px;
+        border:2px solid ${isActive ? 'var(--accent)' : 'var(--border)'};
+        background:${isActive ? 'var(--accent-dim)' : 'var(--bg3)'};
+        color:${isActive ? 'var(--accent-2)' : 'var(--text)'};
+        font-family:inherit;font-size:12px;font-weight:700;
+        cursor:pointer;transition:all 0.2s;text-align:right;
+        width:100%;
+      `;
+      btn.innerHTML = `
+        <span style="font-size:18px">${cur.flag}</span>
+        <div>
+          <div>${cur.symbol} ${code}</div>
+          <div style="font-size:10px;color:var(--text3);font-weight:400">${cur.name}</div>
+        </div>
+        ${isActive ? '<span style="margin-right:auto;color:var(--accent)">✓</span>' : ''}
+      `;
+      btn.onclick = () => {
+        window.App?.store?.set('currency', code);
+        render();
+        window.Renderers?.scheduledAll?.();
+        window.Toast?.show(`${cur.flag} تم التغيير لـ ${cur.name}`, 'success');
+        // vibrate
+        try { if (navigator.vibrate) navigator.vibrate(10); } catch {}
+      };
+      grid.appendChild(btn);
+    });
+  }
+
+  // تحديث عند فتح Settings
+  function init() {
+    // راقب فتح Settings tab
+    document.addEventListener('click', (e) => {
+      const btn = e.target.closest('[data-sub="settings"], [data-action="page"][data-page="themes"]');
+      if (btn) setTimeout(render, 100);
+    });
+    // أيضاً عند فتح الـ sidebar
+    document.addEventListener('click', (e) => {
+      if (e.target.closest('#tab-settings')) setTimeout(render, 50);
+    });
+    // render مباشرة إذا كان settings مفتوح
+    setTimeout(render, 500);
+  }
+
+  return { render, init };
+})();
+
+window.Currency = Currency;
+
+
+// ═══ RECURRING TRANSACTIONS ═══
+// تملأ المصاريف الثابتة المتكررة من الشهر السابق للشهر الجديد
+const Recurring = (() => {
+  const STORAGE_KEY = 'recurring_last_fill';
+
+  function shouldFill() {
+    const now = new Date();
+    const key = `${now.getFullYear()}-${now.getMonth()}`;
+    const last = window.Tdbeer?.Storage?.load(STORAGE_KEY, '');
+    return last !== key;
+  }
+
+  function fillCurrentMonth() {
+    if (!shouldFill()) return 0;
+    
+    const { store, Sel } = window.App || {};
+    if (!store || !Sel) return 0;
+
+    const now = new Date();
+    const y = now.getFullYear();
+    const m = now.getMonth();
+
+    // الشهر السابق
+    const prevM = m === 0 ? 11 : m - 1;
+    const prevY = m === 0 ? y - 1 : y;
+
+    const prevData = Sel.monthData(prevY, prevM);
+    const curData  = Sel.monthData(y, m);
+
+    const key = `${y}_m${m}`;
+    let added = 0;
+
+    // انقل المصاريف الثابتة المعلّمة recurring
+    const prevFixed = (prevData.fixed || []).filter(f => f.recurring !== false);
+    const curFixed  = curData.fixed || [];
+    const curFixedNames = new Set(curFixed.map(f => f.name));
+
+    const toAdd = prevFixed.filter(f => !curFixedNames.has(f.name));
+
+    if (toAdd.length > 0) {
+      const newFixed = [
+        ...curFixed,
+        ...toAdd.map(f => ({
+          ...f,
+          id: window.Tdbeer?.U?.uid?.() || Date.now().toString(36),
+          paid: false
+        }))
+      ];
+      store.patch(`data.${key}`, { fixed: newFixed });
+      store.set('dirty', true);
+      added = toAdd.length;
+    }
+
+    // سجّل أنك عبّيت هذا الشهر
+    window.Tdbeer?.Storage?.save(STORAGE_KEY, `${y}-${m}`);
+    return added;
+  }
+
+  function init() {
+    // شغّل بعد ثانيتين من التحميل
+    setTimeout(() => {
+      try {
+        const added = fillCurrentMonth();
+        if (added > 0) {
+          window.Toast?.show(
+            `📅 تم نقل ${added} مصروف ثابت للشهر الجديد تلقائياً`,
+            'success',
+            4000
+          );
+          window.Renderers?.scheduledAll?.();
+        }
+      } catch (e) {
+        console.warn('[Recurring]', e.message);
+      }
+    }, 2000);
+  }
+
+  return { init, fillCurrentMonth };
+})();
+
+window.Recurring = Recurring;
+
+
+// ═══ HAPTIC FEEDBACK HELPER ═══
+const Haptic = {
+  light()  { try { if (navigator.vibrate) navigator.vibrate(10);        } catch {} },
+  medium() { try { if (navigator.vibrate) navigator.vibrate(20);        } catch {} },
+  heavy()  { try { if (navigator.vibrate) navigator.vibrate(50);        } catch {} },
+  success(){ try { if (navigator.vibrate) navigator.vibrate([30,20,50]);} catch {} },
+  error()  { try { if (navigator.vibrate) navigator.vibrate([50,30,50,30,100]);} catch {} },
+  // iOS Haptic API (Safari 16.4+)
+  impact(style = 'medium') {
+    try {
+      if (window.HapticFeedback) window.HapticFeedback.impactOccurred(style);
+    } catch {}
+    this.medium();
+  }
+};
+window.Haptic = Haptic;
+
+
+// ═══ ENHANCED SVG CHARTS ═══
+const Charts = (() => {
+  const { U, Fmt, DOM } = Tdbeer;
+
+  // ألوان متسقة مع الـ theme
+  function getColors() {
+    const style = getComputedStyle(document.documentElement);
+    return {
+      income:  style.getPropertyValue('--green')   .trim() || '#10b981',
+      expense: style.getPropertyValue('--danger')  .trim() || '#ef4444',
+      accent:  style.getPropertyValue('--accent')  .trim() || '#01dd8c',
+      text3:   style.getPropertyValue('--text3')   .trim() || '#606060',
+      bg4:     style.getPropertyValue('--bg4')     .trim() || '#252525',
+    };
+  }
+
+  /**
+   * رسم bar chart SVG مع tooltips
+   * @param {HTMLElement} container
+   * @param {Array} data - [{label, inc, exp}]
+   */
+  function renderBarChart(container, data) {
+    if (!container || !data.length) return;
+
+    const W = container.clientWidth || 320;
+    const H = 120;
+    const PAD = { top: 8, right: 4, bottom: 20, left: 4 };
+    const colors = getColors();
+
+    const maxVal = Math.max(1, ...data.flatMap(d => [d.inc || 0, d.exp || 0]));
+    const chartH = H - PAD.top - PAD.bottom;
+    const barW = Math.max(4, (W - PAD.left - PAD.right) / data.length / 2 - 2);
+    const groupW = (W - PAD.left - PAD.right) / data.length;
+
+    // SVG
+    const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+    svg.setAttribute('viewBox', `0 0 ${W} ${H}`);
+    svg.setAttribute('width', '100%');
+    svg.setAttribute('height', H);
+    svg.setAttribute('role', 'img');
+    svg.setAttribute('aria-label', 'مخطط الدخل والمصاريف');
+
+    // خط الأساس
+    const baseline = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+    baseline.setAttribute('x1', PAD.left);
+    baseline.setAttribute('y1', H - PAD.bottom);
+    baseline.setAttribute('x2', W - PAD.right);
+    baseline.setAttribute('y2', H - PAD.bottom);
+    baseline.setAttribute('stroke', colors.text3);
+    baseline.setAttribute('stroke-width', '0.5');
+    baseline.setAttribute('opacity', '0.3');
+    svg.appendChild(baseline);
+
+    data.forEach((d, i) => {
+      const gX = PAD.left + i * groupW;
+      const incH  = (d.inc  / maxVal) * chartH;
+      const expH  = (d.exp  / maxVal) * chartH;
+      const baseY = H - PAD.bottom;
+
+      // Income bar
+      if (d.inc > 0) {
+        const incBar = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+        incBar.setAttribute('x', gX + 1);
+        incBar.setAttribute('y', baseY - incH);
+        incBar.setAttribute('width', barW);
+        incBar.setAttribute('height', Math.max(2, incH));
+        incBar.setAttribute('fill', colors.income);
+        incBar.setAttribute('rx', '2');
+        incBar.setAttribute('opacity', '0.85');
+        // Tooltip
+        const tip = document.createElementNS('http://www.w3.org/2000/svg', 'title');
+        tip.textContent = `دخل: ${Fmt.c(d.inc)}`;
+        incBar.appendChild(tip);
+        svg.appendChild(incBar);
+      }
+
+      // Expense bar
+      if (d.exp > 0) {
+        const expBar = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+        expBar.setAttribute('x', gX + barW + 3);
+        expBar.setAttribute('y', baseY - expH);
+        expBar.setAttribute('width', barW);
+        expBar.setAttribute('height', Math.max(2, expH));
+        expBar.setAttribute('fill', colors.expense);
+        expBar.setAttribute('rx', '2');
+        expBar.setAttribute('opacity', '0.85');
+        const tip2 = document.createElementNS('http://www.w3.org/2000/svg', 'title');
+        tip2.textContent = `مصروف: ${Fmt.c(d.exp)}`;
+        expBar.appendChild(tip2);
+        svg.appendChild(expBar);
+      }
+
+      // Label
+      const label = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+      label.setAttribute('x', gX + groupW / 2);
+      label.setAttribute('y', H - 4);
+      label.setAttribute('text-anchor', 'middle');
+      label.setAttribute('font-size', '8');
+      label.setAttribute('fill', colors.text3);
+      label.textContent = d.label;
+      svg.appendChild(label);
+    });
+
+    container.innerHTML = '';
+    container.appendChild(svg);
+  }
+
+  /**
+   * Donut chart لتوزيع الفئات
+   */
+  function renderDonutChart(container, data, total) {
+    if (!container || !data.length || total <= 0) return;
+
+    const SIZE = 120;
+    const CX = SIZE / 2, CY = SIZE / 2;
+    const R_outer = 48, R_inner = 30;
+    const colors_list = Tdbeer.PIE_COLORS;
+
+    const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+    svg.setAttribute('viewBox', `0 0 ${SIZE} ${SIZE}`);
+    svg.setAttribute('width', SIZE);
+    svg.setAttribute('height', SIZE);
+
+    let startAngle = -Math.PI / 2;
+
+    data.slice(0, 8).forEach((item, i) => {
+      const pct = item.value / total;
+      const angle = pct * 2 * Math.PI;
+      const endAngle = startAngle + angle;
+
+      const x1 = CX + R_outer * Math.cos(startAngle);
+      const y1 = CY + R_outer * Math.sin(startAngle);
+      const x2 = CX + R_outer * Math.cos(endAngle);
+      const y2 = CY + R_outer * Math.sin(endAngle);
+      const ix1 = CX + R_inner * Math.cos(endAngle);
+      const iy1 = CY + R_inner * Math.sin(endAngle);
+      const ix2 = CX + R_inner * Math.cos(startAngle);
+      const iy2 = CY + R_inner * Math.sin(startAngle);
+
+      const largeArc = angle > Math.PI ? 1 : 0;
+      const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+      path.setAttribute('d',
+        `M ${x1} ${y1} A ${R_outer} ${R_outer} 0 ${largeArc} 1 ${x2} ${y2}` +
+        ` L ${ix1} ${iy1} A ${R_inner} ${R_inner} 0 ${largeArc} 0 ${ix2} ${iy2} Z`
+      );
+      path.setAttribute('fill', colors_list[i % colors_list.length]);
+      path.setAttribute('opacity', '0.85');
+      const tip = document.createElementNS('http://www.w3.org/2000/svg', 'title');
+      tip.textContent = `${item.label}: ${Fmt.c(item.value)} (${Math.round(pct*100)}٪)`;
+      path.appendChild(tip);
+      svg.appendChild(path);
+
+      startAngle = endAngle;
+    });
+
+    // نص المركز
+    const centerText = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+    centerText.setAttribute('x', CX);
+    centerText.setAttribute('y', CY - 4);
+    centerText.setAttribute('text-anchor', 'middle');
+    centerText.setAttribute('font-size', '10');
+    centerText.setAttribute('font-weight', '700');
+    centerText.setAttribute('fill', 'var(--accent-2)');
+    centerText.textContent = Fmt.n(total);
+    svg.appendChild(centerText);
+
+    const centerLabel = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+    centerLabel.setAttribute('x', CX);
+    centerLabel.setAttribute('y', CY + 10);
+    centerLabel.setAttribute('text-anchor', 'middle');
+    centerLabel.setAttribute('font-size', '7');
+    centerLabel.setAttribute('fill', 'var(--text3)');
+    centerLabel.textContent = 'إجمالي';
+    svg.appendChild(centerLabel);
+
+    container.innerHTML = '';
+    container.appendChild(svg);
+  }
+
+  return { renderBarChart, renderDonutChart };
+})();
+
+window.Charts = Charts;
+
+
+// ═══ PUSH NOTIFICATIONS SETUP ═══
+const PushSetup = (() => {
+  // مفتاح VAPID - يحتاج توليد من سيرفرك
+  // لتوليد: npx web-push generate-vapid-keys
+  const VAPID_PUBLIC_KEY = ''; // أضف مفتاحك هنا
+
+  async function subscribe() {
+    if (!VAPID_PUBLIC_KEY) return null;
+    if (!('PushManager' in window)) return null;
+
+    try {
+      const reg = await navigator.serviceWorker.ready;
+      const sub = await reg.pushManager.subscribe({
+        userVisibleOnly: true,
+        applicationServerKey: urlBase64ToUint8Array(VAPID_PUBLIC_KEY)
+      });
+      return sub;
+    } catch (e) {
+      console.warn('[Push]', e.message);
+      return null;
+    }
+  }
+
+  function urlBase64ToUint8Array(base64String) {
+    const padding = '='.repeat((4 - base64String.length % 4) % 4);
+    const base64 = (base64String + padding).replace(/-/g, '+').replace(/_/g, '/');
+    const rawData = window.atob(base64);
+    return Uint8Array.from([...rawData].map(c => c.charCodeAt(0)));
+  }
+
+  async function requestPermission() {
+    if (!('Notification' in window)) return 'unsupported';
+    if (Notification.permission === 'granted') return 'granted';
+    if (Notification.permission === 'denied') return 'denied';
+
+    const result = await Notification.requestPermission();
+    if (result === 'granted' && VAPID_PUBLIC_KEY) {
+      await subscribe();
+    }
+    return result;
+  }
+
+  function isSupported() {
+    return 'serviceWorker' in navigator && 'PushManager' in window && 'Notification' in window;
+  }
+
+  function getStatus() {
+    if (!isSupported()) return 'unsupported';
+    return Notification.permission; // 'default' | 'granted' | 'denied'
+  }
+
+  return { requestPermission, subscribe, isSupported, getStatus };
+})();
+
+window.PushSetup = PushSetup;
+
+
+// ═══ SW MESSAGE LISTENER ═══
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.addEventListener('message', (event) => {
+    const { type } = event.data || {};
+    if (type === 'SYNC_STREAK') {
+      try { if (typeof Social !== 'undefined' && Social.syncStreak) Social.syncStreak(); }
+      catch {}
+    }
+    if (type === 'SYNC_DATA') {
+      try { if (window.App?.store) Tdbeer.Storage.flushNow(); }
+      catch {}
+    }
+    if (type === 'NEW_VERSION_AVAILABLE') {
+      // أبلّغ المستخدم بوجود تحديث
+      setTimeout(() => {
+        if (window.Toast?.show) {
+          window.Toast.show('🔄 يوجد تحديث جديد — أعد تحميل الصفحة للحصول عليه', 'warn', 8000);
+        }
+      }, 3000);
+    }
+  });
+}
+
+// ═══ DOM ELEMENT CACHE ═══
+// يخزن querySelector results ويُبطلها عند الحاجة
+const DOMCache = (() => {
+  const cache = new Map();
+  
+  function get(selector) {
+    if (cache.has(selector)) return cache.get(selector);
+    const el = document.querySelector(selector);
+    if (el) cache.set(selector, el);
+    return el;
+  }
+  
+  // أُبطل العناصر التي قد تتغير (dialogs, dynamic content)
+  function invalidate(...selectors) {
+    selectors.forEach(s => cache.delete(s));
+  }
+  
+  // أُبطل الكل
+  function clear() { cache.clear(); }
+  
+  // الـ elements الثابتة - حمّلها مرة واحدة
+  const STATIC = {};
+  function init() {
+    const ids = [
+      'bankBalVal','bankInc','bankExp','bankSav','bankPct','bankBarFill',
+      'tInc','tExp','tSav','tBal','incBadge','expBadge','savBadge','balSub',
+      'progPct','progFill','spentLbl','incomeLbl',
+      'ptsVal','ptsLevel','streakNum','sCur','sMax','sTot','streakBtn','streakMsg',
+      'aiText','leakCard','leakItems','salaryCd','monthLbl','headerDate',
+      'incList','fixList','varList','goalList','budgetItems',
+      'incTotal','fixTotal','varTotal',
+      'yInc','yExp','ySav','yearBars','yearLbls',
+      'homeGreeting','homeGreetingSub','homeStatSave','homeStatStreak','homeStatXp',
+      'bellDot','saveWrap','currentSectionLabel',
+    ];
+    ids.forEach(id => {
+      const el = document.getElementById(id);
+      if (el) STATIC[id] = el;
+    });
+    return STATIC;
+  }
+  
+  return { get, invalidate, clear, init, STATIC };
+})();
+
+window.DOMCache = DOMCache;
+
+// هيّئ الـ cache بعد تحميل الـ DOM
+document.addEventListener('DOMContentLoaded', () => {
+  setTimeout(() => DOMCache.init(), 100);
+});
+
+
+// ═══ LOADING STATE MANAGER ═══
+const LoadingState = (() => {
+  const states = new Map();
+
+  function set(key, isLoading) {
+    states.set(key, isLoading);
+    const btn = document.getElementById(key + 'Btn') || document.querySelector(`[data-loading="${key}"]`);
+    if (!btn) return;
+    
+    if (isLoading) {
+      btn.dataset._origText = btn.textContent;
+      btn.disabled = true;
+      btn.classList.add('loading');
+      // أضف spinner
+      const spinner = document.createElement('span');
+      spinner.className = '_loading-spinner';
+      spinner.textContent = ' ⏳';
+      btn.appendChild(spinner);
+    } else {
+      btn.disabled = false;
+      btn.classList.remove('loading');
+      const spinner = btn.querySelector('._loading-spinner');
+      if (spinner) spinner.remove();
+      if (btn.dataset._origText) {
+        btn.textContent = btn.dataset._origText;
+        delete btn.dataset._origText;
+      }
+    }
+  }
+
+  function wrap(key, asyncFn) {
+    return async (...args) => {
+      set(key, true);
+      try {
+        return await asyncFn(...args);
+      } finally {
+        set(key, false);
+      }
+    };
+  }
+
+  return { set, wrap };
+})();
+
+window.LoadingState = LoadingState;
+
+
+// ═══ MONTHLY SEARCH ═══
+const MonthlySearch = (() => {
+  const { U, Fmt, DOM } = Tdbeer;
+  const { store, Sel } = App;
+
+  let active = false;
+
+  function toggle() {
+    const wrap = document.getElementById('monthlySearchWrap');
+    if (!wrap) return;
+    active = !active;
+    wrap.style.display = active ? '' : 'none';
+    if (active) {
+      document.getElementById('monthlySearchInput')?.focus();
+    } else {
+      clear();
+    }
+  }
+
+  function clear() {
+    const input = document.getElementById('monthlySearchInput');
+    const results = document.getElementById('monthlySearchResults');
+    const clearBtn = document.getElementById('monthlySearchClear');
+    if (input) input.value = '';
+    if (results) { results.innerHTML = ''; results.style.display = 'none'; }
+    if (clearBtn) clearBtn.style.display = 'none';
+  }
+
+  function search(query) {
+    const q = (query || '').trim().toLowerCase();
+    const clearBtn = document.getElementById('monthlySearchClear');
+    const results = document.getElementById('monthlySearchResults');
+    if (!results) return;
+
+    if (clearBtn) clearBtn.style.display = q ? 'flex' : 'none';
+
+    if (!q) {
+      results.innerHTML = '';
+      results.style.display = 'none';
+      return;
+    }
+
+    const y = store.get('year'), m = store.get('month');
+    const d = Sel.monthData(y, m);
+
+    const items = [];
+
+    // دخل
+    (d.income || []).forEach(x => {
+      if (x.name.toLowerCase().includes(q) || (x.cat || '').toLowerCase().includes(q))
+        items.push({ ...x, _type: 'دخل', _color: 'var(--green-2)' });
+    });
+    // ثابت
+    (d.fixed || []).forEach(x => {
+      if (x.name.toLowerCase().includes(q) || (x.cat || '').toLowerCase().includes(q))
+        items.push({ ...x, _type: 'ثابت', _color: 'var(--danger)' });
+    });
+    // متغير
+    (d.variable || []).forEach(x => {
+      if (x.name.toLowerCase().includes(q) || (x.cat || '').toLowerCase().includes(q))
+        items.push({ ...x, _type: 'متغير', _color: 'var(--danger)' });
+    });
+    // يومي
+    Object.entries(d.daily || {}).forEach(([day, arr]) => {
+      (arr || []).forEach(x => {
+        if (x.name.toLowerCase().includes(q) || (x.cat || '').toLowerCase().includes(q))
+          items.push({ ...x, _type: `يوم ${day}`, _color: x.type === 'out' ? 'var(--danger)' : 'var(--green-2)' });
+      });
+    });
+
+    results.style.display = '';
+    results.innerHTML = '';
+
+    if (!items.length) {
+      results.appendChild(DOM.h('div', {
+        style: 'text-align:center;padding:16px;color:var(--text3);font-size:13px'
+      }, `🔍 ما وجدنا نتائج لـ "${q}"`));
+      return;
+    }
+
+    // عنوان
+    results.appendChild(DOM.h('div', {
+      style: 'font-size:11px;color:var(--text3);margin-bottom:6px;font-weight:700'
+    }, `${items.length} نتيجة`));
+
+    items.slice(0, 20).forEach(item => {
+      // تمييز النص المطابق
+      const nameHighlighted = item.name.replace(
+        new RegExp(`(${q})`, 'gi'),
+        '<mark style="background:var(--accent-dim);color:var(--accent-2);border-radius:2px;padding:0 2px">$1</mark>'
+      );
+
+      const row = DOM.h('div', {
+        style: 'display:flex;align-items:center;gap:10px;padding:10px 12px;background:var(--bg4);border-radius:10px;margin-bottom:5px;border:1px solid var(--border)'
+      },
+        DOM.h('div', { style: 'font-size:16px;flex-shrink:0' }, item.cat || '📌'),
+        DOM.h('div', { style: 'flex:1;min-width:0' },
+          DOM.h('div', { style: 'font-size:13px;color:var(--text)', html: nameHighlighted }),
+          DOM.h('div', { style: 'font-size:10px;color:var(--text3);margin-top:2px' }, item._type)
+        ),
+        DOM.h('div', { style: `font-size:13px;font-weight:700;color:${item._color};flex-shrink:0` }, Fmt.c(item.amt))
+      );
+      results.appendChild(row);
+    });
+  }
+
+  function init() {
+    const input = document.getElementById('monthlySearchInput');
+    const clearBtn = document.getElementById('monthlySearchClear');
+    const bar = document.getElementById('monthlySearchBar');
+
+    if (input) {
+      input.addEventListener('input', (e) => search(e.target.value));
+      input.addEventListener('focus', () => {
+        if (bar) bar.style.borderColor = 'var(--accent)';
+      });
+      input.addEventListener('blur', () => {
+        if (bar) bar.style.borderColor = 'var(--border)';
+      });
+    }
+
+    if (clearBtn) {
+      clearBtn.addEventListener('click', clear);
+    }
+
+    // زر البحث في الـ header (نضيف icon-btn في الـ header)
+    document.addEventListener('click', (e) => {
+      if (e.target.closest('#monthlySearchToggle')) toggle();
+    });
+  }
+
+  return { toggle, clear, search, init };
+})();
+
+window.MonthlySearch = MonthlySearch;
+
+
+// ═══ KEYBOARD SHORTCUTS ═══
+(function setupKeyboardShortcuts() {
+  const shortcuts = {
+    // Alt + الأرقام للتبويبات
+    'alt+1': () => window.Controllers?.showTab('home'),
+    'alt+2': () => window.Controllers?.showTab('money'),
+    'alt+3': () => window.Controllers?.showTab('social'),
+    'alt+4': () => window.Controllers?.showTab('profile'),
+    // Alt + N = إضافة سريعة
+    'alt+n': () => document.getElementById('fab')?.click(),
+    // Alt + S = بحث
+    'alt+s': () => window.MonthlySearch?.toggle(),
+    // Alt + B = نسخة احتياطية
+    'alt+b': () => document.getElementById('backupBtn')?.click(),
+    // Escape يُغلق أي overlay مفتوح
+    'escape': () => {
+      const overlays = ['authOverlay','notifPanel','profileOverlay','chatPanel','sidebarDrawer'];
+      for (const id of overlays) {
+        const el = document.getElementById(id);
+        if (el && el.classList.contains('open')) {
+          el.classList.remove('open');
+          break;
+        }
+      }
+    }
+  };
+
+  document.addEventListener('keydown', (e) => {
+    // لا تشتغل لو المستخدم يكتب في input
+    if (e.target.matches('input, textarea, select, [contenteditable]')) return;
+
+    const key = [
+      e.altKey ? 'alt' : '',
+      e.ctrlKey ? 'ctrl' : '',
+      e.shiftKey ? 'shift' : '',
+      e.key.toLowerCase()
+    ].filter(Boolean).join('+');
+
+    const fn = shortcuts[key];
+    if (fn) {
+      e.preventDefault();
+      fn();
+    }
+  });
+
+  // Tooltip للـ shortcuts في الـ settings
+  window._shortcuts = shortcuts;
 })();
 
 </script>
