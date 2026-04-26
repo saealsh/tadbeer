@@ -19,7 +19,7 @@ var Social = (() => {
   function saveConvPrefs(prefs) {
     try {
       if (window.Storage) window.Storage.save('convPrefs', prefs);
-      else saveConvPrefs(prefs);
+      else localStorage.setItem('convPrefs', JSON.stringify(prefs));
     } catch (e) { if (window.Logger) Logger.warn('Social.saveConvPrefs', e?.message); }
   }
 
