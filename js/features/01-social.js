@@ -8,6 +8,21 @@ var Social = (() => {
   const { U, Fmt, DOM, $, $$, Logger } = Tdbeer;
   const { store, Toast, Streak } = App;
 
+  // 🔧 STORAGE FIX: helpers لـ convPrefs (تستخدم Storage module مع fallback)
+  // كان الكود يستخدم localStorage مباشرة في 11 مكان — هذي توحيد المنطق.
+  function loadConvPrefs() {
+    try {
+      if (window.Storage) return window.Storage.load('convPrefs', {}) || {};
+      return JSON.parse(localStorage.getItem('convPrefs') || '{}');
+    } catch { return {}; }
+  }
+  function saveConvPrefs(prefs) {
+    try {
+      if (window.Storage) window.Storage.save('convPrefs', prefs);
+      else saveConvPrefs(prefs);
+    } catch (e) { if (window.Logger) Logger.warn('Social.saveConvPrefs', e?.message); }
+  }
+
   const state = {
     user: null,
     profile: null,
@@ -1041,7 +1056,7 @@ var Social = (() => {
     }
 
     // ═══ Load user preferences ═══
-    const prefs = JSON.parse(localStorage.getItem('convPrefs') || '{}');
+    const prefs = loadConvPrefs();
     const pinnedUids = prefs.pinned || [];
     const mutedUids = prefs.muted || [];
     const archivedUids = prefs.archived || [];
@@ -1100,7 +1115,7 @@ var Social = (() => {
         onclick: () => {
           window._convFilter = f.id;
           prefs.filter = f.id;
-          localStorage.setItem('convPrefs', JSON.stringify(prefs));
+          saveConvPrefs(prefs);
           renderConversations();
         }
       },
@@ -1280,7 +1295,7 @@ var Social = (() => {
     const existing = document.getElementById('convActionsMenu');
     if (existing) existing.remove();
 
-    const prefs = JSON.parse(localStorage.getItem('convPrefs') || '{}');
+    const prefs = loadConvPrefs();
     const pinnedUids = prefs.pinned || [];
     const mutedUids = prefs.muted || [];
     const archivedUids = prefs.archived || [];
@@ -1371,7 +1386,7 @@ var Social = (() => {
 
   // ═══ Toggle Pin ═══
   function togglePin(peerUid) {
-    const prefs = JSON.parse(localStorage.getItem('convPrefs') || '{}');
+    const prefs = loadConvPrefs();
     prefs.pinned = prefs.pinned || [];
     const idx = prefs.pinned.indexOf(peerUid);
     if (idx >= 0) {
@@ -1385,13 +1400,13 @@ var Social = (() => {
       prefs.pinned.push(peerUid);
       Toast.show('📌 تم الثبّتها فوق', 'ok');
     }
-    localStorage.setItem('convPrefs', JSON.stringify(prefs));
+    saveConvPrefs(prefs);
     renderConversations();
   }
 
   // ═══ Toggle Mute ═══
   function toggleMute(peerUid) {
-    const prefs = JSON.parse(localStorage.getItem('convPrefs') || '{}');
+    const prefs = loadConvPrefs();
     prefs.muted = prefs.muted || [];
     const idx = prefs.muted.indexOf(peerUid);
     if (idx >= 0) {
@@ -1401,13 +1416,13 @@ var Social = (() => {
       prefs.muted.push(peerUid);
       Toast.show('🔕 تم كتم التنبيهات', 'ok');
     }
-    localStorage.setItem('convPrefs', JSON.stringify(prefs));
+    saveConvPrefs(prefs);
     renderConversations();
   }
 
   // ═══ Toggle Archive ═══
   function toggleArchive(peerUid) {
-    const prefs = JSON.parse(localStorage.getItem('convPrefs') || '{}');
+    const prefs = loadConvPrefs();
     prefs.archived = prefs.archived || [];
     const idx = prefs.archived.indexOf(peerUid);
     if (idx >= 0) {
@@ -1417,7 +1432,7 @@ var Social = (() => {
       prefs.archived.push(peerUid);
       Toast.show('📦 تم حطها في الأرشيف المحادثة', 'ok');
     }
-    localStorage.setItem('convPrefs', JSON.stringify(prefs));
+    saveConvPrefs(prefs);
     renderConversations();
   }
 
@@ -1440,14 +1455,14 @@ var Social = (() => {
       await window.FB.deleteDoc(ref);
       
       // Also remove from prefs
-      const prefs = JSON.parse(localStorage.getItem('convPrefs') || '{}');
+      const prefs = loadConvPrefs();
       ['pinned', 'muted', 'archived'].forEach(key => {
         if (prefs[key]) {
           const idx = prefs[key].indexOf(peerUid);
           if (idx >= 0) prefs[key].splice(idx, 1);
         }
       });
-      localStorage.setItem('convPrefs', JSON.stringify(prefs));
+      saveConvPrefs(prefs);
       
       Toast.show('🗑️ تم ااحذف المحادثة', 'ok');
     } catch (e) {
