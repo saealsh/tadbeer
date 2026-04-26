@@ -246,7 +246,9 @@ var BiometricAuth = (() => {
     };
 
     document.getElementById('biometricSkipBtn').onclick = () => {
-      localStorage.setItem('biometric_dismissed', Date.now().toString());
+      // 🔧 STORAGE FIX: Storage module مع fallback
+      if (window.Storage) window.Storage.save('biometric_dismissed', Date.now().toString());
+      else localStorage.setItem('biometric_dismissed', Date.now().toString());
       close();
     };
 
