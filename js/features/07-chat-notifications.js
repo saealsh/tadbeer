@@ -154,13 +154,8 @@ var ChatNotifications = (() => {
     setTimeout(() => { try { toast.remove(); } catch (e) { if (window.Logger) Logger.warn('ChatNotifications', e?.message); } }, 300);
   }
 
-  function escapeHtml(s) {
-    return String(s ?? '')
-      .replace(/&/g, '&amp;')
-      .replace(/</g, '&lt;')
-      .replace(/>/g, '&gt;')
-      .replace(/"/g, '&quot;');
-  }
+  // 🔧 DRY FIX: استخدام U.esc من core بدل تعريف محلي مكرر.
+  const escapeHtml = (s) => (window.Tdbeer?.U?.esc || ((x) => String(x ?? '')))(s);
 
   // ═══ BADGE UPDATE ═══
   function updateBadge(totalUnread) {
