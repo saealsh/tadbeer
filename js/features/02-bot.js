@@ -362,24 +362,24 @@ var Bot = (() => {
       return;
     }
 
-    for (const m of state.messages) {
+  for (const m of state.messages) {
       const isMine = m.from !== BOT_ID;
       const bubble = DOM.h('div', { class: 'msg ' + (isMine ? 'mine' : 'bot') });
 
-// ⚠️ XSS FIX: escape أولاً، ثم حوّل markdown لعلامات HTML آمنة فقط
+      // ⚠️ XSS FIX: escape أولاً، ثم حوّل markdown لعلامات HTML آمنة فقط
       const safe = U.esc(m.text)
         .replace(/\*\*(.+?)\*\*/g, '<b>$1</b>')   // bold
         .replace(/\n/g, '<br>');                    // line breaks
       const textDiv = document.createElement('div');
       textDiv.className = 'msg-text';
       textDiv.innerHTML = safe;
+      bubble.appendChild(textDiv);
 
       const t = m.at ? new Date(m.at) : new Date();
       const timeStr = t.toLocaleTimeString('ar-SA', { hour: '2-digit', minute: '2-digit' });
       bubble.appendChild(DOM.h('div', { class: 'msg-time' }, timeStr));
       cont.appendChild(bubble);
     }
-
     if (state.isTyping) {
       const typing = DOM.h('div', { class: 'bot-typing', id: 'botTypingIndicator' },
         DOM.h('span'), DOM.h('span'), DOM.h('span')
