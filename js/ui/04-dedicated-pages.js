@@ -541,10 +541,8 @@ var DedicatedPages = (() => {
     };
   }
 
-  function escapeHTML(s) {
-    return String(s || '').replace(/[&<>"']/g, m => 
-      ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[m]);
-  }
+  // 🔧 DRY FIX: استخدام U.esc من core بدل تعريف محلي مكرر.
+  const escapeHTML = (s) => (window.Tdbeer?.U?.esc || ((x) => String(x ?? '')))(s);
 
   // Initialize on DOM ready
   if (document.readyState === 'loading') {
