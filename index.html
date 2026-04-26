@@ -35,15 +35,24 @@
 
 <script>
  // تطبيق الثيم فوراً قبل أي رسم (لتجنب ومضة الألوان)
+ // 🔧 STORAGE FIX: نقرأ من td_theme (المفتاح الجديد) ثم tadbeerStore (للتوافق مع النسخ القديمة)
  (function() {
   try {
-   var saved = localStorage.getItem('tadbeerStore');
    var theme = 'midnight'; // الافتراضي
-   if (saved) {
-    try {
-     var data = JSON.parse(saved);
-     if (data && data.theme) theme = data.theme;
-    } catch(e) {}
+   // أولاً: المفتاح الجديد (Storage module)
+   try {
+    var modernTheme = localStorage.getItem('td_theme');
+    if (modernTheme) theme = JSON.parse(modernTheme);
+   } catch(e) {}
+   // ثانياً (fallback): المفتاح القديم
+   if (theme === 'midnight') {
+    var saved = localStorage.getItem('tadbeerStore');
+    if (saved) {
+     try {
+      var data = JSON.parse(saved);
+      if (data && data.theme) theme = data.theme;
+     } catch(e) {}
+    }
    }
    if (theme !== 'default') {
     document.documentElement.setAttribute('data-theme', theme);
