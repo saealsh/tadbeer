@@ -31,7 +31,7 @@ var Scheduler = (() => {
   };
 })();
 
-// ═══ DOM HELPERS ═══
-var $ = (sel, root = document) => root.querySelector(sel);
+// 🔧 FIX: حذفنا تعريف "$" من هنا لأنه مكرر مع 08-dom.js (سطر 8).
+// التعريف الصحيح موجود في 08-dom.js مع $$ ودوال DOM الأخرى.
 
 window.Tdbeer.Scheduler = Scheduler;
