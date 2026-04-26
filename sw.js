@@ -13,7 +13,7 @@
      • Push notifications + background sync
 ═══════════════════════════════════════════════════════════════════ */
 
-const CACHE_VERSION = '3.1.0';
+const CACHE_VERSION = '3.2.0';
 const BUILD_TIME = '2026-04-26';
 const CACHE_NAME = `tdbeer-v${CACHE_VERSION}`;
 const FONTS_CACHE = `${CACHE_NAME}-fonts`;
@@ -36,6 +36,7 @@ const CORE_ASSETS = [
   './js/core/07-scheduler.js',
   './js/core/08-dom.js',
   './js/core/09-error-handling.js',
+  './js/core/10-toast.js',
 
   // Services
   './js/services/00-firebase.js',
@@ -43,6 +44,7 @@ const CORE_ASSETS = [
   './js/services/02-image-handler.js',
   './js/services/03-biometric.js',
   './js/services/04-pwa-install.js',
+  './js/services/05-bootstrap.js',
 
   // UI
   './js/ui/01-renderers.js',
@@ -50,6 +52,7 @@ const CORE_ASSETS = [
   './js/ui/03-sidebar.js',
   './js/ui/04-dedicated-pages.js',
   './js/ui/05-chats-page.js',
+  './js/ui/06-html-bindings.js',
 
   // Features
   './js/features/01-social.js',
