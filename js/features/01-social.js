@@ -470,49 +470,136 @@ var Social = (() => {
     if (!text) return;
     const peer = state.activeChat;
     const chatId = peer.chatId;
-    const now = window.FB.serverTimestamp();
 
     $('#chatSendBtn').disabled = true;
     input.value = '';
     autoResizeInput();
 
-    try {
+    // 🔧 RELIABILITY FIX: استخدام withRetry للمحاولات السريعة، WriteQueue للأوفلاين/الفشل النهائي.
+    // قبل: لو فشل الإرسال (شبكة ضعيفة)، الرسالة تضيع تماماً.
+    // بعد: 3 محاولات مع backoff؛ ولو فشل، الرسالة تُحفظ في WriteQueue وتُرسل لما يرجع النت.
+
+    const isOnline = window.Network?.isOnline?.() ?? navigator.onLine;
+    const senderProfile = {
+      uid: state.user.uid,
+      name: state.profile.displayName,
+      username: state.profile.username
+    };
+    const preview = text.slice(0, 80);
+
+    // Helper: نفذ كل العمليات الـ 3 (رسالة + محادثتي + محادثة الطرف الآخر)
+    async function executeWrites() {
+      const now = window.FB.serverTimestamp();
+
+      // 1) أضف الرسالة
       const msgRef = window.FB.collection(window.FB.db, 'chats', chatId, 'messages');
       await window.FB.addDoc(msgRef, {
-        from: state.user.uid, to: peer.peerUid,
+        from: senderProfile.uid, to: peer.peerUid,
         text, at: now, read: false
       });
 
-      const myConvRef = window.FB.doc(window.FB.db, 'users', state.user.uid, 'conversations', peer.peerUid);
+      // 2) حدّث محادثتي
+      const myConvRef = window.FB.doc(window.FB.db, 'users', senderProfile.uid, 'conversations', peer.peerUid);
       await window.FB.setDoc(myConvRef, {
         peerUid: peer.peerUid, peerName: peer.peerName, peerUsername: peer.peerUsername,
-        lastMessage: text.slice(0, 80), lastMessageAt: now,
-        lastMessageFrom: state.user.uid, unread: 0
+        lastMessage: preview, lastMessageAt: now,
+        lastMessageFrom: senderProfile.uid, unread: 0
       });
 
-      const theirConvRef = window.FB.doc(window.FB.db, 'users', peer.peerUid, 'conversations', state.user.uid);
+      // 3) حدّث محادثة الطرف الآخر مع زيادة unread
+      const theirConvRef = window.FB.doc(window.FB.db, 'users', peer.peerUid, 'conversations', senderProfile.uid);
       try {
         const snap = await window.FB.getDoc(theirConvRef);
         const prevUnread = snap.exists() ? (snap.data().unread || 0) : 0;
         await window.FB.setDoc(theirConvRef, {
-          peerUid: state.user.uid,
-          peerName: state.profile.displayName,
-          peerUsername: state.profile.username,
-          lastMessage: text.slice(0, 80), lastMessageAt: now,
-          lastMessageFrom: state.user.uid, unread: prevUnread + 1
+          peerUid: senderProfile.uid,
+          peerName: senderProfile.name,
+          peerUsername: senderProfile.username,
+          lastMessage: preview, lastMessageAt: now,
+          lastMessageFrom: senderProfile.uid, unread: prevUnread + 1
         });
       } catch (e) { Logger.error('Social.updatePeerConv', e); }
+    }
+
+    // Helper: حفظ في WriteQueue للإرسال لاحقاً (fallback أوفلاين أو فشل)
+    function queueForLater() {
+      if (!window.WriteQueue) return false;
+
+      const fallbackTs = Date.now();
+      try {
+        // الرسالة نفسها — نولّد ID محلي
+        const msgId = U.uid();
+        window.WriteQueue.enqueue({
+          type: 'set',
+          path: `chats/${chatId}/messages/${msgId}`,
+          data: {
+            from: senderProfile.uid, to: peer.peerUid,
+            text, at: fallbackTs, read: false
+          }
+        });
+
+        // محادثتي
+        window.WriteQueue.enqueue({
+          type: 'set',
+          path: `users/${senderProfile.uid}/conversations/${peer.peerUid}`,
+          data: {
+            peerUid: peer.peerUid, peerName: peer.peerName, peerUsername: peer.peerUsername,
+            lastMessage: preview, lastMessageAt: fallbackTs,
+            lastMessageFrom: senderProfile.uid, unread: 0
+          }
+        });
+
+        // محادثة الطرف الآخر — ما نقدر نزيد unread بدون قراءة، نضع 1 افتراضياً
+        // (في حالة الأوفلاين، الحل المثالي يحتاج Firestore Cloud Function)
+        window.WriteQueue.enqueue({
+          type: 'set',
+          path: `users/${peer.peerUid}/conversations/${senderProfile.uid}`,
+          data: {
+            peerUid: senderProfile.uid,
+            peerName: senderProfile.name,
+            peerUsername: senderProfile.username,
+            lastMessage: preview, lastMessageAt: fallbackTs,
+            lastMessageFrom: senderProfile.uid, unread: 1
+          }
+        });
+
+        return true;
+      } catch (err) {
+        Logger.error('Social.sendMsg.queue', err);
+        return false;
+      }
+    }
+
+    try {
+      if (!isOnline) {
+        // أوفلاين — احفظ مباشرة في الطابور
+        if (queueForLater()) {
+          Toast.show('📴 الرسالة محفوظة — راح تُرسل لما يرجع النت', 'warn', 3000);
+        } else {
+          throw new Error('فشل الحفظ');
+        }
+      } else {
+        // أونلاين — جرّب مع retry
+        if (window.withRetry) {
+          await window.withRetry(executeWrites, { ctx: 'Social.sendMsg', maxAttempts: 3 });
+        } else {
+          // fallback لو error-handling module ما تحمّل
+          await executeWrites();
+        }
+      }
 
       try { if (navigator.vibrate) navigator.vibrate(20); } catch (e) { if (window.Logger) Logger.warn('Social', e?.message); }
-
-      // Play sent sound
-      try {
-        if (window.ChatNotifications) window.ChatNotifications.playSentSound();
-      } catch (e) { if (window.Logger) Logger.warn('Social', e?.message); }
+      try { if (window.ChatNotifications) window.ChatNotifications.playSentSound(); }
+      catch (e) { if (window.Logger) Logger.warn('Social', e?.message); }
     } catch (e) {
       Logger.error('Social.sendMsg', e);
-      Toast.show('فشل الإرسال', 'danger');
-      input.value = text;
+      // محاولة أخيرة: ضع في الطابور
+      if (queueForLater()) {
+        Toast.show('⚠️ فشل الإرسال — راح يُعاد المحاولة لاحقاً', 'warn', 3000);
+      } else {
+        Toast.show('❌ فشل الإرسال', 'danger');
+        input.value = text; // أرجع النص للمستخدم ليحاول مرة ثانية
+      }
     } finally {
       $('#chatSendBtn').disabled = !input.value.trim();
       input.focus();
@@ -561,24 +648,33 @@ var Social = (() => {
       const sentCheck = await window.FB.getDoc(window.FB.doc(window.FB.db, 'users', state.user.uid, 'outgoingRequests', t.uid));
       if (sentCheck.exists()) { Toast.show('أرسلت طلب مسبقاً', 'warn'); return; }
 
-      await window.FB.setDoc(
-        window.FB.doc(window.FB.db, 'users', state.user.uid, 'outgoingRequests', t.uid),
-        {
-          uid: t.uid,
-          username: t.username || '',
-          displayName: t.displayName || t.username || 'مستخدم',
-          sentAt: window.FB.serverTimestamp()
-        }
-      );
-      await window.FB.setDoc(
-        window.FB.doc(window.FB.db, 'users', t.uid, 'incomingRequests', state.user.uid),
-        {
-          uid: state.user.uid,
-          username: state.profile.username || '',
-          displayName: state.profile.displayName || state.profile.username || 'مستخدم',
-          sentAt: window.FB.serverTimestamp()
-        }
-      );
+      // 🔧 RELIABILITY: استخدم withRetry لمقاومة فشل الشبكة المؤقت
+      const writeRequests = async () => {
+        await window.FB.setDoc(
+          window.FB.doc(window.FB.db, 'users', state.user.uid, 'outgoingRequests', t.uid),
+          {
+            uid: t.uid,
+            username: t.username || '',
+            displayName: t.displayName || t.username || 'مستخدم',
+            sentAt: window.FB.serverTimestamp()
+          }
+        );
+        await window.FB.setDoc(
+          window.FB.doc(window.FB.db, 'users', t.uid, 'incomingRequests', state.user.uid),
+          {
+            uid: state.user.uid,
+            username: state.profile.username || '',
+            displayName: state.profile.displayName || state.profile.username || 'مستخدم',
+            sentAt: window.FB.serverTimestamp()
+          }
+        );
+      };
+
+      if (window.withRetry) {
+        await window.withRetry(writeRequests, { ctx: 'Social.sendReq', maxAttempts: 3 });
+      } else {
+        await writeRequests();
+      }
       Toast.show('تم إرسال الطلب 📤', 'success');
       const input = $('#userSearchInput'); if (input) input.value = '';
       const results = $('#searchResults'); if (results) results.style.display = 'none';
@@ -591,30 +687,40 @@ var Social = (() => {
   async function acceptFriendRequest(req) {
     if (!state.user || !state.profile) return;
     try {
-      await window.FB.setDoc(
-        window.FB.doc(window.FB.db, 'users', state.user.uid, 'friends', req.uid),
-        {
-          uid: req.uid,
-          username: req.username || '',
-          displayName: req.displayName || req.username || 'مستخدم',
-          streak: 0,
-          maxStreak: 0,
-          friendsSince: window.FB.serverTimestamp()
-        }
-      );
-      await window.FB.setDoc(
-        window.FB.doc(window.FB.db, 'users', req.uid, 'friends', state.user.uid),
-        {
-          uid: state.user.uid,
-          username: state.profile.username || '',
-          displayName: state.profile.displayName || state.profile.username || 'مستخدم',
-          streak: state.profile.streak || 0,
-          maxStreak: state.profile.maxStreak || 0,
-          friendsSince: window.FB.serverTimestamp()
-        }
-      );
-      await window.FB.deleteDoc(window.FB.doc(window.FB.db, 'users', state.user.uid, 'incomingRequests', req.uid));
-      await window.FB.deleteDoc(window.FB.doc(window.FB.db, 'users', req.uid, 'outgoingRequests', state.user.uid));
+      // 🔧 RELIABILITY: withRetry لمقاومة فشل الشبكة
+      const acceptOps = async () => {
+        await window.FB.setDoc(
+          window.FB.doc(window.FB.db, 'users', state.user.uid, 'friends', req.uid),
+          {
+            uid: req.uid,
+            username: req.username || '',
+            displayName: req.displayName || req.username || 'مستخدم',
+            streak: 0,
+            maxStreak: 0,
+            friendsSince: window.FB.serverTimestamp()
+          }
+        );
+        await window.FB.setDoc(
+          window.FB.doc(window.FB.db, 'users', req.uid, 'friends', state.user.uid),
+          {
+            uid: state.user.uid,
+            username: state.profile.username || '',
+            displayName: state.profile.displayName || state.profile.username || 'مستخدم',
+            streak: state.profile.streak || 0,
+            maxStreak: state.profile.maxStreak || 0,
+            friendsSince: window.FB.serverTimestamp()
+          }
+        );
+        await window.FB.deleteDoc(window.FB.doc(window.FB.db, 'users', state.user.uid, 'incomingRequests', req.uid));
+        await window.FB.deleteDoc(window.FB.doc(window.FB.db, 'users', req.uid, 'outgoingRequests', state.user.uid));
+      };
+
+      if (window.withRetry) {
+        await window.withRetry(acceptOps, { ctx: 'Social.accept', maxAttempts: 3 });
+      } else {
+        await acceptOps();
+      }
+
       Toast.show(`أهلاً ${req.displayName || '@' + req.username} 🎉`, 'success');
       App.Pts.add(25);
     } catch (e) { Logger.error('Social.accept', e); Toast.show('فشل', 'danger'); }
