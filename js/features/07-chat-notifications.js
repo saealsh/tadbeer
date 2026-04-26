@@ -214,7 +214,8 @@ var ChatNotifications = (() => {
 
     // Check if this conversation is muted
     try {
-      const prefs = JSON.parse(localStorage.getItem('convPrefs') || '{}');
+      // 🔧 STORAGE FIX: استخدام Storage module
+      const prefs = (window.Storage && window.Storage.load('convPrefs', {})) || {};
       if (prefs.muted && prefs.muted.includes(peerUid)) {
         // Muted - skip sound, vibration, and browser notification
         // Only show a subtle badge update (already done in badge update)
@@ -353,16 +354,17 @@ var ChatNotifications = (() => {
   // ═══ SETTINGS ═══
   function loadSettings() {
     try {
-      const saved = localStorage.getItem('chatNotifSettings');
+      // 🔧 STORAGE FIX: استخدام Storage module
+      const saved = window.Storage && window.Storage.load('chatNotifSettings', null);
       if (saved) {
-        state.settings = { ...state.settings, ...JSON.parse(saved) };
+        state.settings = { ...state.settings, ...saved };
       }
     } catch (e) { if (window.Logger) Logger.warn('ChatNotifications', e?.message); }
   }
 
   function saveSettings() {
     try {
-      localStorage.setItem('chatNotifSettings', JSON.stringify(state.settings));
+      if (window.Storage) window.Storage.save('chatNotifSettings', state.settings);
     } catch (e) { if (window.Logger) Logger.warn('ChatNotifications', e?.message); }
   }
 
