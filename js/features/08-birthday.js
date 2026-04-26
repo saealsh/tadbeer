@@ -5,9 +5,14 @@
 ═══════════════════════════════════════════════════════════════════ */
 
 var BirthdaySystem = (() => {
+  // 🔧 STORAGE FIX: استخدام Storage module بدل localStorage مباشرة
+  // (يدعم memory fallback لمتصفحات Private Browsing)
+  const _S = () => window.Storage;
+
   function checkBirthday() {
     try {
-      const birthday = localStorage.getItem('userBirthday');
+      const S = _S();
+      const birthday = S ? S.load('userBirthday', null) : null;
       if (!birthday) return;
 
       const today = new Date();
@@ -15,7 +20,7 @@ var BirthdaySystem = (() => {
       
       // Compare month and day only
       if (today.getMonth() === bday.getMonth() && today.getDate() === bday.getDate()) {
-        const lastShown = localStorage.getItem('birthdayShown');
+        const lastShown = S ? S.load('birthdayShown', null) : null;
         const todayKey = `${today.getFullYear()}-${today.getMonth()}-${today.getDate()}`;
         
         if (lastShown !== todayKey) {
@@ -28,7 +33,7 @@ var BirthdaySystem = (() => {
           
           // Show celebration
           showBirthdayCelebration(age);
-          localStorage.setItem('birthdayShown', todayKey);
+          if (S) S.save('birthdayShown', todayKey);
         }
       }
     } catch (e) {
@@ -37,8 +42,9 @@ var BirthdaySystem = (() => {
   }
 
   function showBirthdayCelebration(age) {
-    const userName = localStorage.getItem('userName') || 
-                     window.Social?._state?.profile?.displayName || 
+    const S = _S();
+    const userName = (S && S.load('userName', '')) ||
+                     window.Social?._state?.profile?.displayName ||
                      'صديقي';
 
     const celebration = document.createElement('div');
