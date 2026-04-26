@@ -139,6 +139,61 @@ var Storage = (() => {
       return migrated;
     },
 
+    /**
+     * 🔧 ينقل المفاتيح القديمة (بدون prefix) إلى Storage module (مع td_ prefix).
+     * يُستدعى مرة واحدة عند بدء التطبيق. آمن للاستدعاء أكثر من مرة.
+     * المفاتيح اللي تنتقل: convPrefs, userName, userBirthday, birthdayShown,
+     *                      tadbeerStore (theme), chatNotifSettings,
+     *                      pwa_install_dismissed, biometric_dismissed
+     */
+    migrateLegacyKeys() {
+      if (!checkAvailable()) return;
+      // نسخة المهاجرة — لو 1، خلصنا
+      if (Storage.load('__legacyMigrated', 0) >= 1) return;
+
+      const legacyKeys = [
+        'convPrefs', 'userName', 'userBirthday', 'birthdayShown',
+        'chatNotifSettings', 'pwa_install_dismissed', 'biometric_dismissed'
+      ];
+
+      let migrated = 0;
+      for (const key of legacyKeys) {
+        try {
+          const oldVal = localStorage.getItem(key);
+          if (oldVal === null) continue;
+          // إذا الجديد موجود (المستخدم استخدم النسخة الجديدة)، تخطّى
+          if (localStorage.getItem(PREFIX + key) !== null) {
+            localStorage.removeItem(key);
+            continue;
+          }
+          // انقل القيمة (بدون JSON.parse — Storage يخزّن JSON منفصلاً)
+          localStorage.setItem(PREFIX + key, oldVal);
+          localStorage.removeItem(key);
+          migrated++;
+        } catch (e) { Logger.warn('Storage.migrateLegacy', `${key}: ${e?.message}`); }
+      }
+
+      // tadbeerStore حالة خاصة — كان يخزّن object كامل، الـ theme مفصول الحين في Storage
+      try {
+        const old = localStorage.getItem('tadbeerStore');
+        if (old) {
+          try {
+            const parsed = JSON.parse(old);
+            if (parsed && parsed.theme && localStorage.getItem(PREFIX + 'theme') === null) {
+              localStorage.setItem(PREFIX + 'theme', JSON.stringify(parsed.theme));
+              migrated++;
+            }
+          } catch {}
+          // ما نحذف tadbeerStore لأنه قد يحتوي بيانات أخرى تحفظ بـ inline script في index.html
+        }
+      } catch (e) { Logger.warn('Storage.migrateLegacy.tadbeerStore', e?.message); }
+
+      if (migrated > 0) {
+        Logger.warn('Storage', `migrated ${migrated} legacy keys`);
+      }
+      Storage.save('__legacyMigrated', 1);
+    },
+
     isAvailable: checkAvailable
   };
 })();
@@ -146,3 +201,6 @@ var Storage = (() => {
 
 window.Tdbeer.Storage = Storage;
 window.Storage = Storage;
+
+// 🔧 Run legacy migration immediately on load
+try { Storage.migrateLegacyKeys(); } catch (e) { /* defensive */ }
